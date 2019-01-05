@@ -1,0 +1,25 @@
+# Spring Datasource Settings
+spring:
+  datasource:
+    username: root
+    password: webproject
+    driver-class-name: com.mysql.jdbc.Driver
+    name: druidDataSource
+    url: jdbc:mysql://aloli.cn:3306/neko?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    type: com.alibaba.druid.pool.DruidDataSource
+    initial-size: 3
+    min-idle: 3
+    max-active: 100
+    max-wait: 60000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: select 1 from dual
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: true
+    #监控
+    filters: stat,wall,log4j
+    max-pool-prepared-statement-per-connection-size: 20
+    useGlobalDateSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500

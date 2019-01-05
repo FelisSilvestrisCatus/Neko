@@ -1,4 +1,4 @@
-package neko.activiti;
+package neko;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
