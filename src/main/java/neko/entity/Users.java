@@ -2,20 +2,18 @@ package neko.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-
 import java.io.Serializable;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author z9961
- * @since 2019-01-07
+ * @since 2019-01-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -28,6 +26,8 @@ public class Users implements Serializable {
     private Integer uid;
 
     private String uname;
+
+    private String pwd;
 
     private String phone;
 
@@ -42,6 +42,11 @@ public class Users implements Serializable {
      * 证件号码（学生证，教师证）
      */
     private Integer idnumber;
+
+    /**
+     * 用户标识
+     */
+    private String token;
 
 
 }
