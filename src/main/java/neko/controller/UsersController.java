@@ -31,7 +31,7 @@ public class UsersController {
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
         map.put("msg", "error");
-
+        map.put("token", "");
         System.out.println("u:" + username + "\np:" + password);
 
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -43,6 +43,7 @@ public class UsersController {
             if (password.equals(users.getPwd())) {
                 map.put("state", "200");
                 map.put("msg", "ok");
+                map.put("token", "this is a token");
             }
         } catch (Exception e) {
 
