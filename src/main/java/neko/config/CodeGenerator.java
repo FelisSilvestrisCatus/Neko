@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/*
+ * Mybatis Plus 生成器
+ * */
+
+
 public class CodeGenerator {
 
     public static String scanner(String tip) {
