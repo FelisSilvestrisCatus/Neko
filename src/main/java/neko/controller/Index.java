@@ -3,13 +3,8 @@ package neko.controller;
 //import neko.entity.Users;
 //import neko.mapper.UsersMapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @RestController
 public class Index {
@@ -25,7 +20,7 @@ public class Index {
 //    }
 
     @RequestMapping(value = "/")
-    public String index(){
+    public String index() {
 
 //        testSelect();
         return "hello world";
