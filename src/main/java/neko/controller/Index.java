@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @RestController
-public class index {
+public class Index {
 
 //    @Autowired
 //    private UsersMapper userMapper;
