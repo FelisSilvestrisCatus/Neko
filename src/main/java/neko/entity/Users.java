@@ -44,10 +44,4 @@ public class Users implements Serializable {
      */
     private Integer idnumber;
 
-    /**
-     * 用户标识
-     */
-    private String token;
-
-
 }

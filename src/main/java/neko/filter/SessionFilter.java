@@ -22,12 +22,17 @@ public class SessionFilter implements Filter {
     private IUsersService usersService;
 
 
-    //不需要登录就可以访问的路径(比如:注册登录等)
+    //不需要登录就可以访问的路径
     String[] includeUrls = new String[]{"/users/login"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+
+        /*
+         * 测试Autowired
+         * */
+        System.out.println(usersService);
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -81,12 +86,6 @@ public class SessionFilter implements Filter {
         }
     }
 
-    /**
-     * @param uri
-     * @Author: xxxxx
-     * @Description: 是否需要过滤
-     * @Date: 2018-03-12 13:20:54
-     */
     public boolean isNeedFilter(String uri) {
 
         for (String includeUrl : includeUrls) {
