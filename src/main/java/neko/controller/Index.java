@@ -1,29 +1,26 @@
 package neko.controller;
 
-//import neko.entity.Users;
-//import neko.mapper.UsersMapper;
-
+import neko.utils.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Index {
-
-//    @Autowired
-//    private UsersMapper userMapper;
-//
-//    public void testSelect() {
-//        System.out.println(("----- selectAll method test ------"));
-//        List<Users> userList = userMapper.selectList(null);
-//        Assert.assertEquals(5, userList.size());
-//        userList.forEach(System.out::println);
-//    }
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequestMapping(value = "/")
     public String index() {
+//
+//        System.out.println("redis test");
+//        redisUtil.set("testkey1","testvalue1");
+//        String value = redisUtil.get("testkey1");
+//
+//        System.out.println(value);
+//        System.out.println("redis test end");
 
-//        testSelect();
-        return "hello world";
+        return "This is api";
     }
 
 
