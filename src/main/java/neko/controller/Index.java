@@ -25,7 +25,7 @@ public class Index {
 //        System.out.println(value);
 //        System.out.println("redis test end");
         String ip = loginInfo.getIpAddr(request);
-        System.out.println(ip);
+
         String local = "";
         local = loginInfo.getIpLocation(ip);
 
