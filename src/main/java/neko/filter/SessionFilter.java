@@ -23,34 +23,24 @@ public class SessionFilter implements Filter {
 
 
     //不需要登录就可以访问的路径
-    String[] includeUrls = new String[]{"/users/login"};
+    String[] includeUrls = new String[]{"/users/login", "/favicon.ico"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-
-        /*
-         * 测试Autowired
-         * */
-        System.out.println(usersService);
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
 
+        boolean needFilter = isNeedFilter(uri);
+
         System.out.println("filter url:" + uri);
         //是否需要过滤
-        boolean needFilter = isNeedFilter(uri);
-        try {
-            System.out.println("session:" + session.toString());
-            System.out.println("user is:" + session.getAttribute("user"));
-        } catch (Exception e) {
-            System.out.println("NULL USER");
-        }
-
 
         if (!needFilter) { //不需要过滤直接传给下一个过滤器
+            System.out.println("no filter");
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             //需要过滤器
@@ -59,7 +49,7 @@ public class SessionFilter implements Filter {
                 //无token信息,销毁session
                 try {
                     session.invalidate();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
                 response.setStatus(401);
@@ -91,6 +81,11 @@ public class SessionFilter implements Filter {
     }
 
     public boolean isNeedFilter(String uri) {
+
+        //排除druid监控
+        if (uri.contains("druid")) {
+            return false;
+        }
 
         for (String includeUrl : includeUrls) {
             if (includeUrl.equals(uri)) {
