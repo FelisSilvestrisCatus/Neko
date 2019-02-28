@@ -1,6 +1,5 @@
 package neko.utils;
 
-
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -15,13 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/*
- * Mybatis Plus 生成器
- * */
-
-
+// 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
 public class CodeGenerator {
 
+    /**
+     * <p>
+     * 读取控制台内容
+     * </p>
+     */
     public static String scanner(String tip) {
         Scanner scanner = new Scanner(System.in);
         StringBuilder help = new StringBuilder();
@@ -60,7 +60,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-//        pc.setModuleName(scanner("please enter"));
+//        pc.setModuleName(scanner("模块名"));
         pc.setParent("neko");
         mpg.setPackageInfo(pc);
 
@@ -83,8 +83,8 @@ public class CodeGenerator {
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件名
-                return projectPath + "/src/main/resources/mapper/"
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -96,7 +96,8 @@ public class CodeGenerator {
         TemplateConfig templateConfig = new TemplateConfig();
 
         // 配置自定义输出模板
-        // templateConfig.setEntity();
+        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        // templateConfig.setEntity("templates/entity2.java");
         // templateConfig.setService();
         // templateConfig.setController();
 
