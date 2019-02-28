@@ -1,17 +1,22 @@
 package neko.controller;
 
+import neko.utils.LoginInfo;
 import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class Index {
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private LoginInfo loginInfo;
 
     @RequestMapping(value = "/")
-    public String index() {
+    public String index(HttpServletRequest request) {
 //
 //        System.out.println("redis test");
 //        redisUtil.set("testkey1","testvalue1");
@@ -19,8 +24,13 @@ public class Index {
 //
 //        System.out.println(value);
 //        System.out.println("redis test end");
+        String ip = loginInfo.getIpAddr(request);
+        System.out.println(ip);
+        String local = "";
+        local = loginInfo.getIpLocation(ip);
 
-        return "This is api";
+        System.out.println("local " + local);
+        return ip + "\n" + local;
     }
 
 
