@@ -66,14 +66,14 @@ public class UsersController {
                 //保存本次登录信息
                 Userslogin userslogin = new Userslogin();
                 userslogin.setUid(user.getUid());
-                userslogin.setLoginIp(loginInfo.getIpAddr(request));
-                userslogin.setLoginType(1);
-                userslogin.setLoginTime(LocalDateTime.now());
-                userslogin.setLoginLocation(loginInfo.getIpLocation(loginInfo.getIpAddr(request)));
-                System.out.println("要存的数据库数据"+userslogin.getLoginIp());
-                System.out.println("要存的数据库数据"+userslogin.getLoginLocation());
-                System.out.println("要存的数据库数据"+userslogin.getLoginTime());
-                System.out.println("要存的数据库数据"+userslogin.getLoginType());
+                userslogin.setLoginip(loginInfo.getIpAddr(request));
+                userslogin.setLogintype(1);
+                userslogin.setLogintime(LocalDateTime.now());
+                userslogin.setLoginlocation(loginInfo.getIpLocation(loginInfo.getIpAddr(request)));
+                System.out.println("要存的数据库数据"+userslogin.getLoginip());
+                System.out.println("要存的数据库数据"+userslogin.getLoginlocation());
+                System.out.println("要存的数据库数据"+userslogin.getLogintime());
+                System.out.println("要存的数据库数据"+userslogin.getLogintype());
                 System.out.println("要存的数据库数据"+userslogin.getUid());
                 usersloginService.save(userslogin);
 
