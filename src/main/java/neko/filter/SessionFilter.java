@@ -57,7 +57,11 @@ public class SessionFilter implements Filter {
             String token = request.getHeader("Authorization");
             if (null == token || Objects.equals(token, "")) {
                 //无token信息,销毁session
-                session.invalidate();
+                try {
+                    session.invalidate();
+                } catch (Exception e) {
+
+                }
                 response.setStatus(401);
                 response.getWriter().write("error filter");
                 return;
