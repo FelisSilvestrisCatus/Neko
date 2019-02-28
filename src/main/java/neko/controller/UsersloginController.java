@@ -41,7 +41,7 @@ public class UsersloginController {
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", users.getUid());
-        queryWrapper.orderByDesc("loginTime");
+        queryWrapper.orderByDesc("logintime");
         List<Userslogin> usersloginList = usersloginService.listObjs(queryWrapper);
         /*
          * 这里需要判断list中是否有两个对象，取时间最近的两个对象
@@ -50,8 +50,8 @@ public class UsersloginController {
         JSONArray json = JSONArray.fromObject(usersloginList);
 
         Map<String, String> map = new HashMap<>();
-        map.put("state", "200");
-        map.put("msg", "ok");
+        map.put("stmsgate", "200");
+        map.put("", "ok");
         map.put("data", json.toString());
         return map;
     }

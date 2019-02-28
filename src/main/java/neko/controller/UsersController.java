@@ -40,11 +40,11 @@ public class UsersController {
     private LoginInfo loginInfo;
 
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String username, String password, int loginType) throws IOException {
+    public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
 
         //token
         System.out.println(request.getHeader("Authorization"));
-
+        System.out.println("类型"+loginType);
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
         map.put("msg", "error");
@@ -54,7 +54,7 @@ public class UsersController {
         queryWrapper.eq("phone", username);
         Users user = usersService.getOne(queryWrapper);
 
-        try {
+
             System.out.println(user.toString());
             if (password.equals(user.getPwd())) {
                 HttpSession session = request.getSession();
@@ -67,13 +67,18 @@ public class UsersController {
                 Userslogin userslogin = new Userslogin();
                 userslogin.setUid(user.getUid());
                 userslogin.setLoginIp(loginInfo.getIpAddr(request));
-                userslogin.setLoginType(loginType);
+                userslogin.setLoginType(1);
                 userslogin.setLoginTime(LocalDateTime.now());
+                userslogin.setLoginLocation(loginInfo.getIpLocation(loginInfo.getIpAddr(request)));
+                System.out.println("要存的数据库数据"+userslogin.getLoginIp());
+                System.out.println("要存的数据库数据"+userslogin.getLoginLocation());
+                System.out.println("要存的数据库数据"+userslogin.getLoginTime());
+                System.out.println("要存的数据库数据"+userslogin.getLoginType());
+                System.out.println("要存的数据库数据"+userslogin.getUid());
                 usersloginService.save(userslogin);
 
+
             }
-        } catch (Exception e) {
-        }
 
         return map;
     }
