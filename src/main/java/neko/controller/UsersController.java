@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,11 +31,12 @@ public class UsersController {
 
     @Autowired
     private IUsersService usersService;
-    LoginRequestHeaderMessage loginRequestHeaderMessage=new LoginRequestHeaderMessage();
+    LoginRequestHeaderMessage loginRequestHeaderMessage = new LoginRequestHeaderMessage();
+
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String username, String password) throws IOException {
 
-        loginRequestHeaderMessage.getIpLocation("ip"+loginRequestHeaderMessage.getIpAddr(request),"utf-8");
+        loginRequestHeaderMessage.getIpLocation("ip" + loginRequestHeaderMessage.getIpAddr(request), "utf-8");
         System.out.println(request.getHeader("Authorization"));
 
         Map<String, String> map = new HashMap<>();

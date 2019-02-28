@@ -1,4 +1,4 @@
-package neko.config;
+package neko.utils;
 
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;

@@ -1,30 +1,30 @@
 package neko.utils;
 
 
-
-
-
-
+import net.sf.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.*;
-import net.sf.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 public class LoginRequestHeaderMessage {
 
 
     /**
      * @parameter:HttpServletRequest request
-     * @return:ip
-     * 实现获取登录ip地址 以及 尝试使用dns域名解析
-     *
+     * @return:ip 实现获取登录ip地址 以及 尝试使用dns域名解析
      */
     public String getIpAddr(HttpServletRequest request) {
         // 取用户客户端真实ip地址
         //x-forwarded-for 记录正向代理的真实浏览器地址以及之间的代理服务器地址
         String ip = request.getHeader("x-forwarded-for");
-        String getRemoteIp="";
+        String getRemoteIp = "";
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             //X-Real-IP 记录一次真实的浏览器地址
             ip = request.getHeader("X-Real-IP");
@@ -70,15 +70,15 @@ public class LoginRequestHeaderMessage {
         }
         if (ip != null && ip.length() > 15) { //"***.***.***.***".length() = 15  
             if (ip.indexOf(",") > 0) {
-                ip = ip.split(",")[ ip.split(",").length-1];
-                System.out.println("通过x-forwarded-for记录的正向代理ip中离目标服务器最近的ip地址"+ ip );
+                ip = ip.split(",")[ip.split(",").length - 1];
+                System.out.println("通过x-forwarded-for记录的正向代理ip中离目标服务器最近的ip地址" + ip);
                 //为了减少ip篡改的可能性 比较一下离目标最近的地址ip
-                if(!ip.equalsIgnoreCase(request.getRemoteAddr())){
+                if (!ip.equalsIgnoreCase(request.getRemoteAddr())) {
                     System.out.println("x-forwarded-for被篡改或者服务器不支持可能性很大 但不影响ip的测定");
 
                 }
 
-        }
+            }
 
 
             //如果最后服务器之间没有x-forwarded-for规范 则以getRemoteAddr为准
@@ -90,15 +90,12 @@ public class LoginRequestHeaderMessage {
 
 
     /**
-     * @param urlStr
-     *            请求的地址
-     * @param content
-     *            请求的参数 格式为：ip=""
-     * @param encoding
-     *            服务器端请求编码。如GBK,UTF-8等
+     * @param urlStr   请求的地址
+     * @param content  请求的参数 格式为：ip=""
+     * @param encoding 服务器端请求编码。如GBK,UTF-8等
      * @return
      */
-    private  String getResult(String urlStr, String content, String encoding) throws IOException {
+    private String getResult(String urlStr, String content, String encoding) throws IOException {
         URL url = null;
         HttpURLConnection connection = null;
         try {
@@ -135,18 +132,19 @@ public class LoginRequestHeaderMessage {
         }
         return null;
     }
+
     /**
      * unicode 转换成 中文
      *
-     * @author fanhui 2007-3-15
      * @param theString
      * @return
+     * @author fanhui 2007-3-15
      */
     public String decodeUnicode(String theString) {
         char aChar;
         int len = theString.length();
         StringBuffer outBuffer = new StringBuffer(len);
-        for (int x = 0; x < len;) {
+        for (int x = 0; x < len; ) {
             aChar = theString.charAt(x++);
             if (aChar == '\\') {
                 aChar = theString.charAt(x++);
@@ -209,16 +207,13 @@ public class LoginRequestHeaderMessage {
     }
 
 
-
-
-
     /**
-     * @param :content ="ip"+ip
+     * @param :content         ="ip"+ip
      * @param :cencodingString ="utf-8/GBK"  编码格式
-     * 根据登录ip获取归属地
+     *                         根据登录ip获取归属地
      * @return :iplocation
      */
-    public String getIpLocation(String content,String encodingString)
+    public String getIpLocation(String content, String encodingString)
             throws IOException {
         // 这里调用淘宝API
         String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
@@ -230,9 +225,9 @@ public class LoginRequestHeaderMessage {
             returnStr = decodeUnicode(returnStr);
             System.out.println("(2) unicode转换成中文后的returnStr : " + returnStr);
             String[] temp = returnStr.split(",");
-            if(temp.length<3){
+            if (temp.length < 3) {
                 return "0";//无效IP，局域网测试
-            }else{
+            } else {
 
 
                 //解析json数据 生成指定数据呈现样式
