@@ -4,6 +4,7 @@
 //import neko.entity.Users;
 //import neko.service.IUsersService;
 //import neko.utils.Token;
+//import neko.utils.redis.RedisUtil;
 //import org.springframework.beans.factory.annotation.Autowired;
 //
 //import javax.servlet.*;
@@ -20,7 +21,8 @@
 //
 //    @Autowired
 //    private IUsersService usersService;
-//
+//    @Autowired
+//    private RedisUtil redisUtil;
 //
 //    //不需要登录就可以访问的路径
 //    String[] includeUrls = new String[]{"/users/login", "/favicon.ico"};
@@ -56,6 +58,15 @@
 //                response.getWriter().write("error filter");
 //                return;
 //            }
+//
+//            //检查token是否存在于redis中
+//            boolean isinredis = false;
+//            isinredis = redisUtil.hasKey(token);
+//            if (!isinredis) {
+//                response.setStatus(401);
+//                response.getWriter().write("认证失败");
+//            }
+//
 //            // session中包含user对象,则是登录状态
 //            if (session != null && session.getAttribute("user") != null) {
 //                // System.out.println("user:"+session.getAttribute("user"));
@@ -74,7 +85,7 @@
 //                } catch (Exception e) {
 //                    //未登陆或登录失效
 //                    response.setStatus(401);
-//                    response.getWriter().write("error filter");
+//                    response.getWriter().write("认证失败");
 //                }
 //            }
 //        }
