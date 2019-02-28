@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
+import neko.utils.LoginRequestHeaderMessage;
 import neko.utils.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +33,11 @@ public class UsersController {
 
     @Autowired
     private IUsersService usersService;
-
+    LoginRequestHeaderMessage loginRequestHeaderMessage=new LoginRequestHeaderMessage();
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String username, String password) {
+    public Map<String, String> login(HttpServletRequest request, String username, String password) throws IOException {
 
+        loginRequestHeaderMessage.getIpLocation("ip"+loginRequestHeaderMessage.getIpAddr(request),"utf-8");
         System.out.println(request.getHeader("Authorization"));
 
         Map<String, String> map = new HashMap<>();
@@ -52,6 +57,8 @@ public class UsersController {
                 map.put("state", "200");
                 map.put("msg", "ok");
                 map.put("token", Token.getJwtToken(user));
+                //本次用户登陆成功后记录登录时间
+
             }
         } catch (Exception e) {
         }
@@ -76,4 +83,6 @@ public class UsersController {
         map.put("data", jsonString);
         return map;
     }
+
+
 }
