@@ -47,12 +47,20 @@ public class UsersloginController {
          * 这里需要判断list中是否有两个对象，取时间最近的两个对象
          * 如果只有一个对象则为第一次登录，last信息全部置NULL
          * */
+           if(usersloginList.size()<2){
+
+                usersloginList.clear();
+           }
+
         JSONArray json = JSONArray.fromObject(usersloginList);
 
         Map<String, String> map = new HashMap<>();
         map.put("stmsgate", "200");
         map.put("", "ok");
         map.put("data", json.toString());
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
         return map;
     }
 }
