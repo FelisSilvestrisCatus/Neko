@@ -7,7 +7,6 @@ import neko.entity.Userslogin;
 import neko.service.IUsersloginService;
 import neko.utils.LoginInfo;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,30 +36,20 @@ public class UsersloginController {
 
     @RequestMapping(value = "/getLast")
     public Map<String, String> getLast(HttpServletRequest request) {
-        System.out.println("dddddddddd");
         HttpSession session = request.getSession();
         Users users = (Users) session.getAttribute("user");
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", users.getUid());
         queryWrapper.orderByDesc("logintime");
-        List<Userslogin> usersloginList = usersloginService.listObjs(queryWrapper);
-        /*
-         * 这里需要判断list中是否有两个对象，取时间最近的两个对象
-         * 如果只有一个对象则为第一次登录，last信息全部置NULL
-         * */
-     //   JsonConfig jsonConfig = new JsonConfig();
+        List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
+
         JSONArray json = JSONArray.fromObject(usersloginList);
-        System.out.println(json.toString());
         Map<String, String> map = new HashMap<>();
         map.put("state", "200");
         map.put("msg", "ok");
-        System.out.println("能获取到的当前用户的登录记录条数"+json.size());
-       // map.put("data",((JSONObject )(json.get(0))).toString());
-//        System.out.println( ( (JSONObject)json.get(0)).toString());    ;
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-        }
+        System.out.println("能获取到的当前用户的登录记录条数" + json.size());
+        map.put("data", json.toString());
         return map;
     }
 }

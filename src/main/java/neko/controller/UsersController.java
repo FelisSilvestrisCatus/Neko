@@ -70,11 +70,6 @@ public class UsersController {
                 userslogin.setLogintype(1);
                 userslogin.setLogintime(LocalDateTime.now());
                 userslogin.setLoginlocation(loginInfo.getIpLocation(loginInfo.getIpAddr(request)));
-                System.out.println("要存的数据库数据"+userslogin.getLoginip());
-                System.out.println("要存的数据库数据"+userslogin.getLoginlocation());
-                System.out.println("要存的数据库数据"+userslogin.getLogintime());
-                System.out.println("要存的数据库数据"+userslogin.getLogintype());
-                System.out.println("要存的数据库数据"+userslogin.getUid());
                 usersloginService.save(userslogin);
 
 
