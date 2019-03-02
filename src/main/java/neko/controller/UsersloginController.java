@@ -42,14 +42,26 @@ public class UsersloginController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", users.getUid());
         queryWrapper.orderByDesc("logintime");
-        List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
-
-        JSONArray json = JSONArray.fromObject(usersloginList);
         Map<String, String> map = new HashMap<>();
+        List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
+        //判断是否是首次登录
+        if(usersloginList.size()<2){
+            map.put("state", "200");
+            map.put("msg", "ok");
+
+
+        }
+        List<Userslogin> getUsersLastTwoLoginList = usersloginService.list(queryWrapper).subList(0,1);
+
+        JSONArray json = JSONArray.fromObject(getUsersLastTwoLoginList);
+
         map.put("state", "200");
         map.put("msg", "ok");
-        System.out.println("能获取到的当前用户的登录记录条数" + json.size());
+        System.out.println(json.size());
+
         map.put("data", json.toString());
+
+
         return map;
     }
 }
