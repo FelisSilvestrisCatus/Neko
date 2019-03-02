@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Userslogin;
 import neko.service.IUsersloginService;
-import neko.utils.LoginInfo;
-import net.sf.json.JSONArray;
+import neko.utils.ip.LoginInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,25 +41,34 @@ public class UsersloginController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", users.getUid());
         queryWrapper.orderByDesc("logintime");
+
         Map<String, String> map = new HashMap<>();
-        List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
-        //判断是否是首次登录
-        if(usersloginList.size()<2){
-            map.put("state", "200");
-            map.put("msg", "ok");
-
-
-        }
-        List<Userslogin> getUsersLastTwoLoginList = usersloginService.list(queryWrapper).subList(0,1);
-
-        JSONArray json = JSONArray.fromObject(getUsersLastTwoLoginList);
-
         map.put("state", "200");
         map.put("msg", "ok");
-        System.out.println(json.size());
 
-        map.put("data", json.toString());
+        List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
 
+        Userslogin u = usersloginList.get(0);
+        String time = u.getLogintime().toString().replace("T", " ");
+        time.substring(0, time.length() - 4);
+        map.put("time", time);
+        map.put("ip", u.getLoginip());
+        map.put("area", u.getLoginlocation());
+        map.put("type", u.getLogintype().toString());
+
+        //判断是否是首次登录
+        if (usersloginList.size() < 2) {
+            map.put("isfirst", "true");
+        } else {
+            u = usersloginList.get(1);
+            time = u.getLogintime().toString().replace("T", " ");
+            time.substring(0, time.length() - 4);
+            map.put("lasttime", time);
+            map.put("lastip", u.getLoginip());
+            map.put("lastarea", u.getLoginlocation());
+            map.put("lasttype", u.getLogintype().toString());
+            map.put("isfirst", "false");
+        }
 
         return map;
     }

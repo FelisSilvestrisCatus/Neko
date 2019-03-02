@@ -1,6 +1,6 @@
 package neko.controller;
 
-import neko.utils.LoginInfo;
+import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

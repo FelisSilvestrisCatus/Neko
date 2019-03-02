@@ -1,4 +1,4 @@
-package neko.utils;
+package neko.utils.ip;
 
 
 import net.sf.json.JSONObject;
@@ -92,15 +92,15 @@ public class LoginInfo {
      * @return
      */
     private String getResult(String urlStr, String content) {
-        System.out.println("要查询的ip"+content);
+        System.out.println("要查询的ip" + content);
         URL url = null;
         HttpURLConnection connection = null;
         try {
-            System.out.println("网站接口"+urlStr+"?ip="+content);
-            url = new URL(urlStr+"?ip="+content);
+            System.out.println("网站接口" + urlStr + "?ip=" + content);
+            url = new URL(urlStr + "?ip=" + content);
             connection = (HttpURLConnection) url.openConnection();// 新建连接实例
-            connection.setConnectTimeout(2000);// 设置连接超时时间，单位毫秒
-            connection.setReadTimeout(2000);// 设置读取数据超时时间，单位毫秒
+            connection.setConnectTimeout(1000);// 设置连接超时时间，单位毫秒
+            connection.setReadTimeout(1000);// 设置读取数据超时时间，单位毫秒
             connection.setDoOutput(true);// 是否打开输出流 true|false
 
             connection.setRequestMethod("GET");// 提交方法POST|GET
@@ -212,14 +212,16 @@ public class LoginInfo {
      * @return :iplocation      根据登录ip获取归属地
      */
     public String getIpLocation(String content) {
+
+        if (content.contains("192.168"))
+            return "局域网地址";
         // 这里调用淘宝API
         String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
-        // 从http://whois.pconline.com.cn取得IP所在的省市区信息
         String returnStr = null;
         try {
-            returnStr=getResult(urlStr,content);
+            returnStr = getResult(urlStr, content);
         } catch (Exception e) {
-            return "因为ip登录地址查询网络接口不可用或者服务器网络状况差导致登陆点未知";
+            return "未知地址";
         }
         if (returnStr != null) {
             // 处理返回的省市区信息
@@ -239,13 +241,6 @@ public class LoginInfo {
                 String county = JSONObject.fromObject(json.get("data")).get("county").toString();
                 String isp = JSONObject.fromObject(json.get("data")).get("isp").toString();
                 String area = JSONObject.fromObject(json.get("data")).get("area").toString();
-                System.out.println("国家： " + country);
-
-                System.out.println("省份: " + region);
-                System.out.println("城市： " + city);
-                System.out.println("区/县： " + county);
-                System.out.println("互联网服务提供商： " + isp);
-
                 String address = country + "/";
                 address += region + "/";
                 address += city + "/";
@@ -255,7 +250,7 @@ public class LoginInfo {
             }
 
         }
-        return "因为ip登录地址查询网络接口不可用或者服务器网络状况差导致登陆点未知";
+        return "未知地址";
     }
 
 

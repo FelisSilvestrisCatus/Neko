@@ -7,8 +7,9 @@ import neko.entity.Users;
 import neko.entity.Userslogin;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
-import neko.utils.LoginInfo;
 import neko.utils.Token;
+import neko.utils.ip.JuheDemo;
+import neko.utils.ip.LoginInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,13 +39,16 @@ public class UsersController {
     private IUsersloginService usersloginService;
     @Autowired
     private LoginInfo loginInfo;
+    @Autowired
+    private JuheDemo juheDemo;
+
 
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
 
         //token
         System.out.println(request.getHeader("Authorization"));
-        System.out.println("类型"+loginType);
+        System.out.println("类型" + loginType);
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
         map.put("msg", "error");
@@ -55,25 +59,27 @@ public class UsersController {
         Users user = usersService.getOne(queryWrapper);
 
 
-            System.out.println(user.toString());
-            if (password.equals(user.getPwd())) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                map.put("state", "200");
-                map.put("msg", "ok");
-                map.put("token", Token.getJwtToken(user));
+        System.out.println(user.toString());
+        if (password.equals(user.getPwd())) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            map.put("state", "200");
+            map.put("msg", "ok");
+            map.put("token", Token.getJwtToken(user));
 
-                //保存本次登录信息
-                Userslogin userslogin = new Userslogin();
-                userslogin.setUid(user.getUid());
-                userslogin.setLoginip(loginInfo.getIpAddr(request));
-                userslogin.setLogintype(1);
-                userslogin.setLogintime(LocalDateTime.now());
-                userslogin.setLoginlocation(loginInfo.getIpLocation(loginInfo.getIpAddr(request)));
-                usersloginService.save(userslogin);
-
-
+            //保存本次登录信息
+            Userslogin userslogin = new Userslogin();
+            userslogin.setUid(user.getUid());
+            userslogin.setLoginip(loginInfo.getIpAddr(request));
+            userslogin.setLogintype(1);
+            userslogin.setLogintime(LocalDateTime.now());
+            String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
+            if (area.equals("未知地址")) {
+                area = juheDemo.getValue(loginInfo.getIpAddr(request));
             }
+            userslogin.setLoginlocation(area);
+            usersloginService.save(userslogin);
+        }
 
         return map;
     }
