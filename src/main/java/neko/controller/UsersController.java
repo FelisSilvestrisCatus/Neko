@@ -46,26 +46,23 @@ public class UsersController {
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
 
-        //token
-        System.out.println(request.getHeader("Authorization"));
-        System.out.println("类型" + loginType);
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
         map.put("msg", "error");
         map.put("token", "");
 
+        //查询用户
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("phone", username);
         Users user = usersService.getOne(queryWrapper);
 
-
-        System.out.println(user.toString());
         if (password.equals(user.getPwd())) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             map.put("state", "200");
             map.put("msg", "ok");
             map.put("token", Token.getJwtToken(user));
+            map.put("user", JSON.toJSONString(user));
 
             //保存本次登录信息
             Userslogin userslogin = new Userslogin();

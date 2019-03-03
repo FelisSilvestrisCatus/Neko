@@ -260,7 +260,6 @@ public class RedisUtil {
      * 设置ASCII码, 字符串'a'的ASCII码是97, 转为二进制是'01100001', 此方法是将二进制第offset位值变为value
      *
      * @param key
-     * @param postion 位置
      * @param value   值,true为1, false为0
      * @return
      */
@@ -336,7 +335,6 @@ public class RedisUtil {
      * 增加(自增长), 负数则为自减
      *
      * @param key
-     * @param value
      * @return
      */
     public Long incrBy(String key, long increment) {
@@ -345,7 +343,6 @@ public class RedisUtil {
 
     /**
      * @param key
-     * @param value
      * @return
      */
     public Double incrByFloat(String key, double increment) {
@@ -963,8 +960,6 @@ public class RedisUtil {
      * 获取集合所有元素
      *
      * @param key
-     * @param otherKeys
-     * @param destKey
      * @return
      */
     public Set<String> setMembers(String key) {
