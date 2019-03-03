@@ -1,4 +1,4 @@
-package neko.utils;
+package neko.utils.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

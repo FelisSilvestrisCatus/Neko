@@ -7,9 +7,9 @@ import neko.entity.Users;
 import neko.entity.Userslogin;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
-import neko.utils.Token;
-import neko.utils.ip.JuheDemo;
+import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
+import neko.utils.token.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +40,7 @@ public class UsersController {
     @Autowired
     private LoginInfo loginInfo;
     @Autowired
-    private JuheDemo juheDemo;
+    private Juhe juhe;
 
 
     @RequestMapping(value = "/login")
@@ -75,7 +75,8 @@ public class UsersController {
             userslogin.setLogintime(LocalDateTime.now());
             String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
             if (area.equals("未知地址")) {
-                area = juheDemo.getValue(loginInfo.getIpAddr(request));
+                //在淘宝api未得到数据或超时的情况下调用聚合api
+                area = juhe.getValue(loginInfo.getIpAddr(request));
             }
             userslogin.setLoginlocation(area);
             usersloginService.save(userslogin);

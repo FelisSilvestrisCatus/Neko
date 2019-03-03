@@ -2,11 +2,11 @@ package neko.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author z9961
- * @since 2019-02-28
+ * @since 2019-03-03
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -23,6 +23,9 @@ public class Rollcalldetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 自增主键
+     */
     @TableId(value = "rdid", type = IdType.AUTO)
     private Integer rdid;
 
@@ -35,11 +38,6 @@ public class Rollcalldetails implements Serializable {
      * 学生id
      */
     private Integer uid;
-
-    /**
-     * 点名时间
-     */
-    private LocalDateTime date;
 
 
 }

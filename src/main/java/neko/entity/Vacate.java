@@ -7,11 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 请假表
  * </p>
  *
  * @author z9961
@@ -20,20 +19,22 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Rollcall implements Serializable {
+public class Vacate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 点名id
-     */
-    @TableId(value = "rid", type = IdType.AUTO)
-    private Integer rid;
+    @TableId(value = "vid", type = IdType.AUTO)
+    private Integer vid;
 
     /**
-     * 班级id
+     * 学生id
      */
-    private Integer cid;
+    private Integer uid;
+
+    /**
+     * 课程id
+     */
+    private Integer courseid;
 
     /**
      * 教师id
@@ -41,9 +42,19 @@ public class Rollcall implements Serializable {
     private Integer tid;
 
     /**
-     * 点名时间
+     * 请假原因
      */
-    private LocalDateTime rtime;
+    private String vname;
+
+    /**
+     * 请假类型(0为事假,1为病假,3为其他)
+     */
+    private Integer vtype;
+
+    /**
+     * 状态(0为已申请,1为未批准,2为已批准)
+     */
+    private Integer state;
 
 
 }

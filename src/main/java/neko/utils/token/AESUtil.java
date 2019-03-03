@@ -1,4 +1,4 @@
-package neko.utils;
+package neko.utils.token;
 
 import org.apache.commons.codec.binary.Base64;
 

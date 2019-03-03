@@ -7,11 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 课程表
  * </p>
  *
  * @author z9961
@@ -20,15 +19,15 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Rollcall implements Serializable {
+public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 点名id
+     * 课程id
      */
-    @TableId(value = "rid", type = IdType.AUTO)
-    private Integer rid;
+    @TableId(value = "courseid", type = IdType.AUTO)
+    private Integer courseid;
 
     /**
      * 班级id
@@ -41,9 +40,29 @@ public class Rollcall implements Serializable {
     private Integer tid;
 
     /**
-     * 点名时间
+     * 课程名
      */
-    private LocalDateTime rtime;
+    private String cname;
+
+    /**
+     * 星期几
+     */
+    private Integer cday;
+
+    /**
+     * 课程类型(0为固定,1为单周,2为双周)
+     */
+    private Integer ctype;
+
+    /**
+     * 课程时间(1-5大节)
+     */
+    private Integer ctime;
+
+    /**
+     * 状态位
+     */
+    private Integer state;
 
 
 }

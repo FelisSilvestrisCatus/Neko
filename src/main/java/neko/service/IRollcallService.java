@@ -1,7 +1,7 @@
 package neko.service;
 
-import neko.entity.Rollcall;
 import com.baomidou.mybatisplus.extension.service.IService;
+import neko.entity.Rollcall;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author z9961
- * @since 2019-02-28
+ * @since 2019-03-03
  */
 public interface IRollcallService extends IService<Rollcall> {
 

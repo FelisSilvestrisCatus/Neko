@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 @Component
-public class JuheDemo {
+public class Juhe {
     public static final String DEF_CHATSET = "UTF-8";
     public static final int DEF_CONN_TIMEOUT = 30000;
     public static final int DEF_READ_TIMEOUT = 30000;

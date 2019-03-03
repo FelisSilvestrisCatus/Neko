@@ -1,7 +1,7 @@
 package neko.mapper;
 
-import neko.entity.Rollcalldetails;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import neko.entity.Rollcalldetails;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author z9961
- * @since 2019-02-28
+ * @since 2019-03-03
  */
 public interface RollcalldetailsMapper extends BaseMapper<Rollcalldetails> {
 

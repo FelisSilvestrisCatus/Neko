@@ -1,9 +1,9 @@
 package neko.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Rollcall;
 import neko.mapper.RollcallMapper;
 import neko.service.IRollcallService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author z9961
- * @since 2019-02-28
+ * @since 2019-03-03
  */
 @Service
 public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> implements IRollcallService {
