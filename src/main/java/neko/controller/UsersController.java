@@ -9,6 +9,7 @@ import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
+import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -33,6 +35,12 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UsersController {
 
+    //Redis过期时间
+    private static final long expire = 7;
+    //Redis过期时间单位
+//    private static final TimeUnit expireTimeUnit = TimeUnit.DAYS;
+    private static final TimeUnit expireTimeUnit = TimeUnit.MINUTES;
+
     @Autowired
     private IUsersService usersService;
     @Autowired
@@ -41,7 +49,8 @@ public class UsersController {
     private LoginInfo loginInfo;
     @Autowired
     private Juhe juhe;
-
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
@@ -59,9 +68,14 @@ public class UsersController {
         if (password.equals(user.getPwd())) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+
+            String token = Token.getJwtToken(user);
+            redisUtil.set(token, user.getUid().toString());
+            redisUtil.expire(token, expire, expireTimeUnit);
+
             map.put("state", "200");
             map.put("msg", "ok");
-            map.put("token", Token.getJwtToken(user));
+            map.put("token", token);
             map.put("user", JSON.toJSONString(user));
 
             //保存本次登录信息
