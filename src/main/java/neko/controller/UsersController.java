@@ -120,24 +120,21 @@ public class UsersController {
 
         String userphone = request.getParameter("userphone");
         String validatecode = request.getParameter("validatecode");
-        Map<String, String> map=new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         //手机号有记录且获取验证码匹配
         if (redisUtil.hasKey(userphone) && redisUtil.get(userphone).equalsIgnoreCase(validatecode)) {
             //插入数据库
             Users user = new Users();
             user.setPhone(userphone);
             user.setUname(username);
-            try {
-                usersService.save(user);
-                map.put("state","200");
-            } catch (Exception e) {
-                map.put("state","400");
-            }
+            user.setType(2);
 
+            usersService.save(user);
+            map.put("state", "200");
 
         } else {
 
-            map.put("state","400");
+            map.put("state", "400");
         }
 
 
