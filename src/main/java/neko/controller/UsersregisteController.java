@@ -35,9 +35,29 @@ public class UsersregisteController {
     private IUsersService userslService;
     @Autowired
     private LoginInfo loginInfo;
-
+    userphone
     @RequestMapping(value = "/phoneIsOrNotExist")
     public Map<String, String> phoneIsOrNotExist(HttpServletRequest request) {
+        String userphone=request.getParameter("userphone");
+        Map<String, String> map = new HashMap<>();
+        System.out.println("用户输入手机号后接受手机号"+userphone);
+        //查询该手机号用户是否存在
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone",userphone);
+
+        List<Users>  userlist= userslService.listObjs(queryWrapper);
+        System.out.println("拥有该手机号的用户有"+userlist.size()+"个");
+        if(userlist.size()==0){
+            System.out.println("拥有该手机号的用户有0个");
+            map.put("state","0");
+        }else{
+            map.put("state","1");
+
+        }
+        return map;
+    }
+    @RequestMapping(value = "/getValidatecode")
+    public Map<String, String> getValidatecode(HttpServletRequest request) {
         String userphone=request.getParameter("userphone");
         Map<String, String> map = new HashMap<>();
         System.out.println("用户输入手机号后接受手机号"+userphone);
