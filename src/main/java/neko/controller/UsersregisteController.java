@@ -63,19 +63,12 @@ public class UsersregisteController {
         if (!checkUser(userphone)) {
             if (!redis || hasRedis) {
                 int code = message.getCode(userphone);
-                if (code!=0) {
+                if (code != 0) {
                     //获取验证码存入redis
-//                    try{
-                    System.out.println(map.get("data"));
-                        redisUtil.set(userphone,code+"");
-                        redisUtil.expire(userphone, expire, expireTimeUnit);
-                        map.put("state", "200");
-                        map.put("msg", "验证码发送成功");
-//                    }catch (Exception e){
-                        map.put("state", "400");
-                        map.put("msg", "redis不可用");
-//                    }
-
+                    redisUtil.set(userphone, code + "");
+                    redisUtil.expire(userphone, expire, expireTimeUnit);
+                    map.put("state", "200");
+                    map.put("msg", "验证码发送成功");
                 } else {
                     map.put("state", "400");
                     map.put("msg", "验证码发送失败");

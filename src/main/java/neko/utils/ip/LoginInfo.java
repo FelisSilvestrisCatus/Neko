@@ -25,47 +25,30 @@ public class LoginInfo {
         //获取用户客户端真实ip地址
         //x-forwarded-for 记录正向代理的真实浏览器地址以及之间的代理服务器地址
         String ip = request.getHeader("x-forwarded-for");
-        System.out.println("x-forwarded-for" + ip);
         String getRemoteIp = "";
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             //X-Real-IP 记录一次真实的浏览器地址
             ip = request.getHeader("X-Real-IP");
-            System.out.println("X-Real-IP" + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Forwarded-For");
-            System.out.println("X-Forwarded-For" + ip);
         }
-
-        //　X-Forwarded-For  WL-Proxy-Client-IP都是apache的请求头
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
-            System.out.println("Proxy-Client-IP" + ip);
         }
-
-
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
-            System.out.println("WL-Proxy-Client-IP" + ip);
         }
-
-
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
-            System.out.println("HTTP_CLIENT_IP" + ip);
         }
-
-
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-            System.out.println("HTTP_X_FORWARDED_FOR" + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            System.out.println("getRemoteAddr" + ip);
             //判断是不是本地ip
             if (ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1")) {
-
                 //根据网卡取本机配置的IP
                 InetAddress inet = null;
                 try {
@@ -106,8 +89,8 @@ public class LoginInfo {
             System.out.println("网站接口" + urlStr + "?ip=" + content);
             url = new URL(urlStr + "?ip=" + content);
             connection = (HttpURLConnection) url.openConnection();// 新建连接实例
-            connection.setConnectTimeout(1000);// 设置连接超时时间，单位毫秒
-            connection.setReadTimeout(1000);// 设置读取数据超时时间，单位毫秒
+            connection.setConnectTimeout(500);// 设置连接超时时间，单位毫秒
+            connection.setReadTimeout(500);// 设置读取数据超时时间，单位毫秒
             connection.setDoOutput(true);// 是否打开输出流 true|false
 
             connection.setRequestMethod("GET");// 提交方法POST|GET
