@@ -3,8 +3,6 @@ package neko.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.service.IUsersService;
-import neko.service.IUsersloginService;
-import neko.utils.ip.LoginInfo;
 import neko.utils.message.Message;
 import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +33,7 @@ public class UsersregisteController {
 
 
     @Autowired
-    private IUsersloginService usersloginService;
-    @Autowired
     private IUsersService userslService;
-    @Autowired
-    private LoginInfo loginInfo;
     //使用工具类
     @Autowired
     private Message message;
@@ -63,17 +57,24 @@ public class UsersregisteController {
     @RequestMapping(value = "/getValidatecode")
     public Map<String, String> getValidatecode(HttpServletRequest request, String userphone) {
         Map<String, String> map = new HashMap<>();
-        //查询该手机号用户是否存在
-        if (checkUser(userphone)) {
-            if (message.getCode(userphone)) {
-                //获取验证码存入redis
-                redisUtil.set(userphone, map.get("data"));
-                redisUtil.expire(userphone, expire, expireTimeUnit);
-                map.put("state", "200");
-                map.put("msg", "验证码发送成功");
+        boolean redis = redisUtil.hasKey(userphone);
+        boolean hasRedis = redis && redisUtil.getExpire(userphone, TimeUnit.SECONDS) < ((expire - 1) * 60);
+        //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
+        if (!checkUser(userphone)) {
+            if (!redis || hasRedis) {
+                if (message.getCode(userphone)) {
+                    //获取验证码存入redis
+                    redisUtil.set(userphone, map.get("data"));
+                    redisUtil.expire(userphone, expire, expireTimeUnit);
+                    map.put("state", "200");
+                    map.put("msg", "验证码发送成功");
+                } else {
+                    map.put("state", "400");
+                    map.put("msg", "验证码发送失败");
+                }
             } else {
                 map.put("state", "400");
-                map.put("msg", "验证码发送失败");
+                map.put("msg", "验证码发送频繁");
             }
         } else {
             map.put("state", "400");
