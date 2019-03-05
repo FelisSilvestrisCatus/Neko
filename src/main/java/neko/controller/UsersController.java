@@ -75,7 +75,7 @@ public class UsersController {
             map.put("state", "200");
             map.put("msg", "ok");
             map.put("token", token);
-            map.put("user", JSON.toJSONString(user));
+
 
             //保存本次登录信息
             Userslogin userslogin = new Userslogin();
@@ -90,6 +90,9 @@ public class UsersController {
             }
             userslogin.setLoginlocation(area);
             usersloginService.save(userslogin);
+
+            user.setPwd("");
+            map.put("user", JSON.toJSONString(user));
         }
 
         return map;
