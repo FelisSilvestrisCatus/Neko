@@ -135,7 +135,12 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
-
+        <!-- 短信-->
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+            <version>1.0.2</version>
+        </dependency>
 
     </dependencies>
 
