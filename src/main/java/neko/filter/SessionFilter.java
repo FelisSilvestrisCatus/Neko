@@ -25,7 +25,7 @@
 //    private RedisUtil redisUtil;
 //
 //    //不需要登录就可以访问的路径
-//    String[] includeUrls = new String[]{"/users/login", "/favicon.ico"};
+//    String[] includeUrls = new String[]{"/users/login", "/favicon.ico","/usersLogin/getLast"};
 //
 //    @Override
 //    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
