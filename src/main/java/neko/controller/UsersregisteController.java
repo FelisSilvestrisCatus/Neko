@@ -62,12 +62,20 @@ public class UsersregisteController {
         //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
         if (!checkUser(userphone)) {
             if (!redis || hasRedis) {
-                if (message.getCode(userphone)) {
+                int code = message.getCode(userphone);
+                if (code!=0) {
                     //获取验证码存入redis
-                    redisUtil.set(userphone, map.get("data"));
-                    redisUtil.expire(userphone, expire, expireTimeUnit);
-                    map.put("state", "200");
-                    map.put("msg", "验证码发送成功");
+//                    try{
+                    System.out.println(map.get("data"));
+                        redisUtil.set(userphone,code+"");
+                        redisUtil.expire(userphone, expire, expireTimeUnit);
+                        map.put("state", "200");
+                        map.put("msg", "验证码发送成功");
+//                    }catch (Exception e){
+                        map.put("state", "400");
+                        map.put("msg", "redis不可用");
+//                    }
+
                 } else {
                     map.put("state", "400");
                     map.put("msg", "验证码发送失败");

@@ -10,7 +10,7 @@ import java.util.Map;
 @Component
 public class Message {
 
-    public boolean getCode(String userphone) {
+    public int getCode(String userphone) {
 
         //获取的code验证
         int code = (int) (Math.random() * 9000 + 1000);
@@ -26,9 +26,9 @@ public class Message {
             SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
             SmsSingleSenderResult result = ssender.send(0, "86", userphone,
                     msg, "", "");
-            return true;
+            return code;
         } catch (Exception e) {
-            return false;
+            return 0;
         }
 
     }
