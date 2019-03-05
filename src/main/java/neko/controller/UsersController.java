@@ -115,4 +115,19 @@ public class UsersController {
     }
 
 
+    @RequestMapping(value = "/registe")
+    public Map<String, String> registe(HttpServletRequest request) throws IOException {
+        String username=request.getParameter("username");
+        String useremail=request.getParameter("useremail");
+        String userphone=request.getParameter("userphone");
+        String validatecode=request.getParameter("validatecode");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("state", "200");
+
+
+        return map;
+    }
+
+
 }
