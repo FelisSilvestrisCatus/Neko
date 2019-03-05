@@ -2,8 +2,6 @@ package neko.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import neko.entity.Users;
-import neko.entity.Userslogin;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.LoginInfo;
@@ -14,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -31,61 +28,66 @@ import java.util.Map;
 @RequestMapping("/usersRegiste")
 public class UsersregisteController {
 
+    //Redis过期时间
+    private static final long expire = 5;
+    //Redis过期时间单位
+    private static final TimeUnit expireTimeUnit = TimeUnit.MINUTES;
+
+
     @Autowired
     private IUsersloginService usersloginService;
     @Autowired
     private IUsersService userslService;
     @Autowired
     private LoginInfo loginInfo;
-    userphone
+    //使用工具类
+    @Autowired
+    private Message message;
+    //使用redis
+    @Autowired
+    private RedisUtil redisUtil;
+
     @RequestMapping(value = "/phoneIsOrNotExist")
-    public Map<String, String> phoneIsOrNotExist(HttpServletRequest request) {
-        String userphone = request.getParameter("userphone");
+    public Map<String, String> phoneIsOrNotExist(HttpServletRequest request, String userphone) {
         Map<String, String> map = new HashMap<>();
-        System.out.println("用户输入手机号后接受手机号" + userphone);
-        //查询该手机号用户是否存在
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", userphone);
-
-        List<Users> userlist = userslService.listObjs(queryWrapper);
-        System.out.println("拥有该手机号的用户有" + userlist.size() + "个");
-        if (userlist.size() == 0) {
-            System.out.println("拥有该手机号的用户有0个");
-            map.put("state", "0");
+        if (checkUser(userphone)) {
+            map.put("state", "400");
+            map.put("msg", "手机号已存在");
         } else {
-            map.put("state", "1");
-
+            map.put("state", "200");
+            map.put("msg", "手机号不存在");
         }
         return map;
     }
 
     @RequestMapping(value = "/getValidatecode")
-    public Map<String, String> getValidatecode(HttpServletRequest request) {
-        String userphone = request.getParameter("userphone");
+    public Map<String, String> getValidatecode(HttpServletRequest request, String userphone) {
         Map<String, String> map = new HashMap<>();
-        System.out.println("获取验证码的手机号" + userphone);
         //查询该手机号用户是否存在
-        map = message.getCode(userphone);
-        //获取手机号成功
-        if (map.get("state").equalsIgnoreCase("0")) {
-            //获取验证码存入redis
-            System.out.println("控制层获取的验证码" + map.get("state"));
-
-            edisUtil.set("userphone", map.get("state"));
-
-            try {
-                edisUtil.set("userphone", map.get("state"));
-                map.put("state","ok");
-            } catch (Exception e) {
-                map.put("state","false");
-
+        if (checkUser(userphone)) {
+            if (message.getCode(userphone)) {
+                //获取验证码存入redis
+                redisUtil.set(userphone, map.get("data"));
+                redisUtil.expire(userphone, expire, expireTimeUnit);
+                map.put("state", "200");
+                map.put("msg", "验证码发送成功");
+            } else {
+                map.put("state", "400");
+                map.put("msg", "验证码发送失败");
             }
-
-
         } else {
-
-            map.put("state","false");
+            map.put("state", "400");
+            map.put("msg", "手机号已存在");
         }
-return map;
+
+        return map;
+    }
+
+    //查询该手机号用户是否存在
+    private boolean checkUser(String userphone) {
+        Map<String, String> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", userphone);
+        return userslService.count(queryWrapper) != 0 ? true : false;
     }
 }
