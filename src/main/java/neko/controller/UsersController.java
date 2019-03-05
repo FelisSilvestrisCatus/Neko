@@ -116,13 +116,29 @@ public class UsersController {
 
     @RequestMapping(value = "/registe")
     public Map<String, String> registe(HttpServletRequest request) throws IOException {
-        String username=request.getParameter("username");
-        String useremail=request.getParameter("useremail");
-        String userphone=request.getParameter("userphone");
-        String validatecode=request.getParameter("validatecode");
+        String username = request.getParameter("username");
 
-        Map<String, String> map = new HashMap<>();
-        map.put("state", "200");
+        String userphone = request.getParameter("userphone");
+        String validatecode = request.getParameter("validatecode");
+        Map<String, String> map=new HashMap<>();
+        //手机号有记录且获取验证码匹配
+        if (redisUtil.hasKey(userphone) && redisUtil.get(userphone).equalsIgnoreCase(validatecode)) {
+            //插入数据库
+            Users user = new Users();
+            user.setPhone(userphone);
+            user.setUname(username);
+            try {
+                usersService.save(user);
+                map.put("state","200");
+            } catch (Exception e) {
+                map.put("state","400");
+            }
+
+
+        } else {
+
+            map.put("state","400");
+        }
 
 
         return map;
