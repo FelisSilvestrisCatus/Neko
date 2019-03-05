@@ -117,13 +117,9 @@ public class UsersController {
         return map;
     }
 
-
+    //用户注册
     @RequestMapping(value = "/registe")
-    public Map<String, String> registe(HttpServletRequest request) {
-        String username = request.getParameter("username");
-
-        String userphone = request.getParameter("userphone");
-        String validatecode = request.getParameter("validatecode");
+    public Map<String, String> registe(HttpServletRequest request, String username, String userphone, String validatecode) {
         Map<String, String> map = new HashMap<>();
         //手机号有记录且获取验证码匹配
         if (redisUtil.hasKey(userphone) && redisUtil.get(userphone).equalsIgnoreCase(validatecode)) {
