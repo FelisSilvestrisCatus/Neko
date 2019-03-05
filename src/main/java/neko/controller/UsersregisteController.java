@@ -76,7 +76,7 @@ public class UsersregisteController {
             //获取验证码存入redis
             System.out.println("控制层获取的验证码" + map.get("state"));
 
-            edisUtil.set("userphone", map.get("state"));
+         //    edisUtil.set("userphone", map.get("state"));
 
             try {
                 edisUtil.set("userphone", map.get("state"));
