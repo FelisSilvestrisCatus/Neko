@@ -3,7 +3,6 @@ package neko.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
-import neko.entity.Userslogin;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.LoginInfo;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +33,7 @@ public class UsersregisteController {
     private IUsersService userslService;
     @Autowired
     private LoginInfo loginInfo;
-    userphone
+
     @RequestMapping(value = "/phoneIsOrNotExist")
     public Map<String, String> phoneIsOrNotExist(HttpServletRequest request) {
         String userphone=request.getParameter("userphone");
