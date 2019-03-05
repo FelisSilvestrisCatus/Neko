@@ -62,7 +62,8 @@ public class UsersregisteController {
         //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
         if (!checkUser(userphone)) {
             if (!redis || hasRedis) {
-                int code = message.getCode(userphone);
+//                int code = message.getCode(userphone);
+                int code = 1111;
                 if (code != 0) {
                     //获取验证码存入redis
                     redisUtil.set(userphone, code + "");

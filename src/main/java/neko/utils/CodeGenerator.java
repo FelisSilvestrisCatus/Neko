@@ -46,7 +46,7 @@ public class CodeGenerator {
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("z9961");
         gc.setOpen(false);
-        gc.setFileOverride(true);
+        gc.setFileOverride(false);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -60,7 +60,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-//        pc.setModuleName(scanner("模块名"));
+        pc.setModuleName("neko");
         pc.setParent("neko");
         mpg.setPackageInfo(pc);
 

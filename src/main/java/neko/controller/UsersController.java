@@ -10,6 +10,7 @@ import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -118,7 +119,7 @@ public class UsersController {
 
 
     @RequestMapping(value = "/registe")
-    public Map<String, String> registe(HttpServletRequest request) throws IOException {
+    public Map<String, String> registe(HttpServletRequest request) {
         String username = request.getParameter("username");
 
         String userphone = request.getParameter("userphone");
@@ -141,6 +142,27 @@ public class UsersController {
         }
 
 
+        return map;
+    }
+
+    //修改用户信息
+    @RequestMapping(value = "/changeInfo")
+    public Map<String, String> changeInfo(HttpServletRequest request, String email, String password) {
+
+        Map<String, String> map = new HashMap<>();
+
+        Users users = (Users) request.getSession().getAttribute("user");
+        Users u = usersService.getById(users.getUid());
+        if (!StringUtils.isBlank(email))
+            u.setEmail(email);
+        if (!StringUtils.isBlank(password)) {
+            u.setPwd(password);
+        }
+        if (usersService.updateById(u)) {
+            map.put("state", "200");
+        } else {
+            map.put("state", "400");
+        }
         return map;
     }
 
