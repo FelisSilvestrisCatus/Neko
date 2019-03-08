@@ -128,16 +128,13 @@ public class UsersController {
             user.setPhone(userphone);
             user.setUname(username);
             user.setType(2);
-
             usersService.save(user);
             map.put("state", "200");
-
+            //删除验证码
+            redisUtil.delete(userphone);
         } else {
-
             map.put("state", "400");
         }
-
-
         return map;
     }
 
@@ -162,5 +159,23 @@ public class UsersController {
         return map;
     }
 
+    //修改用户信息
+    @RequestMapping(value = "/getInfo")
+    public Map<String, String> getInfo(HttpServletRequest request) {
+        //获取token
+        String token = request.getHeader("Authorization");
+        Map<String, String> info = Token.parseJwtToken(token);
+        //查询用户
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", info.get("Phone"));
+        Users user = usersService.getOne(queryWrapper);
+        //清除密码
+        user.setPwd("");
+        //返回数据
+        Map<String, String> map = new HashMap<>();
+        map.put("state", "200");
+        map.put("user", JSON.toJSONString(user));
+        return map;
+    }
 
 }
