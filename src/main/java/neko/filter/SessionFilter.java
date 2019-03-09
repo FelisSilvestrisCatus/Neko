@@ -25,7 +25,7 @@
 //    private RedisUtil redisUtil;
 //
 //    //不需要登录就可以访问的路径
-//    String[] includeUrls = new String[]{"/users/login", "/favicon.ico","/usersLogin/getLast"};
+//    String[] includeUrls = new String[]{"/users/login", "/favicon.ico", "/usersLogin/getLast"};
 //
 //    @Override
 //    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -65,7 +65,8 @@
 //
 //            //检查token是否存在于redis中
 //            boolean isinredis = false;
-//            isinredis = redisUtil.hasKey(token);
+//            Map<String, String> info = Token.parseJwtToken(token);
+//            isinredis = redisUtil.hasKey(info.get("Uid"));
 //            if (!isinredis) {
 //                response.setStatus(401);
 //                response.getWriter().write("认证失败");
@@ -79,7 +80,7 @@
 //                try {
 //                    //存在token但不存在session
 //
-//                    Map<String, String> info = Token.parseJwtToken(token);
+//
 //                    QueryWrapper queryWrapper = new QueryWrapper();
 //                    queryWrapper.eq("phone", info.get("Phone"));
 //                    Users user = usersService.getOne(queryWrapper);
