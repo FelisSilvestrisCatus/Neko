@@ -33,6 +33,7 @@ public class UsersloginController {
     @Autowired
     private LoginInfo loginInfo;
 
+    //获取登录信息
     @RequestMapping(value = "/getLast")
     public Map<String, String> getLast(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -47,6 +48,11 @@ public class UsersloginController {
         map.put("msg", "ok");
 
         List<Userslogin> usersloginList = usersloginService.list(queryWrapper);
+
+        for (int i = 0; i < usersloginList.size(); i++) {
+            Userslogin userslogin = usersloginList.get(i);
+            System.out.println("userslogin = " + i + ":" + userslogin);
+        }
 
         Userslogin u = usersloginList.get(0);
         String time = u.getLogintime().toString().replace("T", " ");

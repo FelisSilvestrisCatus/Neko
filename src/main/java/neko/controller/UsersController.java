@@ -52,6 +52,7 @@ public class UsersController {
     @Autowired
     private RedisUtil redisUtil;
 
+    //用户登录
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
 

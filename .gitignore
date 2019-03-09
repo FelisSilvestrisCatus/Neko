@@ -9,4 +9,4 @@ out
 gen
 *.rar
 target
-/src/main/resources/application.yml
+
