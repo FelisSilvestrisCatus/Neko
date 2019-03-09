@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author z9961
- * @since 2019-03-03
+ * @since 2019-03-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -55,6 +55,11 @@ public class Vacate implements Serializable {
      * 状态(0为已申请,1为未批准,2为已批准)
      */
     private Integer state;
+
+    /**
+     * 审批备注
+     */
+    private String remark;
 
 
 }
