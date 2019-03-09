@@ -35,26 +35,29 @@ public class ClassController {
 
         Map<String, String> map = new HashMap<>();
         Users users = (Users) request.getSession().getAttribute("user");
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("uid",users.getUid());
-        queryWrapper.eq("flag",0);
-        queryWrapper.eq("type",1);
-        Users user =userslService.getOne(queryWrapper);
-        if(null==users||null==user){
+
+        if(users.getFlag()!=0){
             //用户状态不合法 ： 或权限不够 或状态不正常
             map.put("state","401");
-            map.put("msg","用户状态不合法 ： 或权限不够 或状态不正常");
+            map.put("msg","用户状态不合法(疑似注销)");
+            return  map;
 
+        } if(users.getType()!=1){
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state","401");
+            map.put("msg","用户权限不够");
+            return  map;
         }
-        else{
+
              //创建班级表
             Class  newclass=new Class();
             newclass.setCname(name);
             classService.save(newclass);
             map.put("state","200");
             map.put("msg","创建成功");
-        }
-        return map;
+            return map;
+
+
     }
 
 }
