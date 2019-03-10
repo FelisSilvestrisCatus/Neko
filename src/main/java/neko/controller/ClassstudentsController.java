@@ -1,8 +1,20 @@
 package neko.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import neko.entity.Class;
+import neko.entity.Classstudents;
+import neko.entity.Users;
+import neko.service.IClassService;
+import neko.service.IClassstudentsService;
+import neko.service.IClassteacherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -15,5 +27,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/classstudents")
 public class ClassstudentsController {
+    @Autowired
+    private IClassService classService;
+    @Autowired
+    private IClassteacherService classteacherServic;
+    @Autowired
+    private IClassstudentsService classstudentsService;
+    //加入班级
+
+    @RequestMapping(value = "/joinClass")
+    public Map<String, String> changeClass(HttpServletRequest request,String cid) {
+        int _cid=Integer.valueOf(cid);
+        Map<String, String> map = new HashMap<>();
+        Users users = (Users) request.getSession().getAttribute("user");
+
+        if (users.getFlag() != 0) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户状态不合法(疑似注销)");
+            return map;
+
+        }
+        if (users.getType() != 2) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户权限不够");
+            return map;
+        }
+        QueryWrapper queryWrapper = new QueryWrapper();
+
+        queryWrapper.eq("cid",_cid);
+        Class _class=classService.getOne(queryWrapper);
+        if(null==_class){
+            map.put("state", "400");
+            map.put("msg", "班级不存在");
+            return map;
+        }
+        Classstudents classstudents=new Classstudents();
+        classstudents.setCid(_cid);
+        classstudents.setCsid(users.getUid());
+
+        classstudentsService.save(classstudents);
+        map.put("state", "200");
+        map.put("msg", "加入班级成功");
+        return map;
+
+
+    }
+    //
+
 
 }

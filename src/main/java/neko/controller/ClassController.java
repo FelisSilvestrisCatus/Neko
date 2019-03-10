@@ -77,5 +77,50 @@ public class ClassController {
 
 
     }
+    //修改班级信息(改名字)
+
+    @RequestMapping(value = "/changeClass")
+    public Map<String, String> changeClass(HttpServletRequest request, String name,String cid) {
+
+        Map<String, String> map = new HashMap<>();
+        Users users = (Users) request.getSession().getAttribute("user");
+
+        if (users.getFlag() != 0) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户状态不合法(疑似注销)");
+            return map;
+
+        }
+        if (users.getType() != 1) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户权限不够");
+            return map;
+        }
+        QueryWrapper queryWrapper = new QueryWrapper();
+
+        queryWrapper.eq("cid",cid);
+        Class _class=classService.getOne(queryWrapper);
+        _class.setCname(name);
+
+        if(classService.updateById(_class)){
+
+
+
+
+            map.put("state", "200");
+            map.put("msg", "修改班级名字成功");
+            return map;
+
+
+        }
+        map.put("state", "400");
+        map.put("msg", "修改班级名字失败");
+        return map;
+
+
+    }
+    //
 
 }
