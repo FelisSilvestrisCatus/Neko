@@ -53,34 +53,39 @@ public class ClassController {
             return map;
         }
 
+        try {//创建班级表
+            Class newclass = new Class();
+            newclass.setCname(name);
+            classService.save(newclass);
+
+            //老师绑定课程
+
+            QueryWrapper queryWrapper = new QueryWrapper();
+
+            queryWrapper.orderByAsc("cid");
+
+            Classteacher classteacher = new Classteacher();
+
+            classteacher.setCid((((Class) classService.list(queryWrapper).get(classService.count() - 1)).getCid()));
+            classteacher.setUid(users.getUid());
+            classteacherServic.save(classteacher);
+            map.put("state", "200");
+            map.put("msg", "创建成功");
+            return map;
 
 
-        //创建班级表
-        Class newclass = new Class();
-        newclass.setCname(name);
-        classService.save(newclass);
-
-        //老师绑定课程
-
-        QueryWrapper queryWrapper = new QueryWrapper();
-
-        queryWrapper.orderByAsc("cid");
-
-        Classteacher classteacher = new Classteacher();
-
-        classteacher.setCid((((Class)classService.list(queryWrapper).get(classService.count()-1)).getCid()));
-        classteacher.setUid(users.getUid());
-        classteacherServic.save(classteacher);
-        map.put("state", "200");
-        map.put("msg", "创建成功");
-        return map;
+        } catch (Exception e) {
+            map.put("state", "400");
+            map.put("msg", "创建失败");
+            return map;
+        }
 
 
     }
     //修改班级信息(改名字)
 
     @RequestMapping(value = "/changeClass")
-    public Map<String, String> changeClass(HttpServletRequest request, String name,String cid) {
+    public Map<String, String> changeClass(HttpServletRequest request, String name, String cid) {
 
         Map<String, String> map = new HashMap<>();
         Users users = (Users) request.getSession().getAttribute("user");
@@ -98,29 +103,34 @@ public class ClassController {
             map.put("msg", "用户权限不够");
             return map;
         }
-        QueryWrapper queryWrapper = new QueryWrapper();
 
-        queryWrapper.eq("cid",cid);
-        Class _class=classService.getOne(queryWrapper);
-        _class.setCname(name);
+        try {
+            QueryWrapper queryWrapper = new QueryWrapper();
 
-        if(classService.updateById(_class)){
+            queryWrapper.eq("cid", cid);
+            Class _class = classService.getOne(queryWrapper);
+            _class.setCname(name);
+
+            if (classService.updateById(_class)) {
 
 
+                map.put("state", "200");
+                map.put("msg", "修改班级名字成功");
+                return map;
 
 
-            map.put("state", "200");
-            map.put("msg", "修改班级名字成功");
+            }
+            map.put("state", "400");
+            map.put("msg", "修改班级名字失败");
             return map;
 
+        } catch (Exception e) {
+            map.put("state", "400");
+            map.put("msg", "修改班级名字失败");
+            return map;
 
         }
-        map.put("state", "400");
-        map.put("msg", "修改班级名字失败");
-        return map;
 
-
+        //
     }
-    //
-
 }
