@@ -31,6 +31,7 @@ public class Token {
         //添加自定义信息
         claims.put("Name", users.getUname());
         claims.put("Phone", users.getPhone());
+        claims.put("Uid", users.getUid());
 
         //签名的使用者
         claims.setAudience("user");
@@ -65,6 +66,7 @@ public class Token {
         Map<String, String> info = new HashMap<>();
         info.put("Name", (String) Claims.get("Name"));
         info.put("Phone", (String) Claims.get("Phone"));
+        info.put("Uid", (String) Claims.get("Uid"));
         info.put("Expiration", Claims.getExpiration().toString());
         info.put("IssuedAt", Claims.getIssuedAt().toString());
 

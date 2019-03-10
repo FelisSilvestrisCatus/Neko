@@ -71,7 +71,7 @@ public class UsersController {
             session.setAttribute("user", user);
 
             String token = Token.getJwtToken(user);
-            redisUtil.set(token, user.getUid().toString());
+            redisUtil.set(user.getUid().toString(), token);
             redisUtil.expire(token, expire, expireTimeUnit);
 
             map.put("state", "200");
