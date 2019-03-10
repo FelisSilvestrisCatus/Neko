@@ -54,7 +54,7 @@ public class UsersController {
 
     //用户登录
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String username, String password, Integer loginType) throws IOException {
+    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) throws IOException {
 
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
@@ -63,7 +63,7 @@ public class UsersController {
 
         //查询用户
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", username);
+        queryWrapper.eq("phone", phone);
         Users user = usersService.getOne(queryWrapper);
 
         if (password.equals(user.getPwd())) {
