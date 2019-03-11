@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.*;
 import neko.entity.Class;
 import neko.service.IClassService;
+import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
 import neko.service.IUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +35,8 @@ public class ClassController {
     private IClassService classService;
     @Autowired
     private IClassteacherService classteacherServic;
+    @Autowired
+    private IClassstudentsService classstudentsService;
 
     @RequestMapping(value = "/createClass")
     public Map<String, String> getValidatecode(HttpServletRequest request, String name) {
@@ -86,7 +91,9 @@ public class ClassController {
 
     @RequestMapping(value = "/changeClass")
     public Map<String, String> changeClass(HttpServletRequest request, String name, String cid) {
+        QueryWrapper queryWrapper = new QueryWrapper();
 
+        queryWrapper.eq("cid", cid);
         Map<String, String> map = new HashMap<>();
         Users users = (Users) request.getSession().getAttribute("user");
 
@@ -97,7 +104,7 @@ public class ClassController {
             return map;
 
         }
-        if (users.getType() != 1) {
+        if (users.getType() != 1 || classteacherServic.getOne(queryWrapper).getUid() != users.getUid()) {
             //用户状态不合法 ： 或权限不够 或状态不正常
             map.put("state", "401");
             map.put("msg", "用户权限不够");
@@ -105,11 +112,77 @@ public class ClassController {
         }
 
         try {
-            QueryWrapper queryWrapper = new QueryWrapper();
 
-            queryWrapper.eq("cid", cid);
             Class _class = classService.getOne(queryWrapper);
             _class.setCname(name);
+
+            if (classService.updateById(_class)) {
+
+
+                map.put("state", "200");
+                map.put("msg", "修改班级名字成功");
+                return map;
+
+
+            }
+            map.put("state", "400");
+            map.put("msg", "修改班级名字失败");
+            return map;
+
+        } catch (Exception e) {
+            map.put("state", "400");
+            map.put("msg", "修改班级名字失败");
+            return map;
+
+        }
+
+        //
+    }
+    //修改班级信息(改名字)
+     /**
+     * @param:flag 选择显示列表类型 0显示全部  1 显示已经加入 2 显示待审核
+     * **/
+    @RequestMapping(value = "/auditClass")
+    public Map<String, String> auditClass(HttpServletRequest request, String flag,String cid) {
+        Map<String, String> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        Users users = (Users) request.getSession().getAttribute("user");
+        queryWrapper.eq("cid", cid);
+        if (users.getFlag() != 0) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户状态不合法(疑似注销)");
+            return map;
+
+        }
+        if (users.getType() != 1 || classteacherServic.getOne(queryWrapper).getUid() != users.getUid()) {
+            //用户状态不合法 ： 或权限不够 或状态不正常
+            map.put("state", "401");
+            map.put("msg", "用户权限不够");
+            return map;
+        }
+
+        if (flag.equals("0")) {
+            //显示全部该课程的学生
+           List<Users> userlist=classstudentsService.list(queryWrapper);
+           //消除用戶敏感信息 去掉密码等信息
+            Iterator<Users> itr = userlist.iterator();
+
+            while (itr.hasNext()) {
+               itr.next().setPwd("");
+//               itr.next().
+
+
+            }
+
+
+        }
+
+
+        try {
+
+            Class _class = classService.getOne(queryWrapper);
+//            _class.setCname(name);
 
             if (classService.updateById(_class)) {
 
