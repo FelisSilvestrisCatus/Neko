@@ -38,8 +38,8 @@ public class UsersController {
     //Redis过期时间
     private static final long expire = 7;
     //Redis过期时间单位
-//    private static final TimeUnit expireTimeUnit = TimeUnit.DAYS;
-    private static final TimeUnit expireTimeUnit = TimeUnit.MINUTES;
+    private static final TimeUnit expireTimeUnit = TimeUnit.DAYS;
+//    private static final TimeUnit expireTimeUnit = TimeUnit.MINUTES;
 
     @Autowired
     private IUsersService usersService;
@@ -72,7 +72,7 @@ public class UsersController {
 
             String token = Token.getJwtToken(user);
             redisUtil.set(user.getUid().toString(), token);
-            redisUtil.expire(token, expire, expireTimeUnit);
+            redisUtil.expire(user.getUid().toString(), expire, expireTimeUnit);
 
             map.put("state", "200");
             map.put("msg", "ok");

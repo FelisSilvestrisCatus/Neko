@@ -34,11 +34,12 @@ spring:
       connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=1000
   redis:
     host: redis.aloli.cn
-    #    host: 127.0.0.1
     password: webproject
     port: 56379
-    pool:
-      max-idle: 100
-      min-idle: 1
-      max-active: 1000
-      max-wait: -1
+    timeout: 1000
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 60
+        max-wait: -1
+        min-idle: 5
