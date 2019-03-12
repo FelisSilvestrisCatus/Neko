@@ -1,7 +1,11 @@
 server:
   port: 8888
-# Spring Datasource Settings
+debug: true
+logging.level.org.springframework.boot.autoconfigure: ERROR
 spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
   datasource:
     username: root
     password: 5QDG5zPG%#1d
