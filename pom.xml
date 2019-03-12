@@ -155,27 +155,18 @@
             <version>1.0.2</version>
         </dependency>
 
-        <!--websocket-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-        <!--f打印sql日志-->
+        <!--打印sql日志-->
         <dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
-
+            <version>3.8.1</version>
         </dependency>
+
 
     </dependencies>
 
     <build>
         <plugins>
-
-            <!--<plugin>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--</plugin>-->
 
             <!--spring-boot-devtools-->
             <plugin>
