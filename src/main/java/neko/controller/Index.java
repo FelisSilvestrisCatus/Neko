@@ -17,21 +17,13 @@ public class Index {
 
     @RequestMapping(value = "/")
     public String index(HttpServletRequest request) {
-//
-//        System.out.println("redis test");
-//        redisUtil.set("testkey1","testvalue1");
-//        String value = redisUtil.get("testkey1");
-//
-//        System.out.println(value);
-//        System.out.println("redis test end");
-        String ip = loginInfo.getIpAddr(request);
-
-        String local = "";
-        local = loginInfo.getIpLocation(ip);
-
-        System.out.println("local " + local);
-        return ip + "\n" + local;
+        return "此路不通";
     }
 
+    //测试可用性
+    @RequestMapping(value = "/alive")
+    public String alive(HttpServletRequest request) {
+        return "200";
+    }
 
 }
