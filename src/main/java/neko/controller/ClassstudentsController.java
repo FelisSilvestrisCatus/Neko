@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author z9961
@@ -36,8 +36,9 @@ public class ClassstudentsController {
     //加入班级
 
     @RequestMapping(value = "/joinClass")
-    public Map<String, String> changeClass(HttpServletRequest request,String cid) {
-        int _cid=Integer.valueOf(cid);
+    public Map<String, String> joinClass(HttpServletRequest request, String cid) {
+        System.out.println("cid = " + cid);
+        int _cid = Integer.valueOf(cid);
         Map<String, String> map = new HashMap<>();
         Users users = (Users) request.getSession().getAttribute("user");
 
@@ -56,25 +57,21 @@ public class ClassstudentsController {
         }
         QueryWrapper queryWrapper = new QueryWrapper();
 
-        queryWrapper.eq("cid",_cid);
-        Class _class=classService.getOne(queryWrapper);
-        if(null==_class){
+        queryWrapper.eq("cid", _cid);
+        Class _class = classService.getOne(queryWrapper);
+        if (null == _class) {
             map.put("state", "400");
             map.put("msg", "班级不存在");
             return map;
         }
-        Classstudents classstudents=new Classstudents();
+        Classstudents classstudents = new Classstudents();
         classstudents.setCid(_cid);
-        classstudents.setCsid(users.getUid());
+        classstudents.setUid(users.getUid());
 
         classstudentsService.save(classstudents);
         map.put("state", "200");
         map.put("msg", "加入班级成功");
         return map;
 
-
     }
-    //
-
-
 }

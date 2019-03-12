@@ -207,7 +207,6 @@ public class ClassController {
 
         }
 
-        //
     }
 
     //获取所有班级
@@ -220,7 +219,6 @@ public class ClassController {
         map.put("state", "200");
         map.put("msg", "ok");
         map.put("data", JSON.toJSONString(classes));
-
         return map;
     }
 

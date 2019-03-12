@@ -64,9 +64,9 @@ public class Token {
 
         //提取信息
         Map<String, String> info = new HashMap<>();
-        info.put("Name", (String) Claims.get("Name"));
-        info.put("Phone", (String) Claims.get("Phone"));
-        info.put("Uid", (String) Claims.get("Uid"));
+        info.put("Name", Claims.get("Name").toString());
+        info.put("Phone", Claims.get("Phone").toString());
+        info.put("Uid", Claims.get("Uid").toString());
         info.put("Expiration", Claims.getExpiration().toString());
         info.put("IssuedAt", Claims.getIssuedAt().toString());
 
