@@ -17,7 +17,7 @@ public class Index {
 
     @RequestMapping(value = "/")
     public String index(HttpServletRequest request) {
-        return "此路不通";
+        return "此路不通\n" + "Your ip:" + loginInfo.getIpAddr(request) + "\n" + loginInfo.getIpLocation(loginInfo.getIpAddr(request));
     }
 
     //测试可用性

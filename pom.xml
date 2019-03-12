@@ -31,6 +31,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- spring boot 开发工具-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
+
         <!--mysql驱动-->
         <dependency>
             <groupId>mysql</groupId>
@@ -108,14 +116,16 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.55</version>
+            <version>1.2.56</version>
         </dependency>
+
+        <!--String工具类-->
         <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
-            <classifier>jdk15</classifier>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
         </dependency>
+
 
         <!--JWT-->
         <dependency>
@@ -161,9 +171,20 @@
 
     <build>
         <plugins>
+
+            <!--<plugin>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+
+            <!--spring-boot-devtools-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- fork: 如果没有配置该项配置，devtools不会起作用的，即应用不会restear -->
+                    <fork>true</fork>
+                </configuration>
             </plugin>
         </plugins>
     </build>

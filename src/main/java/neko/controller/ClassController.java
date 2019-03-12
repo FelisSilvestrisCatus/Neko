@@ -1,9 +1,11 @@
 package neko.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import neko.entity.*;
 import neko.entity.Class;
+import neko.entity.Classteacher;
+import neko.entity.Users;
 import neko.service.IClassService;
 import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
@@ -139,11 +141,12 @@ public class ClassController {
         //
     }
     //修改班级信息(改名字)
-     /**
+
+    /**
      * @param:flag 选择显示列表类型 0显示全部  1 显示已经加入 2 显示待审核
-     * **/
+     **/
     @RequestMapping(value = "/auditClass")
-    public Map<String, String> auditClass(HttpServletRequest request, String flag,String cid) {
+    public Map<String, String> auditClass(HttpServletRequest request, String flag, String cid) {
         Map<String, String> map = new HashMap<>();
         QueryWrapper queryWrapper = new QueryWrapper();
         Users users = (Users) request.getSession().getAttribute("user");
@@ -164,12 +167,12 @@ public class ClassController {
 
         if (flag.equals("0")) {
             //显示全部该课程的学生
-           List<Users> userlist=classstudentsService.list(queryWrapper);
-           //消除用戶敏感信息 去掉密码等信息
+            List<Users> userlist = classstudentsService.list(queryWrapper);
+            //消除用戶敏感信息 去掉密码等信息
             Iterator<Users> itr = userlist.iterator();
 
             while (itr.hasNext()) {
-               itr.next().setPwd("");
+                itr.next().setPwd("");
 //               itr.next().
 
 
@@ -206,4 +209,19 @@ public class ClassController {
 
         //
     }
+
+    //获取所有班级
+    @RequestMapping(value = "/getAllClass")
+    public Map<String, String> getAllClass(HttpServletRequest request, String name) {
+        Map<String, String> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.ne("cstate", "2");
+        List<Class> classes = classService.list(queryWrapper);
+        map.put("state", "200");
+        map.put("msg", "ok");
+        map.put("data", JSON.toJSONString(classes));
+
+        return map;
+    }
+
 }
