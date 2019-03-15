@@ -1,6 +1,8 @@
 package neko.utils.ip;
 
-import net.sf.json.JSONObject;
+//import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -20,9 +22,8 @@ public class Juhe {
         String area = "";
         try {
             JSONObject jsonObject = getRequest(ip);
-            System.out.println("jsonObject = " + jsonObject);
+            assert jsonObject != null;
             area = jsonObject.getString("Country") + jsonObject.get("Province") + jsonObject.get("City") + jsonObject.get("Isp");
-
         } catch (Exception e) {
             area = "未知地址";
         }
@@ -35,9 +36,9 @@ public class Juhe {
 
         try {
             result = net(url, "GET");
-            JSONObject object = JSONObject.fromObject(result);
-            if (object.getInt("error_code") == 0) {
-                return JSONObject.fromObject(object.get("result"));
+            JSONObject object = JSONObject.parseObject(result);
+            if (object.getIntValue("error_code") == 0) {
+                return JSONObject.parseObject(object.getString("result"));
             } else {
                 System.out.println(object.get("error_code") + ":" + object.get("reason"));
             }

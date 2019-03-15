@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="neko.mapper.ClassMapper">
 
+
+    <resultMap id="allClassListIncludeTeacherName" type="neko.entity.Class">
+        <id property="cid" column="cid"/>
+        <result property="cname" column="cname"/>
+        <result property="cstate" column="cstate"/>
+
+        <association property="teacher" javaType="neko.entity.Users"
+
+                     resultMap="classteacherResultMap"/>
+    </resultMap>
+    <!--教师实体映射-->
+    <resultMap id="classteacherResultMap" type="neko.entity.Users">
+        <id property="uname" column="uname"/>
+
+    </resultMap>
+    <select id="getallclass" resultMap="allClassListIncludeTeacherName">
+           select users.uname uname,classes.cid cid,classes.cname cname,classes.cstate  cstate from( users as users,class as classes )inner join classteacher  on users.uid=classteacher.uid where classteacher.cid=classes.cid
+    </select>
+
 </mapper>

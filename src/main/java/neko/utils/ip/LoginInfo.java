@@ -1,7 +1,9 @@
 package neko.utils.ip;
 
 
-import net.sf.json.JSONObject;
+//import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -223,19 +225,16 @@ public class LoginInfo {
                 return "0";//无效IP，局域网测试
             } else {
                 //解析json数据 生成指定数据呈现样式
-                JSONObject json = JSONObject.fromObject(returnStr);
+                JSONObject json = JSONObject.parseObject(returnStr);
                 System.out.println("json数据： " + json);
-                String country = JSONObject.fromObject(json.get("data")).get("country").toString();
-                String region = JSONObject.fromObject(json.get("data")).get("region").toString();
-                String city = JSONObject.fromObject(json.get("data")).get("city").toString();
-                String county = JSONObject.fromObject(json.get("data")).get("county").toString();
-                String isp = JSONObject.fromObject(json.get("data")).get("isp").toString();
-                String area = JSONObject.fromObject(json.get("data")).get("area").toString();
-                String address = country + "/";
-                address += region + "/";
-                address += city + "/";
-                address += county;
-                System.out.println(address);
+                String country = JSONObject.parseObject(json.getString("data")).get("country").toString();
+                String region = JSONObject.parseObject(json.getString("data")).get("region").toString();
+                String city = JSONObject.parseObject(json.getString("data")).get("city").toString();
+                String county = JSONObject.parseObject(json.getString("data")).get("county").toString();
+                String isp = JSONObject.parseObject(json.getString("data")).get("isp").toString();
+                String area = JSONObject.parseObject(json.getString("data")).get("area").toString();
+                String address;
+                address = country + region + city + county + isp;
                 return address;
             }
 

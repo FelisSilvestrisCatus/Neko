@@ -10,7 +10,7 @@ import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

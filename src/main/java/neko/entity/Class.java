@@ -37,6 +37,8 @@ public class Class implements Serializable {
      * 班级状态，0未初始化，1正常，2冻结
      */
     private Integer cstate;
+    //班级老师
+    private Users teacher;
 
 
 }
