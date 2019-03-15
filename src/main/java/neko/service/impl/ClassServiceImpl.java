@@ -1,18 +1,17 @@
 package neko.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Class;
+import neko.entity.vo.ClassWithTeacherName;
 import neko.mapper.ClassMapper;
 import neko.service.IClassService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import neko.service.IUsersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author z9961
@@ -23,7 +22,7 @@ public class ClassServiceImpl extends ServiceImpl<ClassMapper, Class> implements
 
 
     @Override
-    public List<Class> getallclass() {
+    public List<ClassWithTeacherName> getallclass() {
         return this.baseMapper.getallclass();
     }
 }

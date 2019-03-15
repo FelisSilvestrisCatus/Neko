@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Class;
 import neko.entity.Classteacher;
 import neko.entity.Users;
+import neko.entity.vo.ClassWithTeacherName;
 import neko.service.IClassService;
 import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
@@ -215,7 +216,7 @@ public class ClassController {
         Map<String, String> map = new HashMap<>();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.ne("cstate", "2");
-        List<Class> classes = classService.getallclass();
+        List<ClassWithTeacherName> classes = classService.getallclass();
 
         map.put("state", "200");
         map.put("msg", "ok");

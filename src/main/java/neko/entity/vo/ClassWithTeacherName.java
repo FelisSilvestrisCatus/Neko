@@ -1,4 +1,4 @@
-package neko.entity;
+package neko.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Class implements Serializable {
+public class ClassWithTeacherName implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,5 +38,9 @@ public class Class implements Serializable {
      * 班级状态，0未初始化，1正常，2冻结
      */
     private Integer cstate;
+
+    //班级老师
+    private String uname;
+
 
 }
