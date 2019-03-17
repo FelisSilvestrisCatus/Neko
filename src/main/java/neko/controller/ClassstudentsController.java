@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,13 +79,12 @@ public class ClassstudentsController {
 
     }
 
-    //获取所有班级
+    //获取已加入的班级
     @RequestMapping(value = "/getJoinedClass")
-    public Map<String, String> getJoinedClass(HttpServletRequest request, String name) {
+    public Map<String, String> getJoinedClass(HttpSession session, HttpServletRequest request, String name) {
         Map<String, String> map = new HashMap<>();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.ne("cstate", "2");
-        List<ClassWithTeacherName> classes = classService.getallclass();
+        Users users = (Users) session.getAttribute("user");
+        List<ClassWithTeacherName> classes = classService.getJoinedclass(users.getUid());
 
         map.put("state", "200");
         map.put("msg", "ok");

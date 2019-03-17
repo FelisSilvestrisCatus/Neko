@@ -20,9 +20,14 @@ import java.util.List;
 @Service
 public class ClassServiceImpl extends ServiceImpl<ClassMapper, Class> implements IClassService {
 
+    @Override
+    public List<ClassWithTeacherName> getAllclass() {
+
+        return this.baseMapper.getallclass();
+    }
 
     @Override
-    public List<ClassWithTeacherName> getallclass() {
-        return this.baseMapper.getallclass();
+    public List<ClassWithTeacherName> getJoinedclass(int uid) {
+        return this.baseMapper.getJoinedclass(uid);
     }
 }

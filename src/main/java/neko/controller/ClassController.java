@@ -214,9 +214,7 @@ public class ClassController {
     @RequestMapping(value = "/getAllClass")
     public Map<String, String> getAllClass(HttpServletRequest request, String name) {
         Map<String, String> map = new HashMap<>();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.ne("cstate", "2");
-        List<ClassWithTeacherName> classes = classService.getallclass();
+        List<ClassWithTeacherName> classes = classService.getAllclass();
 
         map.put("state", "200");
         map.put("msg", "ok");

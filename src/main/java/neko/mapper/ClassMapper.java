@@ -3,7 +3,10 @@ package neko.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Class;
 import neko.entity.vo.ClassWithTeacherName;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.mapping.StatementType;
 
 import java.util.List;
 
@@ -17,8 +20,10 @@ import java.util.List;
  */
 public interface ClassMapper extends BaseMapper<Class> {
 
-    @Select("select u.uname,c.cid,c.cname,c.cstate" +
-            " from users u,class c,classteacher t" +
-            " where t.cid=c.cid and u.uid=t.uid;")
+    @Select("select * from classWithTeacherName")
     List<ClassWithTeacherName> getallclass();
+
+    @Select("call JoinedClass(#{uid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<ClassWithTeacherName> getJoinedclass(@Param("uid") int uid);
 }
