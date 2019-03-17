@@ -1,10 +1,12 @@
 package neko.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Class;
 import neko.entity.Classstudents;
 import neko.entity.Users;
+import neko.entity.vo.ClassWithTeacherName;
 import neko.service.IClassService;
 import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,5 +76,19 @@ public class ClassstudentsController {
         map.put("msg", "加入班级成功");
         return map;
 
+    }
+
+    //获取所有班级
+    @RequestMapping(value = "/getJoinedClass")
+    public Map<String, String> getJoinedClass(HttpServletRequest request, String name) {
+        Map<String, String> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.ne("cstate", "2");
+        List<ClassWithTeacherName> classes = classService.getallclass();
+
+        map.put("state", "200");
+        map.put("msg", "ok");
+        map.put("data", JSON.toJSONString(classes));
+        return map;
     }
 }
