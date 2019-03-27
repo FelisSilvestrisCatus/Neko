@@ -1,5 +1,7 @@
 package neko.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -8,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author z9961
@@ -20,6 +22,12 @@ import java.io.Serializable;
 public class Studentcourse implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 学生课程主键
+     */
+    @TableId(value = "scid", type = IdType.AUTO)
+    private Integer scid;
 
     /**
      * 学生id
