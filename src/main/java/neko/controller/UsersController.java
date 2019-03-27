@@ -22,12 +22,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author z9961
- * @since 2019-01-14
+ * 用户操作
  */
 @RestController
 @RequestMapping("/users")

@@ -12,12 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author z9961
- * @since 2019-02-28
+ * 用户注册信息
  */
 @RestController
 @RequestMapping("/usersRegiste")

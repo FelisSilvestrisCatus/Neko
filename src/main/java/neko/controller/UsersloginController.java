@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Userslogin;
 import neko.service.IUsersloginService;
-import neko.utils.ip.LoginInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author z9961
- * @since 2019-02-28
+ * 用户登录信息
  */
 @RestController
 @RequestMapping("/usersLogin")
@@ -30,8 +24,7 @@ public class UsersloginController {
 
     @Autowired
     private IUsersloginService usersloginService;
-    @Autowired
-    private LoginInfo loginInfo;
+
 
     //获取登录信息
     @RequestMapping(value = "/getLast")

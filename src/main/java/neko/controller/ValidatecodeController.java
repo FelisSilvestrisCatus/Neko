@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * 验证码相关
+ * */
 @RestController
 @RequestMapping("/validatecode")
 public class ValidatecodeController {
