@@ -1,0 +1,138 @@
+package neko.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import neko.service.IUsersService;
+import neko.service.IUsersloginService;
+import neko.utils.ip.Juhe;
+import neko.utils.ip.LoginInfo;
+import neko.utils.message.Message;
+import neko.utils.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+@RestController
+@RequestMapping("/validatecode")
+public class ValidatecodeController {
+
+    //Redis过期时间
+    private static final long codeExpire = 5;
+    //Redis过期时间单位
+    private static final TimeUnit codeExpireTimeUnit = TimeUnit.MINUTES;
+
+    @Autowired
+    private IUsersService usersService;
+    @Autowired
+    private IUsersloginService usersloginService;
+    @Autowired
+    private LoginInfo loginInfo;
+    @Autowired
+    private Juhe juhe;
+    //使用工具类
+    @Autowired
+    private Message message;
+    //使用redis
+    @Autowired
+    private RedisUtil redisUtil;
+
+    //获取注册验证码
+    @RequestMapping(value = "/getValidatecode")
+    public Map<String, String> getValidatecode(HttpServletRequest request, String userphone) {
+        Map<String, String> map = new HashMap<>();
+        boolean redis = redisUtil.hasKey(userphone + "code");
+        boolean hasRedis = redis && redisUtil.getExpire(userphone + "code", TimeUnit.SECONDS) < ((codeExpire - 1) * 60);
+        //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
+        if (!checkUser(userphone)) {
+            checkRedis(userphone, map, redis, hasRedis);
+        } else {
+            map.put("state", "400");
+            map.put("msg", "手机号已存在");
+        }
+
+        return map;
+    }
+
+    //获取登录验证码
+    @RequestMapping(value = "/getLoginValidatecode")
+    public Map<String, String> getLoginValidatecode(HttpServletRequest request, String userphone) {
+        Map<String, String> map = new HashMap<>();
+        //是否存在验证码
+        boolean redis = redisUtil.hasKey(userphone + "code");
+        //距离上次发送验证码是否超过60秒
+        boolean hasRedis = redis && redisUtil.getExpire(userphone + "code", TimeUnit.SECONDS) < ((codeExpire - 1) * 60);
+        //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
+        if (checkUser(userphone)) {
+            checkRedis(userphone, map, redis, hasRedis);
+        } else {
+            map.put("state", "400");
+            map.put("msg", "手机号未注册");
+        }
+
+        return map;
+    }
+
+    //检查redis中的验证码
+    private void checkRedis(String userphone, Map<String, String> map, boolean redis, boolean hasRedis) {
+        System.out.println("redis = " + redis);
+        System.out.println("hasRedis = " + hasRedis);
+        if (!redis || hasRedis) {
+//                int code = message.getCode(userphone);
+            int code = 1111;
+
+            if (code != 0) {
+                //获取验证码存入redis
+                redisUtil.set(userphone + "code", code + "");
+                redisUtil.expire(userphone + "code", codeExpire, codeExpireTimeUnit);
+                map.put("state", "200");
+                map.put("msg", "验证码发送成功");
+            } else {
+                map.put("state", "400");
+                map.put("msg", "验证码发送失败");
+            }
+        } else {
+            map.put("state", "400");
+            map.put("msg", "验证码发送频繁");
+        }
+    }
+
+    //验证码登录
+    @RequestMapping(value = "/loginByCode")
+    public Map<String, String> loginByCode(HttpServletRequest request, String phone, String code, Integer loginType) throws IOException {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("state", "400");
+        map.put("msg", "error");
+        map.put("token", "");
+
+
+        if (!redisUtil.hasKey(phone + "code")) {
+            map.put("msg", "验证码已过期，请重新获取");
+            return map;
+        }
+
+        String redisCode = redisUtil.get(phone + "code");
+        if (redisCode.equals(code)) {
+            usersService.login(request, phone, map);
+        } else {
+            map.put("msg", "验证码错误");
+            return map;
+        }
+
+        return map;
+    }
+
+
+    //查询该手机号用户是否存在
+    private boolean checkUser(String userphone) {
+        Map<String, String> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", userphone);
+        return usersService.count(queryWrapper) != 0 ? true : false;
+    }
+}

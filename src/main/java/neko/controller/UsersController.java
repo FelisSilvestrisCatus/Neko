@@ -3,7 +3,6 @@ package neko.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
-import neko.entity.Userslogin;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.Juhe;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -57,9 +55,6 @@ public class UsersController {
     public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) throws IOException {
 
         Map<String, String> map = new HashMap<>();
-        map.put("state", "400");
-        map.put("msg", "error");
-        map.put("token", "");
 
         //查询用户
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -67,34 +62,11 @@ public class UsersController {
         Users user = usersService.getOne(queryWrapper);
 
         if (password.equals(user.getPwd())) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-
-            String token = Token.getJwtToken(user);
-            redisUtil.set(user.getUid().toString(), token);
-            redisUtil.expire(user.getUid().toString(), expire, expireTimeUnit);
-
-            map.put("state", "200");
-            map.put("msg", "ok");
-            map.put("token", token);
-
-
-            //保存本次登录信息
-            Userslogin userslogin = new Userslogin();
-            userslogin.setUid(user.getUid());
-            userslogin.setLoginip(loginInfo.getIpAddr(request));
-            userslogin.setLogintype(1);
-            userslogin.setLogintime(LocalDateTime.now());
-            String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
-            if (area.equals("未知地址")) {
-                //在淘宝api未得到数据或超时的情况下调用聚合api
-                area = juhe.getValue(loginInfo.getIpAddr(request));
-            }
-            userslogin.setLoginlocation(area);
-            usersloginService.save(userslogin);
-
-            user.setPwd("");
-            map.put("user", JSON.toJSONString(user));
+            usersService.login(request, phone, map);
+        } else {
+            map.put("state", "400");
+            map.put("msg", "用户名或密码错误");
+            map.put("token", "");
         }
 
         return map;
@@ -123,7 +95,7 @@ public class UsersController {
     public Map<String, String> registe(HttpServletRequest request, String username, String userphone, String validatecode) {
         Map<String, String> map = new HashMap<>();
         //手机号有记录且获取验证码匹配
-        if (redisUtil.hasKey(userphone) && redisUtil.get(userphone).equalsIgnoreCase(validatecode)) {
+        if (redisUtil.hasKey(userphone) && redisUtil.get(userphone + "code").equalsIgnoreCase(validatecode)) {
             //插入数据库
             Users user = new Users();
             user.setPhone(userphone);
@@ -132,7 +104,7 @@ public class UsersController {
             usersService.save(user);
             map.put("state", "200");
             //删除验证码
-            redisUtil.delete(userphone);
+            redisUtil.delete(userphone + "code");
         } else {
             map.put("state", "400");
         }
