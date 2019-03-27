@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author z9961
- * @since 2019-03-03
+ * @since 2019-03-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,16 +48,6 @@ public class Course implements Serializable {
      * 星期几
      */
     private Integer cday;
-
-    /**
-     * 课程类型(0为固定,1为单周,2为双周)
-     */
-    private Integer ctype;
-
-    /**
-     * 课程时间(1-5大节)
-     */
-    private Integer ctime;
 
     /**
      * 状态位
