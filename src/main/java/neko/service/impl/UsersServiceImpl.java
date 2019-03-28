@@ -45,6 +45,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Autowired
     private Juhe juhe;
 
+    //查询该手机号用户是否存在
+    public boolean checkUser(String userphone) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", userphone);
+        return count(queryWrapper) != 0 ? true : false;
+    }
+
+
     //密码和验证码登录
     @Override
     public void login(HttpServletRequest request, String phone, Map<String, String> map) {

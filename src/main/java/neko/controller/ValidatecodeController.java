@@ -47,6 +47,7 @@ public class ValidatecodeController {
     //获取注册验证码
     @RequestMapping(value = "/getValidatecode")
     public Map<String, String> getValidatecode(HttpServletRequest request, String userphone) {
+        System.out.println("userphone = " + userphone);
         Map<String, String> map = new HashMap<>();
         boolean redis = redisUtil.hasKey(userphone + "code");
         boolean hasRedis = redis && redisUtil.getExpire(userphone + "code", TimeUnit.SECONDS) < ((codeExpire - 1) * 60);
@@ -136,6 +137,11 @@ public class ValidatecodeController {
         Map<String, String> map = new HashMap<>();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("phone", userphone);
-        return usersService.count(queryWrapper) != 0 ? true : false;
+        boolean userExist = usersService.count(queryWrapper) != 0 ? true : false;
+
+        System.out.println("userphone = " + userphone);
+        System.out.println("userExist = " + userExist);
+
+        return userExist;
     }
 }

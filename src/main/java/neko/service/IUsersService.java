@@ -15,6 +15,9 @@ import java.util.Map;
  * @since 2019-01-14
  */
 public interface IUsersService extends IService<Users> {
+    //查询该手机号用户是否存在
+    public boolean checkUser(String userphone);
 
+    //密码和验证码登录
     void login(HttpServletRequest request, String phone, Map<String, String> map);
 }
