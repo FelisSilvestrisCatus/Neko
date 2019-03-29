@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +31,6 @@ public class UsersController {
     private static final long expire = 7;
     //Redis过期时间单位
     private static final TimeUnit expireTimeUnit = TimeUnit.DAYS;
-//    private static final TimeUnit expireTimeUnit = TimeUnit.MINUTES;
 
     @Autowired
     private IUsersService usersService;
@@ -47,7 +45,7 @@ public class UsersController {
 
     //用户登录
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) throws IOException {
+    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) {
 
         Map<String, String> map = new HashMap<>();
 
@@ -90,6 +88,7 @@ public class UsersController {
     public Map<String, String> registe(HttpServletRequest request, String username, String userphone, String validatecode) {
         Map<String, String> map = new HashMap<>();
 
+        //检查用户是否已存在
         if (usersService.checkUser(userphone)) {
             map.put("state", "400");
             map.put("msg", "用户已存在");

@@ -2,6 +2,9 @@ package neko.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Course;
+import neko.entity.vo.StudentCourseName;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,6 @@ import neko.entity.Course;
  */
 public interface ICourseService extends IService<Course> {
 
+    //学生的课程
+    List<StudentCourseName> getMyCourse(int uid);
 }

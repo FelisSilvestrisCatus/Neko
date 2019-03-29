@@ -1,7 +1,6 @@
 package neko.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.service.IUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,7 @@ public class UsersregisteController {
     @RequestMapping(value = "/phoneIsOrNotExist")
     public Map<String, String> phoneIsOrNotExist(HttpServletRequest request, String userphone) {
         Map<String, String> map = new HashMap<>();
-        if (checkUser(userphone)) {
+        if (usersService.checkUser(userphone)) {
             map.put("state", "400");
             map.put("msg", "手机号已存在");
         } else {
@@ -33,13 +32,5 @@ public class UsersregisteController {
             map.put("msg", "手机号不存在");
         }
         return map;
-    }
-
-    //查询该手机号用户是否存在
-    private boolean checkUser(String userphone) {
-        Map<String, String> map = new HashMap<>();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", userphone);
-        return usersService.count(queryWrapper) != 0 ? true : false;
     }
 }

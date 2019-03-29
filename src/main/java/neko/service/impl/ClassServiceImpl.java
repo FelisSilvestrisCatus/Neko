@@ -22,7 +22,6 @@ public class ClassServiceImpl extends ServiceImpl<ClassMapper, Class> implements
 
     @Override
     public List<ClassWithTeacherName> getAllclass() {
-
         return this.baseMapper.getallclass();
     }
 

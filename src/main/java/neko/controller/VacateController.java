@@ -28,6 +28,12 @@ public class VacateController {
     //学生请假插入数据
     @RequestMapping(value = "/createVacate")
     public Map<String, String> getValidatecode(HttpServletRequest request, String vtype, String vreason) {
+
+        System.out.println("vtype = " + vtype);
+        System.out.println("vreason = " + vreason);
+
+
+
         int vacatetype = Integer.valueOf(vtype);
 
         Map<String, String> map = new HashMap<>();

@@ -1,6 +1,5 @@
 package neko.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.Juhe;
@@ -37,10 +36,8 @@ public class ValidatecodeController {
     private LoginInfo loginInfo;
     @Autowired
     private Juhe juhe;
-    //使用工具类
     @Autowired
     private Message message;
-    //使用redis
     @Autowired
     private RedisUtil redisUtil;
 
@@ -52,7 +49,7 @@ public class ValidatecodeController {
         boolean redis = redisUtil.hasKey(userphone + "code");
         boolean hasRedis = redis && redisUtil.getExpire(userphone + "code", TimeUnit.SECONDS) < ((codeExpire - 1) * 60);
         //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
-        if (!checkUser(userphone)) {
+        if (!usersService.checkUser(userphone)) {
             checkRedis(userphone, map, redis, hasRedis);
         } else {
             map.put("state", "400");
@@ -71,7 +68,7 @@ public class ValidatecodeController {
         //距离上次发送验证码是否超过60秒
         boolean hasRedis = redis && redisUtil.getExpire(userphone + "code", TimeUnit.SECONDS) < ((codeExpire - 1) * 60);
         //查询该手机号用户是否存在,判断上次验证码发送时间,发送验证码
-        if (checkUser(userphone)) {
+        if (usersService.checkUser(userphone)) {
             checkRedis(userphone, map, redis, hasRedis);
         } else {
             map.put("state", "400");
@@ -83,8 +80,6 @@ public class ValidatecodeController {
 
     //检查redis中的验证码
     private void checkRedis(String userphone, Map<String, String> map, boolean redis, boolean hasRedis) {
-        System.out.println("redis = " + redis);
-        System.out.println("hasRedis = " + hasRedis);
         if (!redis || hasRedis) {
 //                int code = message.getCode(userphone);
             int code = 1111;
@@ -129,19 +124,5 @@ public class ValidatecodeController {
         }
 
         return map;
-    }
-
-
-    //查询该手机号用户是否存在
-    private boolean checkUser(String userphone) {
-        Map<String, String> map = new HashMap<>();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", userphone);
-        boolean userExist = usersService.count(queryWrapper) != 0 ? true : false;
-
-        System.out.println("userphone = " + userphone);
-        System.out.println("userExist = " + userExist);
-
-        return userExist;
     }
 }

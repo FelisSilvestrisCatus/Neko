@@ -2,6 +2,11 @@ package neko.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Course;
+import neko.entity.vo.StudentCourseName;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +18,6 @@ import neko.entity.Course;
  */
 public interface CourseMapper extends BaseMapper<Course> {
 
+    @Select("select c.courseid,c.cname from course c where c.cid in (select cid from classstudents where uid=#{uid})")
+    List<StudentCourseName> getMyCourse(@Param("uid") int uid);
 }
