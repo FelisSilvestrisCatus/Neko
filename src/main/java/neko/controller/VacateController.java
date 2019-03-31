@@ -7,7 +7,9 @@ import neko.service.IUsersService;
 import neko.service.IVacateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -25,10 +27,19 @@ public class VacateController {
     @Autowired
     private IVacateService vacateService;
 
-    //学生请假插入数据
+    //学生请假
     @RequestMapping(value = "/createVacate")
-    public Map<String, String> getValidatecode(HttpServletRequest request, String vtype, String vreason) {
+    public Map<String, String> getValidatecode(HttpServletRequest request,
+                                               String vtype,
+                                               String vreason,
+                                               @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
+        System.out.println("file = " + vfile);
+        for (MultipartFile mf : vfile) {
+            if (!mf.isEmpty()) {
 
+                System.out.println("mf = " + mf.getName());
+            }
+        }
         System.out.println("vtype = " + vtype);
         System.out.println("vreason = " + vreason);
 
