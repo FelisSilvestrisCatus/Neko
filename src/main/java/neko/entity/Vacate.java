@@ -37,11 +37,6 @@ public class Vacate implements Serializable {
     private Integer courseid;
 
     /**
-     * 教师id
-     */
-    private Integer tid;
-
-    /**
      * 请假原因
      */
     private String vname;
@@ -61,5 +56,9 @@ public class Vacate implements Serializable {
      */
     private String remark;
 
+    /**
+     * 学生请假时间
+     */
+    private String vtime;
 
 }

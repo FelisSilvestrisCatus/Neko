@@ -8,3 +8,4 @@ gen
 target
 /src/main/resources/application.yml
 /src/main/java/neko/utils/message/Message.java
+/src/main/java/neko/utils/CodeGenerator.java
