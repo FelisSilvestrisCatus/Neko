@@ -6,6 +6,7 @@ import neko.entity.Vacate;
 import neko.entity.Vacatefiles;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
+import neko.service.IVacatefilesService;
 import neko.utils.generalMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -27,10 +30,13 @@ public class VacateController {
     private IUsersService userslService;
     @Autowired
     private IVacateService vacateService;
+    @Autowired
+    private IVacatefilesService vacatefilesService;
+
 
     //学生请假
     @RequestMapping(value = "/createVacate")
-    public Map<String, String> createVacate(HttpSession session, String vtype, String vreason,
+    public Map<String, String> createVacate(HttpSession session, String vtype, String vreason, String vdatetime,
                                             String vcourse, String vtime) {
         Map<String, String> map = generalMap.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
@@ -40,6 +46,7 @@ public class VacateController {
         vacate.setVtype(Integer.parseInt(vtype));
         vacate.setCourseid(Integer.parseInt(vcourse));
         vacate.setRemark(vreason);
+        vacate.setVtime(vdatetime);
         vacate.setVtime(vtime);
 
         if (vacateService.save(vacate)) {
@@ -59,25 +66,33 @@ public class VacateController {
                                                 @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
         Map<String, String> map = generalMap.getSuccessMap();
 
-        int vid = Integer.parseInt(id);
-
-        System.out.println("file = " + vfile);
-        System.out.println("file,length = " + vfile.length);
-        for (MultipartFile mf : vfile) {
-            System.out.println("mf = " + mf);
-            if (!mf.isEmpty()) {
-                System.out.println("mf = " + mf.getName());
-
-                String path = "";
-
+        //创建存储文件夹
+        String dirpath = "c:\\vfiles\\" + Integer.parseInt(id);
+        if (new File(dirpath).mkdirs()) {
+            for (MultipartFile mf : vfile) {
+                //文件路径
+                String filePath = dirpath + "\\" + mf.getName();
+                try {
+                    //保存文件
+                    mf.transferTo(new File(filePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    map = generalMap.getErrorMap();
+                    map.put("msg", "无法存储附件");
+                }
 
                 Vacatefiles vacatefiles = new Vacatefiles();
-                vacatefiles.setVid(vid);
-                vacatefiles.setFilepath(path);
+                vacatefiles.setVid(Integer.parseInt(id));
+                vacatefiles.setFilepath(filePath);
+                vacatefilesService.save(vacatefiles);
             }
+
+            map.put("msg", "请假申请已提交");
+        } else {
+            map = generalMap.getErrorMap();
+            map.put("msg", "无法存储附件");
         }
 
-        map.put("msg", "请假申请已提交");
         return map;
     }
 }
