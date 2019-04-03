@@ -17,4 +17,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> implements IVacateService {
 
+
 }

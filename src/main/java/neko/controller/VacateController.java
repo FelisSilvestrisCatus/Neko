@@ -3,7 +3,6 @@ package neko.controller;
 
 import neko.entity.Users;
 import neko.entity.Vacate;
-import neko.entity.Vacatefiles;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -36,8 +33,8 @@ public class VacateController {
 
     //学生请假
     @RequestMapping(value = "/createVacate")
-    public Map<String, String> createVacate(HttpSession session, String vtype, String vreason, String vdatetime,
-                                            String vcourse, String vtime) {
+    public Map<String, String> createVacate(HttpSession session, String vtype, String vreason, String vdatetimeBegin,
+                                            String vdatetimeEnd, String vcourse) {
         Map<String, String> map = generalMap.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
 
@@ -45,9 +42,19 @@ public class VacateController {
         vacate.setUid(users.getUid());
         vacate.setVtype(Integer.parseInt(vtype));
         vacate.setCourseid(Integer.parseInt(vcourse));
-        vacate.setRemark(vreason);
-        vacate.setVtime(vdatetime);
-        vacate.setVtime(vtime);
+        vacate.setVname(vreason);
+        if ((vdatetimeBegin.equals("undefined")) && (vdatetimeEnd.equals("undefined"))) {
+            vacate.setVtime("未定时间");
+        } else {
+            if (vdatetimeBegin.equals("undefined"))
+                vdatetimeBegin = "未定时间";
+            if (vdatetimeEnd.equals("undefined"))
+                vdatetimeEnd = "未定时间";
+            vacate.setVtime(vdatetimeBegin + " - " + vdatetimeEnd);
+        }
+
+
+        System.out.println("vacate = " + vacate);
 
         if (vacateService.save(vacate)) {
             session.setAttribute("vid", vacate.getVid());
@@ -60,39 +67,11 @@ public class VacateController {
         return map;
     }
 
-    //学生请假
+    //学生请假附件处理
     @RequestMapping(value = "/createVacateFile")
     public Map<String, String> createVacateFile(HttpSession session, String id,
                                                 @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
-        Map<String, String> map = generalMap.getSuccessMap();
 
-        //创建存储文件夹
-        String dirpath = "c:\\vfiles\\" + Integer.parseInt(id);
-        if (new File(dirpath).mkdirs()) {
-            for (MultipartFile mf : vfile) {
-                //文件路径
-                String filePath = dirpath + "\\" + mf.getName();
-                try {
-                    //保存文件
-                    mf.transferTo(new File(filePath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    map = generalMap.getErrorMap();
-                    map.put("msg", "无法存储附件");
-                }
-
-                Vacatefiles vacatefiles = new Vacatefiles();
-                vacatefiles.setVid(Integer.parseInt(id));
-                vacatefiles.setFilepath(filePath);
-                vacatefilesService.save(vacatefiles);
-            }
-
-            map.put("msg", "请假申请已提交");
-        } else {
-            map = generalMap.getErrorMap();
-            map.put("msg", "无法存储附件");
-        }
-
-        return map;
+        return vacatefilesService.createVacateFile(id, vfile);
     }
 }

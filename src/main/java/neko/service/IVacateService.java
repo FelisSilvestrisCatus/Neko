@@ -12,5 +12,4 @@ import neko.entity.Vacate;
  * @since 2019-03-03
  */
 public interface IVacateService extends IService<Vacate> {
-
 }
