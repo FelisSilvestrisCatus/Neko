@@ -11,12 +11,12 @@ import neko.service.IClassService;
 import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
 import neko.service.IUsersService;
+import neko.utils.generalMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,128 +41,81 @@ public class ClassController {
     @Autowired
     private IClassstudentsService classstudentsService;
 
+    //创建班级
     @RequestMapping(value = "/createClass")
-    public Map<String, String> getValidatecode(HttpServletRequest request, String name) {
+    public Map<String, String> getValidatecode(HttpSession session, String name) {
 
-        Map<String, String> map = new HashMap<>();
-        Users users = (Users) request.getSession().getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        Users users = (Users) session.getAttribute("user");
 
-        if (users.getFlag() != 0) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户状态不合法(疑似注销)");
-            return map;
-
-        }
         if (users.getType() != 1) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户权限不够");
+            map = generalMethod.getErrorMap();
+            map.put("msg", "用户权限不足");
             return map;
         }
 
-        try {//创建班级表
-            Class newclass = new Class();
-            newclass.setCname(name);
-            classService.save(newclass);
+        //创建班级表
+        Class newclass = new Class();
+        newclass.setCname(name);
+        classService.save(newclass);
 
-            //老师绑定课程
+        //班级绑定老师
+        Classteacher classteacher = new Classteacher();
+        classteacher.setCid(newclass.getCid());
+        classteacher.setUid(users.getUid());
+        classteacherServic.save(classteacher);
 
-            QueryWrapper queryWrapper = new QueryWrapper();
-
-            queryWrapper.orderByAsc("cid");
-
-            Classteacher classteacher = new Classteacher();
-
-            classteacher.setCid((((Class) classService.list(queryWrapper).get(classService.count() - 1)).getCid()));
-            classteacher.setUid(users.getUid());
-            classteacherServic.save(classteacher);
-            map.put("state", "200");
-            map.put("msg", "创建成功");
-            return map;
-
-
-        } catch (Exception e) {
-            map.put("state", "400");
-            map.put("msg", "创建失败");
-            return map;
-        }
-
-
+        map.put("msg", "创建班级成功");
+        return map;
     }
-    //修改班级信息(改名字)
 
+    //修改班级信息
     @RequestMapping(value = "/changeClass")
-    public Map<String, String> changeClass(HttpServletRequest request, String name, String cid) {
+    public Map<String, String> changeClass(HttpSession session, String name, String cid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+
         QueryWrapper queryWrapper = new QueryWrapper();
-
         queryWrapper.eq("cid", cid);
-        Map<String, String> map = new HashMap<>();
-        Users users = (Users) request.getSession().getAttribute("user");
-
-        if (users.getFlag() != 0) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户状态不合法(疑似注销)");
-            return map;
-
-        }
-        if (users.getType() != 1 || classteacherServic.getOne(queryWrapper).getUid() != users.getUid()) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户权限不够");
+        Users users = (Users) session.getAttribute("user");
+        Class classTeacher = classService.getOne(queryWrapper);
+        if (users.getType() != 1 || !classteacherServic.getOne(queryWrapper).getUid().equals(users.getUid())) {
+            //用户不合法
+            map = generalMethod.getErrorMap();
+            map.put("msg", "用户不合法");
             return map;
         }
 
         try {
-
-            Class _class = classService.getOne(queryWrapper);
-            _class.setCname(name);
-
-            if (classService.updateById(_class)) {
-
-
-                map.put("state", "200");
+            classTeacher.setCname(name);
+            if (classService.updateById(classTeacher)) {
                 map.put("msg", "修改班级名字成功");
-                return map;
-
-
+            } else {
+                map = generalMethod.getErrorMap();
+                map.put("msg", "修改班级名字失败");
             }
-            map.put("state", "400");
-            map.put("msg", "修改班级名字失败");
-            return map;
-
         } catch (Exception e) {
-            map.put("state", "400");
+            map = generalMethod.getErrorMap();
             map.put("msg", "修改班级名字失败");
-            return map;
-
         }
 
-        //
+        return map;
     }
-    //修改班级信息(改名字)
 
     /**
      * @param:flag 选择显示列表类型 0显示全部  1 显示已经加入 2 显示待审核
      **/
     @RequestMapping(value = "/auditClass")
-    public Map<String, String> auditClass(HttpServletRequest request, String flag, String cid) {
-        Map<String, String> map = new HashMap<>();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        Users users = (Users) request.getSession().getAttribute("user");
-        queryWrapper.eq("cid", cid);
-        if (users.getFlag() != 0) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户状态不合法(疑似注销)");
-            return map;
+    public Map<String, String> auditClass(HttpSession session, String flag, String cid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
 
-        }
-        if (users.getType() != 1 || classteacherServic.getOne(queryWrapper).getUid() != users.getUid()) {
-            //用户状态不合法 ： 或权限不够 或状态不正常
-            map.put("state", "401");
-            map.put("msg", "用户权限不够");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        Users users = (Users) session.getAttribute("user");
+        queryWrapper.eq("cid", cid);
+
+        if (users.getType() != 1 || !classteacherServic.getOne(queryWrapper).getUid().equals(users.getUid())) {
+            //用户不合法
+            map.put("state", "400");
+            map.put("msg", "用户不合法");
             return map;
         }
 
@@ -174,50 +127,18 @@ public class ClassController {
 
             while (itr.hasNext()) {
                 itr.next().setPwd("");
-//               itr.next().
-
-
             }
-
-
         }
-
-
-        try {
-
-            Class _class = classService.getOne(queryWrapper);
-//            _class.setCname(name);
-
-            if (classService.updateById(_class)) {
-
-
-                map.put("state", "200");
-                map.put("msg", "修改班级名字成功");
-                return map;
-
-
-            }
-            map.put("state", "400");
-            map.put("msg", "修改班级名字失败");
-            return map;
-
-        } catch (Exception e) {
-            map.put("state", "400");
-            map.put("msg", "修改班级名字失败");
-            return map;
-
-        }
-
+        return map;
     }
 
     //获取所有班级
     @RequestMapping(value = "/getAllClass")
-    public Map<String, String> getAllClass(HttpServletRequest request, String name) {
-        Map<String, String> map = new HashMap<>();
-        List<ClassWithTeacherName> classes = classService.getAllclass();
-
-        map.put("state", "200");
-        map.put("msg", "ok");
+    public Map<String, String> getAllClass(HttpSession session) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        Users u = (Users) session.getAttribute("user");
+        //排除已加入的班级
+        List<ClassWithTeacherName> classes = classService.getAllclass(u.getUid());
         map.put("data", JSON.toJSONString(classes));
         return map;
     }

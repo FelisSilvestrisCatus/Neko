@@ -21,8 +21,8 @@ import java.util.List;
 public class ClassServiceImpl extends ServiceImpl<ClassMapper, Class> implements IClassService {
 
     @Override
-    public List<ClassWithTeacherName> getAllclass() {
-        return this.baseMapper.getallclass();
+    public List<ClassWithTeacherName> getAllclass(int uid) {
+        return this.baseMapper.getallclass(uid);
     }
 
     @Override

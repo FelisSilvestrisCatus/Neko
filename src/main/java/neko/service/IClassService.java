@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2019-02-28
  */
 public interface IClassService extends IService<Class> {
-    List<ClassWithTeacherName> getAllclass();
+    List<ClassWithTeacherName> getAllclass(int uid);
 
     List<ClassWithTeacherName> getJoinedclass(int uid);
 }

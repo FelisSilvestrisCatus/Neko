@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacatefiles;
 import neko.mapper.VacatefilesMapper;
 import neko.service.IVacatefilesService;
-import neko.utils.generalMap;
+import neko.utils.generalMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacatefiles> implements IVacatefilesService {
     @Override
     public Map<String, String> createVacateFile(String id, MultipartFile[] vfile) {
-        Map<String, String> map = generalMap.getSuccessMap();
+        Map<String, String> map = generalMethod.getSuccessMap();
         //创建存储文件夹
         String dirpath = "c:\\vfiles\\" + Integer.parseInt(id);
         if (new File(dirpath).mkdirs()) {
@@ -36,7 +36,7 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
                     mf.transferTo(new File(filePath));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    map = generalMap.getErrorMap();
+                    map = generalMethod.getErrorMap();
                     map.put("msg", "无法存储附件");
                 }
 
@@ -50,7 +50,7 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
 
             map.put("msg", "请假申请已提交");
         } else {
-            map = generalMap.getErrorMap();
+            map = generalMethod.getErrorMap();
             map.put("msg", "无法存储附件");
         }
         return map;

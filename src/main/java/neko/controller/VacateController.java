@@ -7,7 +7,7 @@ import neko.entity.Vacate;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
-import neko.utils.generalMap;
+import neko.utils.generalMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +36,7 @@ public class VacateController {
     @RequestMapping(value = "/createVacate")
     public Map<String, String> createVacate(HttpSession session, String vtype, String vreason, String vdatetimeBegin,
                                             String vdatetimeEnd, String vcourse) {
-        Map<String, String> map = generalMap.getSuccessMap();
+        Map<String, String> map = generalMethod.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
 
         Vacate vacate = new Vacate();
@@ -62,7 +62,7 @@ public class VacateController {
             map.put("vid", vacate.getVid().toString());
             map.put("msg", "请假申请已提交");
         } else {
-            map = generalMap.getErrorMap();
+            map = generalMethod.getErrorMap();
         }
 
         return map;
@@ -83,7 +83,7 @@ public class VacateController {
 
         int uid = ((Users) session.getAttribute("user")).getUid();
 
-        Map<String, String> map = generalMap.getSuccessMap();
+        Map<String, String> map = generalMethod.getSuccessMap();
         map.put("data", JSON.toJSONString(vacateService.getMyVacate(uid)));
         return map;
     }
