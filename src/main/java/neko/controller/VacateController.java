@@ -1,6 +1,7 @@
 package neko.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import neko.entity.Users;
 import neko.entity.Vacate;
 import neko.service.IUsersService;
@@ -73,5 +74,17 @@ public class VacateController {
                                                 @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
 
         return vacatefilesService.createVacateFile(id, vfile);
+    }
+
+    //学生请假列表
+    @RequestMapping(value = "/myVacate")
+    public Map<String, String> myVacate(HttpSession session, String id,
+                                        @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
+
+        int uid = ((Users) session.getAttribute("user")).getUid();
+
+        Map<String, String> map = generalMap.getSuccessMap();
+        map.put("data", JSON.toJSONString(vacateService.getMyVacate(uid)));
+        return map;
     }
 }

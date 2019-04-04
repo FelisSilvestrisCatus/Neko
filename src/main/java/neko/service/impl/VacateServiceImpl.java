@@ -2,9 +2,12 @@ package neko.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacate;
+import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.VacateMapper;
 import neko.service.IVacateService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,8 @@ import org.springframework.stereotype.Service;
 public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> implements IVacateService {
 
 
+    @Override
+    public List<VacateWithTeacherName> getMyVacate(int uid) {
+        return this.baseMapper.getMyVacate(uid);
+    }
 }
