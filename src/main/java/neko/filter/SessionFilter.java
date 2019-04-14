@@ -38,7 +38,7 @@ public class SessionFilter implements Filter {
 
         if ("OPTIONS".equals(request.getMethod())) {
             //不需要过滤
-            System.out.println("OPTIONS no filter");
+//            System.out.println("OPTIONS no filter");
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -47,13 +47,13 @@ public class SessionFilter implements Filter {
         String token = "";
         token = request.getHeader("Authorization");
 
-        System.out.println("filter url:" + uri);
-        System.out.println(token);
+//        System.out.println("filter url:" + uri);
+//        System.out.println(token);
         //是否需要过滤
 
         if (!needFilter) {
             //不需要过滤
-            System.out.println("no filter");
+//            System.out.println("no filter");
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             checkState(filterChain, request, response, session, token);
