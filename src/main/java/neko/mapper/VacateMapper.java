@@ -25,5 +25,5 @@ public interface VacateMapper extends BaseMapper<Vacate> {
     List<VacateWithTeacherName> getMyVacate(@Param("uid") int uid);
 
     @Update("update vacate set state = -1 where vid =#{vid} and uid =#{uid};")
-    int cancelVacate(@Param("vid") String vid, @Param("uid") int uid);
+    int cancelVacate(@Param("vid") int vid, @Param("uid") int uid);
 }

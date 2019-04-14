@@ -51,7 +51,7 @@ public class VacateController {
                 vdatetimeBegin = "未定时间";
             if (vdatetimeEnd.equals("undefined"))
                 vdatetimeEnd = "未定时间";
-            vacate.setVtime(vdatetimeBegin + " - " + vdatetimeEnd);
+            vacate.setVtime(vdatetimeBegin + " 至 " + vdatetimeEnd);
         }
 
 
@@ -91,7 +91,8 @@ public class VacateController {
     @RequestMapping(value = "/cancelVacate")
     public Map<String, String> cancelVacate(HttpSession session, String vid) {
         int uid = ((Users) session.getAttribute("user")).getUid();
-        return  vacateService.cancelVacate(vid,uid);
+        int vidint = Integer.parseInt(vid);
+        return  vacateService.cancelVacate(vidint,uid);
     }
 
 }

@@ -18,5 +18,5 @@ import java.util.Map;
 public interface IVacateService extends IService<Vacate> {
     List<VacateWithTeacherName> getMyVacate(int uid);
 
-    Map<String, String> cancelVacate(String vid, int uid);
+    Map<String, String> cancelVacate(int vid, int uid);
 }

@@ -29,9 +29,9 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     }
 
     @Override
-    public Map<String, String> cancelVacate(String vid, int uid) {
+    public Map<String, String> cancelVacate(int vid, int uid) {
         Map<String, String> map = generalMethod.getSuccessMap();
-        if (this.baseMapper.cancelVacate(vid, uid) == 0) {
+        if (this.baseMapper.cancelVacate(vid,uid) == 0) {
             map = generalMethod.getErrorMap();
         }
 

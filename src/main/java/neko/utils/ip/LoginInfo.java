@@ -221,8 +221,11 @@ public class LoginInfo {
             returnStr = decodeUnicode(returnStr);
 
             String[] temp = returnStr.split(",");
+            if(returnStr.contains("内网")||returnStr.contains("局域网")){
+                return "局域网地址";
+            }
             if (temp.length < 3) {
-                return "0";//无效IP，局域网测试
+                return "局域网地址";//无效IP，局域网测试
             } else {
                 //解析json数据 生成指定数据呈现样式
                 JSONObject json = JSONObject.parseObject(returnStr);

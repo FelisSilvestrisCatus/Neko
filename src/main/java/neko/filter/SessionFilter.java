@@ -36,6 +36,12 @@ public class SessionFilter implements Filter {
         HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
 
+        //不过滤开发环境
+        if(request.getRemoteAddr().contains("127.0.0.1")||request.getRemoteAddr().contains("172.")){
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         if ("OPTIONS".equals(request.getMethod())) {
             //不需要过滤
 //            System.out.println("OPTIONS no filter");

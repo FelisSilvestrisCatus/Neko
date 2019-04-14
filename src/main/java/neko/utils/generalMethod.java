@@ -10,7 +10,7 @@ public class generalMethod {
     public static Map<String, String> getSuccessMap() {
         Map<String, String> map = new HashMap<>();
         map.put("state", "200");
-        map.put("msg", "success");
+        map.put("msg", "操作成功");
         map.put("data", "");
         return map;
     }
@@ -18,7 +18,7 @@ public class generalMethod {
     public static Map<String, String> getErrorMap() {
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
-        map.put("msg", "error");
+        map.put("msg", "操作失败");
         map.put("data", "");
         return map;
     }
