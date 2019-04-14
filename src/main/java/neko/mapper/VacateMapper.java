@@ -5,8 +5,10 @@ import neko.entity.Vacate;
 import neko.entity.vo.VacateWithTeacherName;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -18,7 +20,10 @@ import java.util.List;
  */
 public interface VacateMapper extends BaseMapper<Vacate> {
 
-    @Select("select c.cname,v.vname,v.vtime,v.vtype,v.state,u.uname from vacate v,course c," +
+    @Select("select v.vid,c.cname,v.vname,v.vtime,v.vtype,v.state,u.uname from vacate v,course c," +
             "classteacher t,users u where v.uid=#{uid} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid")
     List<VacateWithTeacherName> getMyVacate(@Param("uid") int uid);
+
+    @Update("update vacate set state = -1 where vid =#{vid} and uid =#{uid};")
+    int cancelVacate(@Param("vid") String vid, @Param("uid") int uid);
 }

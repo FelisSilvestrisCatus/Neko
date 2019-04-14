@@ -13,6 +13,10 @@ public class VacateWithTeacherName implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 请假id
+     */
+    private Integer vid;
 
     /**
      * 请假原因

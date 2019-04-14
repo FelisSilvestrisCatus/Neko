@@ -5,6 +5,7 @@ import neko.entity.Vacate;
 import neko.entity.vo.VacateWithTeacherName;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,4 +17,6 @@ import java.util.List;
  */
 public interface IVacateService extends IService<Vacate> {
     List<VacateWithTeacherName> getMyVacate(int uid);
+
+    Map<String, String> cancelVacate(String vid, int uid);
 }

@@ -72,7 +72,6 @@ public class VacateController {
     @RequestMapping(value = "/createVacateFile")
     public Map<String, String> createVacateFile(HttpSession session, String id,
                                                 @RequestParam(value = "files", required = false) MultipartFile[] vfile) {
-
         return vacatefilesService.createVacateFile(id, vfile);
     }
 
@@ -87,4 +86,12 @@ public class VacateController {
         map.put("data", JSON.toJSONString(vacateService.getMyVacate(uid)));
         return map;
     }
+
+    //学生取消请假
+    @RequestMapping(value = "/cancelVacate")
+    public Map<String, String> cancelVacate(HttpSession session, String vid) {
+        int uid = ((Users) session.getAttribute("user")).getUid();
+        return  vacateService.cancelVacate(vid,uid);
+    }
+
 }
