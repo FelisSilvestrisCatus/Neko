@@ -4,7 +4,7 @@ import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
-import neko.utils.message.Message;
+
 import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +36,8 @@ public class ValidatecodeController {
     private LoginInfo loginInfo;
     @Autowired
     private Juhe juhe;
-    @Autowired
-    private Message message;
+
+
     @Autowired
     private RedisUtil redisUtil;
 

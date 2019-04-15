@@ -3,10 +3,12 @@ package neko.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacate;
+import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.VacateMapper;
 import neko.service.IVacateService;
 import neko.utils.generalMethod;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,4 +47,8 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
         map.put("data", JSON.toJSONString(this.baseMapper.getDetails(vid, uid)));
         return map;
     }
+    @Override
+    public List<AuditVacateByTeacher> auditVacateByTeacher( String nowdate, int uid){
+        return this.baseMapper.auditVacateByTeacher( nowdate,uid);
+    };
 }

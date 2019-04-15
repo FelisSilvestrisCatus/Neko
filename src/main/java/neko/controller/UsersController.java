@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
+import neko.service.IVacateService;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
@@ -42,11 +43,12 @@ public class UsersController {
     private Juhe juhe;
     @Autowired
     private RedisUtil redisUtil;
-
+    @Autowired
+    private IVacateService vacateService;
     //用户登录
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) {
-
+        System.out.println(vacateService.auditVacateByTeacher("2019-04-15 16:34",1).size());
         Map<String, String> map = new HashMap<>();
 
         //查询用户
