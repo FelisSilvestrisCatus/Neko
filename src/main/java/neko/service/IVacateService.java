@@ -19,4 +19,6 @@ public interface IVacateService extends IService<Vacate> {
     List<VacateWithTeacherName> getMyVacate(int uid);
 
     Map<String, String> cancelVacate(int vid, int uid);
+
+    Map<String, String> getDetails(int vidint, int uid);
 }

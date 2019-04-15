@@ -221,6 +221,7 @@ public class LoginInfo {
             returnStr = decodeUnicode(returnStr);
 
             String[] temp = returnStr.split(",");
+            System.out.println("returnStr = " + returnStr);
             if(returnStr.contains("内网")||returnStr.contains("局域网")){
                 return "局域网地址";
             }

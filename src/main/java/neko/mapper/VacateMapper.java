@@ -26,4 +26,9 @@ public interface VacateMapper extends BaseMapper<Vacate> {
 
     @Update("update vacate set state = -1 where vid =#{vid} and uid =#{uid};")
     int cancelVacate(@Param("vid") int vid, @Param("uid") int uid);
+
+    @Select("select v.vid, c.cname, v.vname, v.vtime, v.vtype, v.state, u.uname " +
+            "from vacate v,course c,classteacher t,users u " +
+            "where v.uid =#{uid} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid and vid=#{vid}")
+    VacateWithTeacherName getDetails(@Param("vid") int vid, @Param("uid") int uid);
 }

@@ -1,5 +1,6 @@
 package neko.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacate;
 import neko.entity.vo.VacateWithTeacherName;
@@ -31,10 +32,17 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     @Override
     public Map<String, String> cancelVacate(int vid, int uid) {
         Map<String, String> map = generalMethod.getSuccessMap();
-        if (this.baseMapper.cancelVacate(vid,uid) == 0) {
+        if (this.baseMapper.cancelVacate(vid, uid) == 0) {
             map = generalMethod.getErrorMap();
         }
 
+        return map;
+    }
+
+    @Override
+    public Map<String, String> getDetails(int vid, int uid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        map.put("data", JSON.toJSONString(this.baseMapper.getDetails(vid, uid)));
         return map;
     }
 }
