@@ -222,7 +222,7 @@ public class LoginInfo {
 
             String[] temp = returnStr.split(",");
             System.out.println("returnStr = " + returnStr);
-            if(returnStr.contains("内网")||returnStr.contains("局域网")){
+            if (returnStr.contains("内网") || returnStr.contains("局域网")) {
                 return "局域网地址";
             }
             if (temp.length < 3) {

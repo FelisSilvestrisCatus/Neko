@@ -37,7 +37,7 @@ public class SessionFilter implements Filter {
         String uri = request.getRequestURI();
 
         //不过滤开发环境
-        if(request.getRemoteAddr().contains("127.0.0.1")||request.getRemoteAddr().contains("172.")){
+        if (request.getRemoteAddr().contains("127.0.0.1") || request.getRemoteAddr().contains("172.")) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }

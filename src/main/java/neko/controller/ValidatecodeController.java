@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -102,7 +101,7 @@ public class ValidatecodeController {
 
     //验证码登录
     @RequestMapping(value = "/loginByCode")
-    public Map<String, String> loginByCode(HttpServletRequest request, String phone, String code, String loginType){
+    public Map<String, String> loginByCode(HttpServletRequest request, String phone, String code, String loginType) {
 
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");

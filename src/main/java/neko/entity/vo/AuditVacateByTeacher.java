@@ -1,7 +1,5 @@
 package neko.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,8 +12,7 @@ import java.io.Serializable;
 public class AuditVacateByTeacher implements Serializable {
     /**
      * 学生姓名，手机号，班级名，课程名，请假类型，请假时间范围，请假原因
-     *
-     * */
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,7 +29,7 @@ public class AuditVacateByTeacher implements Serializable {
     /**
      * 手机号
      */
-    private String  phone;
+    private String phone;
 
     //班级名
     private String cname;
@@ -42,8 +39,8 @@ public class AuditVacateByTeacher implements Serializable {
     private String vtype;
     //请假时间范围
     private String vtime;
-   //请假原因(用请假编号代替 方便后期查询请假详情====附件获取)
-   private String vname;
+    //请假原因(用请假编号代替 方便后期查询请假详情====附件获取)
+    private String vname;
 
 
 }

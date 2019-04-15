@@ -5,7 +5,7 @@ import neko.entity.Rollcall;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author z9961

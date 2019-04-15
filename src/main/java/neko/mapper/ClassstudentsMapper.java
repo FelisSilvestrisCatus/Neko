@@ -1,11 +1,11 @@
 package neko.mapper;
 
-import neko.entity.Classstudents;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import neko.entity.Classstudents;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author z9961

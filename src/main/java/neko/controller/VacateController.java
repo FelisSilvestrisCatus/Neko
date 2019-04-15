@@ -140,13 +140,13 @@ public class VacateController {
         Map<String, String> map = generalMethod.getSuccessMap();
         //当前学生请假时间段含今日  且 其请假课程为 本老师创建的课程
         Users users = (Users) session.getAttribute("user");
-        int uid=users.getUid();
-        System.out.println("当前老师uid"+uid);
+        int uid = users.getUid();
+        System.out.println("当前老师uid" + uid);
         //获取今天的日期（String  类型）
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
         //开始实现查询逻辑
-        System.out.println(vacateService.auditVacateByTeacher(df.format(new Date()),uid).size());
+        System.out.println(vacateService.auditVacateByTeacher(df.format(new Date()), uid).size());
         return map;
     }
 }

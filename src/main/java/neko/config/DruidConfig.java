@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dyuproject.protostuff.MapSchema.MessageFactories.HashMap;
-
 @Configuration
 public class DruidConfig {
 

@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -35,6 +34,6 @@ public interface VacateMapper extends BaseMapper<Vacate> {
 
     @Select("select vacate.vid, users.uname,users.phone,class.cname,course.cname as coursename,vacate.vtype,vacate.vtime,vacate.vname from vacate\n" +
             "   vacate left join  users  users on users.uid=vacate.uid  left join  class class on class.cid=vacate.courseid,course course left join class class1 on course.cid=class1.cid where SUBSTR(vacate.vtime FROM 1 FOR 16)<'2019-04-15 12:34'and\n" +
-            "    SUBSTR(vacate.vtime FROM 20 FOR 35)>#{nowdate} and vacate.courseid in (select  course.courseid from course where tid=#{uid})" )
+            "    SUBSTR(vacate.vtime FROM 20 FOR 35)>#{nowdate} and vacate.courseid in (select  course.courseid from course where tid=#{uid})")
     List<AuditVacateByTeacher> auditVacateByTeacher(@Param("nowdate") String nowdate, @Param("uid") int uid);
 }

@@ -1,11 +1,11 @@
 package neko.service;
 
-import neko.entity.Classteacher;
 import com.baomidou.mybatisplus.extension.service.IService;
+import neko.entity.Classteacher;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author z9961

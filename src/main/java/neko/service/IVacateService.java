@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.VacateWithTeacherName;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +22,6 @@ public interface IVacateService extends IService<Vacate> {
     Map<String, String> cancelVacate(int vid, int uid);
 
     Map<String, String> getDetails(int vidint, int uid);
-    List<AuditVacateByTeacher> auditVacateByTeacher( String nowdate, int uid);
+
+    List<AuditVacateByTeacher> auditVacateByTeacher(String nowdate, int uid);
 }
