@@ -19,5 +19,5 @@ public interface IUsersService extends IService<Users> {
     public boolean checkUser(String userphone);
 
     //密码和验证码登录
-    void login(HttpServletRequest request, String phone, Map<String, String> map);
+    void login(HttpServletRequest request, String phone, Map<String, String> map,String logintype);
 }

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
-import neko.service.IVacateService;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -44,11 +42,10 @@ public class UsersController {
     private Juhe juhe;
     @Autowired
     private RedisUtil redisUtil;
-    @Autowired
-    private IVacateService vacateService;
+
     //用户登录
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) throws IOException {
+    public Map<String, String> login(HttpServletRequest request, String phone, String password, String loginType) {
 
         Map<String, String> map = new HashMap<>();
 
@@ -58,7 +55,7 @@ public class UsersController {
         Users user = usersService.getOne(queryWrapper);
 
         if (password.equals(user.getPwd())) {
-            usersService.login(request, phone, map);
+            usersService.login(request, phone, map, loginType);
         } else {
             map.put("state", "400");
             map.put("msg", "用户名或密码错误");
@@ -67,6 +64,7 @@ public class UsersController {
 
         return map;
     }
+
 
     /*
      * 权限测试使用，完成后删除
@@ -87,7 +85,7 @@ public class UsersController {
 
     //用户注册
     @RequestMapping(value = "/registe")
-    public Map<String, String> registe(HttpServletRequest request, String username, String userphone, String validatecode) {
+    public Map<String, String> registe(String idnumber, String username, String userphone, String validatecode) {
         Map<String, String> map = new HashMap<>();
 
         //检查用户是否已存在
@@ -104,6 +102,7 @@ public class UsersController {
             user.setPhone(userphone);
             user.setUname(username);
             user.setType(2);
+            user.setIdnumber(Integer.parseInt(idnumber));
             usersService.save(user);
             map.put("state", "200");
             map.put("msg", "注册成功");

@@ -55,7 +55,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     //密码和验证码登录
     @Override
-    public void login(HttpServletRequest request, String phone, Map<String, String> map) {
+    public void login(HttpServletRequest request, String phone, Map<String, String> map, String logintype) {
         //查询用户
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("phone", phone);
@@ -75,7 +75,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         Userslogin userslogin = new Userslogin();
         userslogin.setUid(user.getUid());
         userslogin.setLoginip(loginInfo.getIpAddr(request));
-        userslogin.setLogintype(1);
+        userslogin.setLogintype(Integer.parseInt(logintype));
         userslogin.setLogintime(LocalDateTime.now());
         String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
         if (area.equals("未知地址")) {
