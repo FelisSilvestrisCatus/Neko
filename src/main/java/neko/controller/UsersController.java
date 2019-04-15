@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -47,8 +48,8 @@ public class UsersController {
     private IVacateService vacateService;
     //用户登录
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) {
-        System.out.println(vacateService.auditVacateByTeacher("2019-04-15 16:34",1).size());
+    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) throws IOException {
+
         Map<String, String> map = new HashMap<>();
 
         //查询用户
@@ -66,7 +67,6 @@ public class UsersController {
 
         return map;
     }
-
 
     /*
      * 权限测试使用，完成后删除
