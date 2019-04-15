@@ -45,7 +45,7 @@ public class UsersController {
 
     //用户登录
     @RequestMapping(value = "/login")
-    public Map<String, String> login(HttpServletRequest request, String phone, String password, Integer loginType) {
+    public Map<String, String> login(HttpServletRequest request, String phone, String password, String loginType) {
 
         Map<String, String> map = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class UsersController {
         Users user = usersService.getOne(queryWrapper);
 
         if (password.equals(user.getPwd())) {
-            usersService.login(request, phone, map);
+            usersService.login(request, phone, map, loginType);
         } else {
             map.put("state", "400");
             map.put("msg", "用户名或密码错误");
@@ -85,7 +85,7 @@ public class UsersController {
 
     //用户注册
     @RequestMapping(value = "/registe")
-    public Map<String, String> registe(HttpServletRequest request, String username, String userphone, String validatecode) {
+    public Map<String, String> registe(String idnumber, String username, String userphone, String validatecode) {
         Map<String, String> map = new HashMap<>();
 
         //检查用户是否已存在
@@ -102,6 +102,7 @@ public class UsersController {
             user.setPhone(userphone);
             user.setUname(username);
             user.setType(2);
+            user.setIdnumber(Integer.parseInt(idnumber));
             usersService.save(user);
             map.put("state", "200");
             map.put("msg", "注册成功");

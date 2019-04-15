@@ -102,7 +102,7 @@ public class ValidatecodeController {
 
     //验证码登录
     @RequestMapping(value = "/loginByCode")
-    public Map<String, String> loginByCode(HttpServletRequest request, String phone, String code, Integer loginType) throws IOException {
+    public Map<String, String> loginByCode(HttpServletRequest request, String phone, String code, String loginType) throws IOException {
 
         Map<String, String> map = new HashMap<>();
         map.put("state", "400");
@@ -117,7 +117,7 @@ public class ValidatecodeController {
 
         String redisCode = redisUtil.get(phone + "code");
         if (redisCode.equals(code)) {
-            usersService.login(request, phone, map);
+            usersService.login(request, phone, map, loginType);
         } else {
             map.put("msg", "验证码错误");
             return map;
