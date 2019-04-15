@@ -40,6 +40,7 @@ public class CourseController {
         map.put("state", "200");
         map.put("msg", "ok");
         map.put("data", JSON.toJSONString(course));
+        System.out.println("map = " + map);
         return map;
     }
 }

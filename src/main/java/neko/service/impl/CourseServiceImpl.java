@@ -20,6 +20,7 @@ import java.util.List;
 @Service
 public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements ICourseService {
 
+    //获取所有课程
     @Override
     public List<StudentCourseName> getMyCourse(int uid) {
         return this.baseMapper.getMyCourse(uid);

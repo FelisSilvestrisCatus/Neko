@@ -20,14 +20,30 @@ import java.io.Serializable;
 public class StudentCourseName implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     /**
-     * 课程id
+     * 班级名
      */
-    private Integer courseid;
+    private String classname;
+
     /**
      * 课程名
      */
     private String cname;
 
+    /**
+     * 任课老师
+     */
+    private String uname;
+
+    /**
+     * 星期几
+     */
+    private Integer cday;
+
+    /**
+     * 状态位
+     */
+    private Integer state;
 
 }
