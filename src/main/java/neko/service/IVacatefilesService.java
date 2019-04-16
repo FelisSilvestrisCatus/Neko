@@ -2,6 +2,7 @@ package neko.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Vacatefiles;
+import neko.entity.vo.VacateDetail;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -16,4 +17,5 @@ import java.util.Map;
  */
 public interface IVacatefilesService extends IService<Vacatefiles> {
     Map<String, String> createVacateFile(String id, MultipartFile[] vfile);
+     VacateDetail getVacateDetail(int vid);
 }

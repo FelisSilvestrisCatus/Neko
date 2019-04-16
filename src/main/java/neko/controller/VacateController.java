@@ -5,10 +5,12 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Vacate;
+import neko.entity.vo.VacateDetail;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
 import neko.utils.generalMethod;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,13 +87,13 @@ public class VacateController {
         return vacateService.cancelVacate(vidint, uid);
     }
 
-    //学生取消请假
+    //学生查看请假信息
     @RequestMapping(value = "/getDetails")
     public Map<String, String> getDetails(HttpSession session, String vid) {
         int uid = ((Users) session.getAttribute("user")).getUid();
         System.out.println("vid = " + vid);
-        int vidint = Integer.parseInt(vid);
-        return vacateService.getDetails(vidint, uid);
+        int vid_ = Integer.parseInt(vid);
+        return vacateService.getDetails(vid_, uid);
     }
 
 
@@ -146,7 +148,20 @@ public class VacateController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
         //开始实现查询逻辑
-        System.out.println(vacateService.auditVacateByTeacher(df.format(new Date()), uid).size());
+        String nowdate=df.format(new Date());
+        String data=JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate,uid));
+        //存放数据
+        map.put("data",data);
+        return map;
+    }
+
+    //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
+    @RequestMapping(value = "/getVacateDetail")
+    public  Map<String, String> getVacateDetail(String vid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        int vid_ = Integer.valueOf(vid);
+        String data=JSON.toJSONString(vacatefilesService.getVacateDetail(vid_));
+        map.put("data",data);
         return map;
     }
 }

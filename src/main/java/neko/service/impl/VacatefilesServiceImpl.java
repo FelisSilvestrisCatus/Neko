@@ -2,6 +2,8 @@ package neko.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacatefiles;
+import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.VacateDetail;
 import neko.mapper.VacatefilesMapper;
 import neko.service.IVacatefilesService;
 import neko.utils.generalMethod;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,4 +58,11 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
         }
         return map;
     }
+
+
+    @Override
+    public VacateDetail getVacateDetail(int vid) {
+        return this.baseMapper.getVacateDetail(vid);
+    }
+
 }
