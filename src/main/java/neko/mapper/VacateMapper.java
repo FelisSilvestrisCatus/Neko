@@ -33,7 +33,11 @@ public interface VacateMapper extends BaseMapper<Vacate> {
     VacateWithTeacherName getDetails(@Param("vid") int vid, @Param("uid") int uid);
 
     @Select("select vacate.vid, users.uname,users.phone,class.cname,course.cname as coursename,vacate.vtype,vacate.vtime,vacate.vname from vacate\n" +
-            "   vacate left join  users  users on users.uid=vacate.uid  left join  class class on class.cid=vacate.courseid,course course left join class class1 on course.cid=class1.cid where SUBSTR(vacate.vtime FROM 1 FOR 16)<'2019-04-15 12:34'and\n" +
+            "   vacate left join  users  users on vacate.uid=users.uid\n" +
+            "  left  join course course on course.courseid=vacate.courseid   left join  class class on course.cid=class.cid\n" +
+            "\n" +
+            "\n" +
+            "where SUBSTR(vacate.vtime FROM 1 FOR 16)<#{nowdate}and\n" +
             "    SUBSTR(vacate.vtime FROM 20 FOR 35)>#{nowdate} and vacate.courseid in (select  course.courseid from course where tid=#{uid})")
     List<AuditVacateByTeacher> auditVacateByTeacher(@Param("nowdate") String nowdate, @Param("uid") int uid);
 }
