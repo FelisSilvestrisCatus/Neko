@@ -164,4 +164,16 @@ public class VacateController {
         map.put("data",data);
         return map;
     }
+    //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
+    @RequestMapping(value = "/VacateList")
+    public  Map<String, String> VacateList(HttpSession session) {
+        Users users = (Users) session.getAttribute("user");
+        int uid = users.getUid();
+        System.out.println("当前老师uid" + uid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+
+        String data=JSON.toJSONString(vacateService.VacateList(uid));
+        map.put("data",data);
+        return map;
+    }
 }

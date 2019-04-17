@@ -40,4 +40,9 @@ public interface VacateMapper extends BaseMapper<Vacate> {
             "where SUBSTR(vacate.vtime FROM 1 FOR 16)<#{nowdate}and\n" +
             "    SUBSTR(vacate.vtime FROM 20 FOR 35)>#{nowdate} and vacate.courseid in (select  course.courseid from course where tid=#{uid})")
     List<AuditVacateByTeacher> auditVacateByTeacher(@Param("nowdate") String nowdate, @Param("uid") int uid);
+
+    @Select("select vacate.vid,users.uname,users.phone,class.cname,course.cname,vacate.vtype , vacate.vtime ,vacate.vname,vacate.state from vacate vacate left join\n" +
+            "  users users on vacate.uid=users.uid left join course course on vacate.courseid=course.courseid\n" +
+            " left join class class  on course.cid=class.cid where course.tid=#{uid}")
+     List<AuditVacateByTeacher> VacateList(int uid);
 }

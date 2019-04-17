@@ -52,5 +52,10 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
         return this.baseMapper.auditVacateByTeacher(nowdate, uid);
     }
 
+    @Override
+    public List<AuditVacateByTeacher> VacateList(int uid) {
+        return this.baseMapper.VacateList(uid);
+    }
+
     ;
 }

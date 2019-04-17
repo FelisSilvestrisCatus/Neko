@@ -22,6 +22,9 @@ public class NekoApplicationTests {
 
         System.out.println(vacateService.auditVacateByTeacher("2019-04-15 16:34", 1).size());
         System.out.println(vacatefilesService.getVacateDetail(1).getVid());
+        System.out.println(vacateService.VacateList(2).size());
+
+
     }
 
 }

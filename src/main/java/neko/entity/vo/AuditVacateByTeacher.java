@@ -11,7 +11,8 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class AuditVacateByTeacher implements Serializable {
     /**
-     * 学生姓名，手机号，班级名，课程名，请假类型，请假时间范围，请假原因
+     * 学生姓名，手机号，班级名，课程名，请假类型，请假时间范围，请假原因，请假状态
+     * vid,uname,phone,classname.coursename,vtype,vtime,vname,state
      */
     private static final long serialVersionUID = 1L;
 
@@ -41,6 +42,8 @@ public class AuditVacateByTeacher implements Serializable {
     private String vtime;
     //请假原因(用请假编号代替 方便后期查询请假详情====附件获取)
     private String vname;
+    //请假状态
+    private  int state;
 
 
 }
