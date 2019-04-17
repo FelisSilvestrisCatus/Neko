@@ -2,9 +2,12 @@ package neko.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import neko.entity.Course;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
 import neko.service.ICourseService;
+import neko.utils.generalMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,4 +46,21 @@ public class CourseController {
         System.out.println("map = " + map);
         return map;
     }
+
+    //获取老师所有的课程
+    @RequestMapping(value = "/getTeacherCourse")
+    public Map<String, String> getTeacherCourse(HttpServletRequest request) {
+        Users users = (Users) request.getSession().getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("uid", users.getUid());
+
+        List<Course> courselist = courseService.list(queryWrapper);
+
+
+        String data = JSON.toJSONString(courselist);
+        map.put("data", data);
+        return map;
+    }
+
 }
