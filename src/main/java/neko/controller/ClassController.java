@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +143,28 @@ public class ClassController {
         map.put("data", JSON.toJSONString(classes));
         return map;
     }
-
+    //获取老师创建的班级
+    @RequestMapping(value = "/getTeacherClass")
+    public Map<String, String> getTeacherClass(HttpSession session) {
+        Users users = (Users) session.getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("uid",users.getUid());
+        //获取老师创建的班级
+        List<Classteacher> classlistbyuid=classteacherServic.list(queryWrapper);
+        Iterator it = classlistbyuid.iterator();
+        List<Integer> cid_list=new ArrayList<>();
+        while(it.hasNext()) {
+           int cid= ( (Classteacher)it.next()).getCid();
+            cid_list.add(cid);
+        }
+        System.out.println("该老师开的总共课程个数"+cid_list.size());
+        QueryWrapper queryWrapper1 = new QueryWrapper();
+        queryWrapper1.in("uid",cid_list);
+        List<Class> classList=classService.list(queryWrapper1);
+        System.out.println("打印"+classList.size());
+        map.put("data", JSON.toJSONString(classList));
+        return map;
+    }
 
 }
