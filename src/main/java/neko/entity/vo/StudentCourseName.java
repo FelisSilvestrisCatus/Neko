@@ -22,6 +22,11 @@ public class StudentCourseName implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 课程id
+     */
+    private Integer courseid;
+
+    /**
      * 班级名
      */
     private String classname;
