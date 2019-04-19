@@ -110,7 +110,7 @@ public class VacateController {
         handleTime(vreason, vdatetimeBegin, vdatetimeEnd, vacate);
 
         Map<String, String> map = generalMethod.getSuccessMap();
-        if (vacateService.saveOrUpdate(vacate)) {
+        if (vacateService.updateById(vacate)) {
             map.put("msg", "请假申请已修改");
         } else {
             map = generalMethod.getErrorMap();

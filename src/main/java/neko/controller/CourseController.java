@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,22 @@ public class CourseController {
 
 
         String data = JSON.toJSONString(courselist);
+        map.put("data", data);
+        return map;
+    }
+    //修改课程信息
+    @RequestMapping(value = "/auditCourse")
+    public Map<String, String> auditCourse(HttpSession session, String  courseid,String cname) {
+        Users users = (Users) session.getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("tid", users.getUid());
+        queryWrapper.eq("courseid",courseid);
+        Course course = courseService.getOne(queryWrapper);
+
+        course.setCname(cname);
+        courseService.updateById(course);
+        String data = JSON.toJSONString(course);
         map.put("data", data);
         return map;
     }
