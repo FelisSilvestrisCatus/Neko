@@ -46,14 +46,9 @@ public class ClassController {
     @RequestMapping(value = "/createClass")
     public Map<String, String> getValidatecode(HttpSession session, String name) {
 
-        Map<String, String> map = generalMethod.getSuccessMap();
+
         Users users = (Users) session.getAttribute("user");
 
-        if (users.getType() != 1) {
-            map = generalMethod.getErrorMap();
-            map.put("msg", "用户权限不足");
-            return map;
-        }
 
         //创建班级表
         Class newclass = new Class();
@@ -64,10 +59,20 @@ public class ClassController {
         Classteacher classteacher = new Classteacher();
         classteacher.setCid(newclass.getCid());
         classteacher.setUid(users.getUid());
-        classteacherServic.save(classteacher);
 
-        map.put("msg", "创建班级成功");
-        return map;
+        if (classteacherServic.save(classteacher)) {
+            Map<String, String> map = generalMethod.getSuccessMap();
+            map.put("msg", "创建班级成功");
+            return map;
+        } else {
+            Map<String, String> map = generalMethod.getErrorMap();
+            map.put("msg", "创建班级失败");
+            return map;
+
+
+        }
+
+
     }
 
     //修改班级信息
@@ -143,26 +148,27 @@ public class ClassController {
         map.put("data", JSON.toJSONString(classes));
         return map;
     }
+
     //获取老师创建的班级
     @RequestMapping(value = "/getTeacherClass")
     public Map<String, String> getTeacherClass(HttpSession session) {
         Users users = (Users) session.getAttribute("user");
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("uid",users.getUid());
+        queryWrapper.eq("uid", users.getUid());
         //获取老师创建的班级
-        List<Classteacher> classlistbyuid=classteacherServic.list(queryWrapper);
+        List<Classteacher> classlistbyuid = classteacherServic.list(queryWrapper);
         Iterator it = classlistbyuid.iterator();
-        List<Integer> cid_list=new ArrayList<>();
-        while(it.hasNext()) {
-           int cid= ( (Classteacher)it.next()).getCid();
+        List<Integer> cid_list = new ArrayList<>();
+        while (it.hasNext()) {
+            int cid = ((Classteacher) it.next()).getCid();
             cid_list.add(cid);
         }
-        System.out.println("该老师开的总共课程个数"+cid_list.size());
+        System.out.println("该老师开的总共课程个数" + cid_list.size());
         QueryWrapper queryWrapper1 = new QueryWrapper();
-        queryWrapper1.in("uid",cid_list);
-        List<Class> classList=classService.list(queryWrapper1);
-        System.out.println("打印"+classList.size());
+        queryWrapper1.in("cid", cid_list);
+        List<Class> classList = classService.list(queryWrapper1);
+        System.out.println("打印" + classList.size());
         map.put("data", JSON.toJSONString(classList));
         return map;
     }

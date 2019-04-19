@@ -1,12 +1,16 @@
 package neko.controller;
 
 
+import neko.entity.Classteacher;
 import neko.entity.Users;
+import neko.service.IClassteacherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +24,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/classteacher")
 public class ClassteacherController {
+    @Autowired
+    IClassteacherService classteacherService;
     //修改班级信息
     @RequestMapping(value = "/getMyCreateClass")
     public Map<String, String> getMyCreateClass(HttpSession session) {
@@ -29,6 +35,7 @@ public class ClassteacherController {
         System.out.println("老师" + uid);
         //获取老师创建的班级
 
+        List<Classteacher>  classteacherList =classteacherService.list();
 
         return map;
     }
