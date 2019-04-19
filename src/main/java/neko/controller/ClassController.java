@@ -78,33 +78,23 @@ public class ClassController {
     //修改班级信息
     @RequestMapping(value = "/changeClass")
     public Map<String, String> changeClass(HttpSession session, String name, String cid) {
-        Map<String, String> map = generalMethod.getSuccessMap();
+
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("cid", cid);
         Users users = (Users) session.getAttribute("user");
         Class classTeacher = classService.getOne(queryWrapper);
-        if (users.getType() != 1 || !classteacherServic.getOne(queryWrapper).getUid().equals(users.getUid())) {
-            //用户不合法
-            map = generalMethod.getErrorMap();
-            map.put("msg", "用户不合法");
+        classTeacher.setCname(name);
+        if (classService.updateById(classTeacher)) {
+            Map<String, String> map = generalMethod.getSuccessMap();
             return map;
+
+        } else {
+            Map<String, String> map = generalMethod.getErrorMap();
+            return map;
+
         }
 
-        try {
-            classTeacher.setCname(name);
-            if (classService.updateById(classTeacher)) {
-                map.put("msg", "修改班级名字成功");
-            } else {
-                map = generalMethod.getErrorMap();
-                map.put("msg", "修改班级名字失败");
-            }
-        } catch (Exception e) {
-            map = generalMethod.getErrorMap();
-            map.put("msg", "修改班级名字失败");
-        }
-
-        return map;
     }
 
     /**

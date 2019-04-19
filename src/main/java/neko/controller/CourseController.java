@@ -3,9 +3,11 @@ package neko.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import neko.entity.Class;
 import neko.entity.Course;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
+import neko.service.IClassService;
 import neko.service.ICourseService;
 import neko.utils.generalMethod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class CourseController {
 
     @Autowired
     private ICourseService courseService;
+    @Autowired
+    private IClassService classService;
 
     //获取学生的课程
     @RequestMapping(value = "/getMyCourse")
@@ -63,14 +67,15 @@ public class CourseController {
         map.put("data", data);
         return map;
     }
+
     //修改课程信息
-    @RequestMapping(value = "/auditCourse")
-    public Map<String, String> auditCourse(HttpSession session, String  courseid,String cname) {
+    @RequestMapping(value = "/alertCourse")
+    public Map<String, String> auditCourse(HttpSession session, String courseid, String cname) {
         Users users = (Users) session.getAttribute("user");
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("tid", users.getUid());
-        queryWrapper.eq("courseid",courseid);
+        queryWrapper.eq("courseid", courseid);
         Course course = courseService.getOne(queryWrapper);
 
         course.setCname(cname);
@@ -80,4 +85,41 @@ public class CourseController {
         return map;
     }
 
+    //创建课程
+    @RequestMapping(value = "/createCourse")
+    public Map<String, String> createCourse(HttpSession session, String cid, String cname, String ctime) {
+        Users users = (Users) session.getAttribute("user");
+
+        int cday = Integer.valueOf(ctime);
+        int cid_ = Integer.valueOf(cid);
+
+        Course course = new Course();
+        course.setCname(cname);
+        course.setCday(cday);
+        course.setCid(cid_);
+        course.setTid(users.getUid());
+
+        if (courseService.save(course)) {
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("cid", cid);
+
+            Class class_ = classService.getOne(queryWrapper);
+            class_.setCstate(1);
+            if (classService.updateById(class_)) {
+
+                Map<String, String> map = generalMethod.getSuccessMap();
+                return map;
+            } else {
+                Map<String, String> map = generalMethod.getErrorMap();
+                return map;
+
+            }
+
+        } else {
+            Map<String, String> map = generalMethod.getErrorMap();
+            return map;
+        }
+
+
+    }
 }
