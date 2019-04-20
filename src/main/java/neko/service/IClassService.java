@@ -18,4 +18,6 @@ public interface IClassService extends IService<Class> {
     List<ClassWithTeacherName> getAllclass(int uid);
 
     List<ClassWithTeacherName> getJoinedclass(int uid);
+    //获取老师id下所有班级的信息（含学生人数）
+    List<ClassWithTeacherName> getClassStudent(int tid);
 }

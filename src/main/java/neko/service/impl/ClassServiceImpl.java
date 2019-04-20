@@ -29,4 +29,9 @@ public class ClassServiceImpl extends ServiceImpl<ClassMapper, Class> implements
     public List<ClassWithTeacherName> getJoinedclass(int uid) {
         return this.baseMapper.getJoinedclass(uid);
     }
+
+    @Override
+    public List<ClassWithTeacherName> getClassStudent(int tid) {
+        return this.baseMapper.getClassStudent(tid);
+    }
 }

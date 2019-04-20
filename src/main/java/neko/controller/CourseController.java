@@ -68,20 +68,26 @@ public class CourseController {
     }
 
     //修改课程信息
-    @RequestMapping(value = "/alertCourse")
-    public Map<String, String> auditCourse(HttpSession session, String courseid, String cname) {
-        Users users = (Users) session.getAttribute("user");
+    @RequestMapping(value = "/changeCourse")
+    public Map<String, String> auditCourse(HttpSession session, String courseid, String cname, String ctime) {
+        int ctime_ = Integer.valueOf(ctime);
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("tid", users.getUid());
+
         queryWrapper.eq("courseid", courseid);
         Course course = courseService.getOne(queryWrapper);
 
         course.setCname(cname);
-        courseService.updateById(course);
-        String data = JSON.toJSONString(course);
-        map.put("data", data);
-        return map;
+        course.setCday(ctime_);
+        try {
+            courseService.updateById(course);
+
+            return map;
+        } catch (Exception e) {
+            map = generalMethod.getErrorMap();
+            return map;
+        }
+
     }
 
     //创建课程
@@ -106,12 +112,12 @@ public class CourseController {
             class_.setCstate(1);
             System.out.println(class_.getCid());
             System.out.println(class_.getCstate());
-            try{
+            try {
                 classService.saveOrUpdate(class_);
                 Map<String, String> map = generalMethod.getSuccessMap();
                 System.out.println("创建课程");
                 return map;
-            }catch (Exception e){
+            } catch (Exception e) {
                 Map<String, String> map = generalMethod.getErrorMap();
                 System.out.println("创建失败");
                 return map;
@@ -126,10 +132,11 @@ public class CourseController {
 
 
     }
+
     //获取指定id的课程
     @RequestMapping(value = "/getCourseByCid")
-        public Map<String, String> getTeacherCourse(HttpSession session,String cid) {
-      int  cid_=Integer.valueOf(cid);
+    public Map<String, String> getTeacherCourse(HttpSession session, String cid) {
+        int cid_ = Integer.valueOf(cid);
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("cid", cid_);
@@ -137,5 +144,29 @@ public class CourseController {
         String data = JSON.toJSONString(courselist);
         map.put("data", data);
         return map;
+    }
+
+    //
+    //修改指定id的课程的state
+    @RequestMapping(value = "/changeCourseState")
+    public Map<String, String> changeCourseState(HttpSession session, String courseid, String state) {
+        int courseid_ = Integer.valueOf(courseid);
+        int state_ = Integer.valueOf(state);
+        Users users = (Users) session.getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("tid", users.getUid());
+        queryWrapper.eq("courseid", courseid_);
+        Course course = courseService.getOne(queryWrapper);
+        course.setState(state_);
+        try {
+            courseService.updateById(course);
+            return map;
+        } catch (Exception e) {
+            map = generalMethod.getErrorMap();
+            return map;
+        }
+
+
     }
 }

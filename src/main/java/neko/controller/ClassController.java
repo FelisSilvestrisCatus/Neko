@@ -163,4 +163,15 @@ public class ClassController {
         return map;
     }
 
+    //获取老师创建的所有班级（含学生数目）
+    //
+    @RequestMapping(value = "/getClassStudent")
+    public Map<String, String> getClassStudent(HttpSession session) {
+        Users users = (Users) session.getAttribute("user");
+
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<ClassWithTeacherName> list = classService.getClassStudent(users.getUid());
+        map.put("data", JSON.toJSONString(list));
+        return map;
+    }
 }

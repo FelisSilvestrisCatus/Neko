@@ -41,6 +41,7 @@ public class ClassWithTeacherName implements Serializable {
 
     //班级老师
     private String uname;
-
+    //班级人数
+    private int stunum;
 
 }

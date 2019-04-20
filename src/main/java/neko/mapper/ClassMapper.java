@@ -27,4 +27,9 @@ public interface ClassMapper extends BaseMapper<Class> {
     @Select("call JoinedClass(#{uid})")
     @Options(statementType = StatementType.CALLABLE)
     List<ClassWithTeacherName> getJoinedclass(@Param("uid") int uid);
+
+
+    @Select("select class.cid,class.cname,(select  count(*) from classstudents where cid=class.cid ) as stunum from class\n" +
+            "where  class.cid in ( select cid from  classteacher where uid=#{tid} )")
+    List<ClassWithTeacherName> getClassStudent(int tid);
 }
