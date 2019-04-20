@@ -59,7 +59,6 @@ public class CourseController {
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", users.getUid());
-
         List<Course> courselist = courseService.list(queryWrapper);
 
 
@@ -105,15 +104,20 @@ public class CourseController {
 
             Class class_ = classService.getOne(queryWrapper);
             class_.setCstate(1);
-            if (classService.updateById(class_)) {
-
+            System.out.println(class_.getCid());
+            System.out.println(class_.getCstate());
+            try{
+                classService.saveOrUpdate(class_);
                 Map<String, String> map = generalMethod.getSuccessMap();
+                System.out.println("创建课程");
                 return map;
-            } else {
+            }catch (Exception e){
                 Map<String, String> map = generalMethod.getErrorMap();
+                System.out.println("创建失败");
                 return map;
 
             }
+
 
         } else {
             Map<String, String> map = generalMethod.getErrorMap();
@@ -121,5 +125,17 @@ public class CourseController {
         }
 
 
+    }
+    //获取指定id的课程
+    @RequestMapping(value = "/getCourseByCid")
+        public Map<String, String> getTeacherCourse(HttpSession session,String cid) {
+      int  cid_=Integer.valueOf(cid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("cid", cid_);
+        List<Course> courselist = courseService.list(queryWrapper);
+        String data = JSON.toJSONString(courselist);
+        map.put("data", data);
+        return map;
     }
 }
