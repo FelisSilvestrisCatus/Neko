@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Vacate;
+import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.VacateDetail;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -164,16 +166,16 @@ public class VacateController {
         map.put("data",data);
         return map;
     }
-    //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
+    //根据请假状态筛选    //
     @RequestMapping(value = "/VacateList")
-    public  Map<String, String> VacateList(HttpSession session) {
+    public  Map<String, String> VacateList(HttpSession session,String state) {
         Users users = (Users) session.getAttribute("user");
         int uid = users.getUid();
+        int state_=Integer.valueOf(state);
         System.out.println("当前老师uid" + uid);
         Map<String, String> map = generalMethod.getSuccessMap();
-
-        String data=JSON.toJSONString(vacateService.VacateList(uid));
-        map.put("data",data);
+        List<AuditVacateByTeacher> list=vacateService.VacateList(uid,state_);
+        map.put("data",JSON.toJSONString(list));
         return map;
     }
 }

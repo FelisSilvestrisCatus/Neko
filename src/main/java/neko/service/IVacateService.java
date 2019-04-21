@@ -25,5 +25,5 @@ public interface IVacateService extends IService<Vacate> {
 
     List<AuditVacateByTeacher> auditVacateByTeacher(String nowdate, int uid);
     //显示老师uid下所有的请假记录
-  List<AuditVacateByTeacher> VacateList(int uid);
+  List<AuditVacateByTeacher> VacateList(int uid,int state);
 }

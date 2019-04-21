@@ -43,6 +43,6 @@ public interface VacateMapper extends BaseMapper<Vacate> {
 
     @Select("select vacate.vid,users.uname,users.phone,class.cname,course.cname,vacate.vtype , vacate.vtime ,vacate.vname,vacate.state from vacate vacate left join\n" +
             "  users users on vacate.uid=users.uid left join course course on vacate.courseid=course.courseid\n" +
-            " left join class class  on course.cid=class.cid where course.tid=#{uid}")
-     List<AuditVacateByTeacher> VacateList(int uid);
+            " left join class class  on course.cid=class.cid where course.tid=#{uid} and vacate.state=#{state}")
+     List<AuditVacateByTeacher> VacateList(int uid,int state);
 }
