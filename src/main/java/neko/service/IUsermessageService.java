@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUsermessageService extends IService<Usermessage> {
 
+/*
+
+* */
+    public boolean sendMessage(Integer uid,Integer sourceid,String message);
 }
