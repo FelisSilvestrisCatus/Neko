@@ -51,11 +51,11 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://mysql.aloli.cn:3306/neko?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://cdb-7bsdq3vw.bj.tencentcdb.com:10077/neko?useUnicode=true&useSSL=false&characterEncoding=utf8");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("5QDG5zPG%#1d");
+        dsc.setPassword("H&4%NNVexrd1");
         mpg.setDataSource(dsc);
 
         // 包配置
