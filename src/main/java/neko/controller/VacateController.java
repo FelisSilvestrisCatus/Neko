@@ -7,6 +7,7 @@ import neko.entity.Users;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.VacateDetail;
+import neko.entity.vo.VacateWithTeacherName;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
@@ -92,10 +93,15 @@ public class VacateController {
     //学生查看请假信息
     @RequestMapping(value = "/getDetails")
     public Map<String, String> getDetails(HttpSession session, String vid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
         int uid = ((Users) session.getAttribute("user")).getUid();
         System.out.println("vid = " + vid);
+        System.out.println("uid="+uid);
         int vid_ = Integer.parseInt(vid);
-        return vacateService.getDetails(vid_, uid);
+        VacateWithTeacherName vacateWithTeacherName = vacateService.getDetails(vid_, uid);
+        System.out.println(vacateWithTeacherName);
+        map.put("data", JSON.toJSONString(vacateWithTeacherName));
+        return map;
     }
 
 
@@ -150,32 +156,47 @@ public class VacateController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
         //开始实现查询逻辑
-        String nowdate=df.format(new Date());
-        String data=JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate,uid));
+        String nowdate = df.format(new Date());
+        String data = JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate, uid));
         //存放数据
-        map.put("data",data);
+        map.put("data", data);
         return map;
     }
 
     //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
     @RequestMapping(value = "/getVacateDetail")
-    public  Map<String, String> getVacateDetail(String vid) {
+    public Map<String, String> getVacateDetail(String vid) {
         Map<String, String> map = generalMethod.getSuccessMap();
         int vid_ = Integer.valueOf(vid);
-        String data=JSON.toJSONString(vacatefilesService.getVacateDetail(vid_));
-        map.put("data",data);
+        String data = JSON.toJSONString(vacatefilesService.getVacateDetail(vid_));
+        map.put("data", data);
         return map;
     }
+    //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
+    @RequestMapping(value = "/getVacateDetailByVid")
+    public Map<String, String> getVacateDetailById(String vid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        int vid_ = Integer.valueOf(vid);
+
+        AuditVacateByTeacher auditVacateByTeacher=vacateService.getVacateDetailByVid(vid_);
+        String data = JSON.toJSONString(auditVacateByTeacher);
+        System.out.println(auditVacateByTeacher.getState()+""+auditVacateByTeacher.getVtype());
+
+
+        map.put("data", data);
+        return map;
+    }
+
     //根据请假状态筛选    //
     @RequestMapping(value = "/VacateList")
-    public  Map<String, String> VacateList(HttpSession session,String state) {
+    public Map<String, String> VacateList(HttpSession session, String state) {
         Users users = (Users) session.getAttribute("user");
         int uid = users.getUid();
-        int state_=Integer.valueOf(state);
+        int state_ = Integer.valueOf(state);
         System.out.println("当前老师uid" + uid);
         Map<String, String> map = generalMethod.getSuccessMap();
-        List<AuditVacateByTeacher> list=vacateService.VacateList(uid,state_);
-        map.put("data",JSON.toJSONString(list));
+        List<AuditVacateByTeacher> list = vacateService.VacateList(uid, state_);
+        map.put("data", JSON.toJSONString(list));
         return map;
     }
 }

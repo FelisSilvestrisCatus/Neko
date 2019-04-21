@@ -3,15 +3,17 @@ package neko.entity.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import neko.entity.Vacatefiles;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class AuditVacateByTeacher implements Serializable {
     /**
-     * 学生姓名，手机号，班级名，课程名，请假类型，请假时间范围，请假原因，请假状态
+     * 学生姓名，手机号，班级名，课程名，请假类型，请假时间范围，请假原因，请假状态,请假附件
      * vid,uname,phone,classname.coursename,vtype,vtime,vname,state
      */
     private static final long serialVersionUID = 1L;
@@ -26,7 +28,10 @@ public class AuditVacateByTeacher implements Serializable {
      * 学生姓名
      */
     private String uname;
-
+    /**
+     * 学生编号
+     */
+    private String uid;
     /**
      * 手机号
      */
@@ -44,6 +49,7 @@ public class AuditVacateByTeacher implements Serializable {
     private String vname;
     //请假状态
     private  int state;
+
 
 
 }
