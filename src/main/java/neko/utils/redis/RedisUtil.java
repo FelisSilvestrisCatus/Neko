@@ -200,12 +200,7 @@ public class RedisUtil {
      * @param value
      */
     public void set(String key, String value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
-        } catch (Exception e) {
-
-        }
-
+        redisTemplate.opsForValue().set(key, value);
     }
 
     /**

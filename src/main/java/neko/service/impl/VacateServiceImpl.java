@@ -41,9 +41,17 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     }
 
     @Override
-    public VacateWithTeacherName getDetails(int vid, int uid) {
+    public Map<String, String> getDetails(int vid, int uid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        map.put("data", JSON.toJSONString(this.baseMapper.getDetails(vid, uid)));
+        return map;
+    }
 
-        return this.baseMapper.getDetails(vid, uid);
+    @Override
+    public Map<String, String> getDetailsByTeacher(int vid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        map.put("data", JSON.toJSONString(this.baseMapper.getDetailsByTeacher(vid)));
+        return map;
     }
 
     @Override
@@ -52,14 +60,7 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     }
 
     @Override
-    public List<AuditVacateByTeacher> VacateList(int uid,int state) {
-        return this.baseMapper.VacateList(uid,state);
+    public List<AuditVacateByTeacher> VacateList(int uid, int state) {
+        return this.baseMapper.VacateList(uid, state);
     }
-
-    @Override
-    public AuditVacateByTeacher getVacateDetailByVid(int vid) {
-        return this.baseMapper.getVacateDetailByVid(vid);
-    }
-
-    ;
 }

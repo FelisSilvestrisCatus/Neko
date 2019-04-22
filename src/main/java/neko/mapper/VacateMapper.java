@@ -41,12 +41,13 @@ public interface VacateMapper extends BaseMapper<Vacate> {
             "    SUBSTR(vacate.vtime FROM 20 FOR 35)>#{nowdate} and vacate.courseid in (select  course.courseid from course where tid=#{uid})")
     List<AuditVacateByTeacher> auditVacateByTeacher(@Param("nowdate") String nowdate, @Param("uid") int uid);
 
-    @Select("select vacate.vid,users.uid,users.uname,users.phone,class.cname,course.cname,vacate.vtype , vacate.vtime ,vacate.vname,vacate.state from vacate vacate left join\n" +
+    @Select("select vacate.vid,users.uname,users.phone,class.cname,course.cname,vacate.vtype , vacate.vtime ,vacate.vname,vacate.state,vacate.remark from vacate vacate left join\n" +
             "  users users on vacate.uid=users.uid left join course course on vacate.courseid=course.courseid\n" +
             " left join class class  on course.cid=class.cid where course.tid=#{uid} and vacate.state=#{state}")
-     List<AuditVacateByTeacher> VacateList(int uid,int state);
-    @Select("select vacate.vid,users.uid,users.uname,users.phone,class.cname,course.cname,vacate.vtype , vacate.vtime ,vacate.vname,vacate.state from vacate vacate left join\n" +
-            "  users users on vacate.uid=users.uid left join course course on vacate.courseid=course.courseid\n" +
-            " left join class class  on course.cid=class.cid where vacate.vid=#{vid}")
-    AuditVacateByTeacher getVacateDetailByVid(int vid);
+    List<AuditVacateByTeacher> VacateList(int uid, int state);
+
+    @Select("select v.vid, c.cname, v.vname, v.vtime, v.vtype, v.state, u.uname " +
+            "from vacate v,course c,classteacher t,users u " +
+            "where v.uid =#{uid} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid and vid=#{vid}")
+    VacateWithTeacherName getDetailsByTeacher(@Param("vid") int vid);
 }

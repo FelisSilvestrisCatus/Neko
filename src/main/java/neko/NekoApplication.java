@@ -12,8 +12,6 @@ public class NekoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NekoApplication.class, args);
-
     }
-
 }
 

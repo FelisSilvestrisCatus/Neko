@@ -3,10 +3,8 @@ package neko.entity.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neko.entity.Vacatefiles;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,14 +40,16 @@ public class AuditVacateByTeacher implements Serializable {
     //课程名
     private String coursename;
     //请假类型
-    private String vtype;
+    private Integer vtype;
     //请假时间范围
     private String vtime;
     //请假原因(用请假编号代替 方便后期查询请假详情====附件获取)
     private String vname;
     //请假状态
-    private  int state;
+    private Integer state;
 
+    //审批备注
+    private String remark;
 
 
 }

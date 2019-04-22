@@ -6,13 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
-import neko.entity.vo.VacateDetail;
-import neko.entity.vo.VacateWithTeacherName;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
 import neko.utils.generalMethod;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +45,7 @@ public class VacateController {
         Users users = (Users) session.getAttribute("user");
 
         Vacate vacate = new Vacate();
-        vacate.setUid(users.getUid());
-        vacate.setVtype(Integer.parseInt(vtype));
-        vacate.setCourseid(Integer.parseInt(vcourse));
+        vacate.setUid(users.getUid()).setVtype(Integer.parseInt(vtype)).setCourseid(Integer.parseInt(vcourse));
         handleTime(vreason, vdatetimeBegin, vdatetimeEnd, vacate);
 
         if (vacateService.save(vacate)) {
@@ -93,17 +88,15 @@ public class VacateController {
     //学生查看请假信息
     @RequestMapping(value = "/getDetails")
     public Map<String, String> getDetails(HttpSession session, String vid) {
-        Map<String, String> map = generalMethod.getSuccessMap();
         int uid = ((Users) session.getAttribute("user")).getUid();
-        System.out.println("vid = " + vid);
-        System.out.println("uid="+uid);
-        int vid_ = Integer.parseInt(vid);
-        VacateWithTeacherName vacateWithTeacherName = vacateService.getDetails(vid_, uid);
-        System.out.println(vacateWithTeacherName);
-        map.put("data", JSON.toJSONString(vacateWithTeacherName));
-        return map;
+        return vacateService.getDetails(Integer.parseInt(vid), uid);
     }
 
+    //老师查看请假信息
+    @RequestMapping(value = "/getDetailsByTeacher")
+    public Map<String, String> getDetailsByTeacher(String vid) {
+        return vacateService.getDetailsByTeacher(Integer.parseInt(vid));
+    }
 
     //学生修改请假申请
     @RequestMapping(value = "/alterVacate")
@@ -142,10 +135,8 @@ public class VacateController {
     }
 
     //请假审批
-    //学生修改请假申请
     @RequestMapping(value = "/auditVacate")
     public Map<String, String> auditVacate(HttpSession session) {
-
 
         Map<String, String> map = generalMethod.getSuccessMap();
         //当前学生请假时间段含今日  且 其请假课程为 本老师创建的课程
@@ -167,35 +158,22 @@ public class VacateController {
     @RequestMapping(value = "/getVacateDetail")
     public Map<String, String> getVacateDetail(String vid) {
         Map<String, String> map = generalMethod.getSuccessMap();
-        int vid_ = Integer.valueOf(vid);
-        String data = JSON.toJSONString(vacatefilesService.getVacateDetail(vid_));
-        map.put("data", data);
-        return map;
-    }
-    //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
-    @RequestMapping(value = "/getVacateDetailByVid")
-    public Map<String, String> getVacateDetailById(String vid) {
-        Map<String, String> map = generalMethod.getSuccessMap();
-        int vid_ = Integer.valueOf(vid);
-
-        AuditVacateByTeacher auditVacateByTeacher=vacateService.getVacateDetailByVid(vid_);
-        String data = JSON.toJSONString(auditVacateByTeacher);
-        System.out.println(auditVacateByTeacher.getState()+""+auditVacateByTeacher.getVtype());
-
-
+        int vidint = Integer.valueOf(vid);
+        String data = JSON.toJSONString(vacatefilesService.getVacateDetail(vidint));
+        System.out.println("data = " + data);
         map.put("data", data);
         return map;
     }
 
-    //根据请假状态筛选    //
+    //根据状态筛选请假申请
     @RequestMapping(value = "/VacateList")
     public Map<String, String> VacateList(HttpSession session, String state) {
         Users users = (Users) session.getAttribute("user");
         int uid = users.getUid();
-        int state_ = Integer.valueOf(state);
+        int stateint = Integer.valueOf(state);
         System.out.println("当前老师uid" + uid);
         Map<String, String> map = generalMethod.getSuccessMap();
-        List<AuditVacateByTeacher> list = vacateService.VacateList(uid, state_);
+        List<AuditVacateByTeacher> list = vacateService.VacateList(uid, stateint);
         map.put("data", JSON.toJSONString(list));
         return map;
     }

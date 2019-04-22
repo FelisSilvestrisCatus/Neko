@@ -21,11 +21,12 @@ public interface IVacateService extends IService<Vacate> {
 
     Map<String, String> cancelVacate(int vid, int uid);
 
-    VacateWithTeacherName getDetails(int vid, int uid);
+    Map<String, String> getDetails(int vid, int uid);
+
+    Map<String, String> getDetailsByTeacher(int vid);
 
     List<AuditVacateByTeacher> auditVacateByTeacher(String nowdate, int uid);
+
     //显示老师uid下所有的请假记录
-  List<AuditVacateByTeacher> VacateList(int uid,int state);
-  //根据vid查询记录
-  AuditVacateByTeacher    getVacateDetailByVid(int  vid);
+    List<AuditVacateByTeacher> VacateList(int uid, int state);
 }
