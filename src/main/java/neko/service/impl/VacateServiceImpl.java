@@ -1,6 +1,7 @@
 package neko.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
@@ -62,5 +63,21 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     @Override
     public List<AuditVacateByTeacher> VacateList(int uid, int state) {
         return this.baseMapper.VacateList(uid, state);
+    }
+
+    @Override
+    public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("vid", vid);
+        Vacate vacate = this.baseMapper.selectOne(queryWrapper);
+        vacate.setRemark(remark).setState(state);
+        if (this.baseMapper.updateById(vacate) == 0) {
+            return generalMethod.getErrorMap();
+        } else {
+            Map<String, String> map = generalMethod.getSuccessMap();
+            map.put("msg", "请假申请处理成功");
+            return map;
+        }
     }
 }

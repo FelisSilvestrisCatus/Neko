@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -136,22 +134,28 @@ public class VacateController {
 
     //请假审批
     @RequestMapping(value = "/auditVacate")
-    public Map<String, String> auditVacate(HttpSession session) {
+    public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
 
-        Map<String, String> map = generalMethod.getSuccessMap();
-        //当前学生请假时间段含今日  且 其请假课程为 本老师创建的课程
-        Users users = (Users) session.getAttribute("user");
-        int uid = users.getUid();
-        System.out.println("当前老师uid" + uid);
-        //获取今天的日期（String  类型）
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
-        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-        //开始实现查询逻辑
-        String nowdate = df.format(new Date());
-        String data = JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate, uid));
-        //存放数据
-        map.put("data", data);
-        return map;
+        return vacateService.auditVacate(vid, state, remark);
+
+
+//        Map<String, String> map = generalMethod.getSuccessMap();
+//        //当前学生请假时间段含今日  且 其请假课程为 本老师创建的课程
+//        Users users = (Users) session.getAttribute("user");
+//        int uid = users.getUid();
+//        System.out.println("当前老师uid" + uid);
+//        //获取今天的日期（String  类型）
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
+//        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
+//        //开始实现查询逻辑
+//        String nowdate = df.format(new Date());
+//        String data = JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate, uid));
+//        //存放数据
+//        map.put("data", data);
+//        return map;
+
+
+
     }
 
     //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
@@ -171,7 +175,6 @@ public class VacateController {
         Users users = (Users) session.getAttribute("user");
         int uid = users.getUid();
         int stateint = Integer.valueOf(state);
-        System.out.println("当前老师uid" + uid);
         Map<String, String> map = generalMethod.getSuccessMap();
         List<AuditVacateByTeacher> list = vacateService.VacateList(uid, stateint);
         map.put("data", JSON.toJSONString(list));

@@ -18,8 +18,6 @@ public class VacateDetail implements Serializable {
      */
     private Integer vid;
 
-
-
     /**
      * 请假类型
      */

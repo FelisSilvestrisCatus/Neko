@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class VacateWithTeacherName implements Serializable {
+public class VacateByTeacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,12 +39,22 @@ public class VacateWithTeacherName implements Serializable {
     private String vtime;
 
     /**
-     * 老师姓名
-     */
-    private String uname;
-    /**
      * 课程名
      */
-    private String cname;
+    private String coursename;
 
+    /**
+     * 班级名
+     */
+    private String classname;
+
+    /**
+     * 审批
+     */
+    private String remark;
+
+    /**
+     * 学生姓名
+     */
+    private String uname;
 }

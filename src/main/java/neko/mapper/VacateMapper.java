@@ -3,10 +3,13 @@ package neko.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.VacateByTeacher;
 import neko.entity.vo.VacateWithTeacherName;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 import java.util.List;
 
@@ -46,8 +49,7 @@ public interface VacateMapper extends BaseMapper<Vacate> {
             " left join class class  on course.cid=class.cid where course.tid=#{uid} and vacate.state=#{state}")
     List<AuditVacateByTeacher> VacateList(int uid, int state);
 
-    @Select("select v.vid, c.cname, v.vname, v.vtime, v.vtype, v.state, u.uname " +
-            "from vacate v,course c,classteacher t,users u " +
-            "where v.uid =#{uid} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid and vid=#{vid}")
-    VacateWithTeacherName getDetailsByTeacher(@Param("vid") int vid);
+    @Select("call getVacateByTeacher(#{vid})")
+    @Options(statementType = StatementType.CALLABLE)
+    VacateByTeacher getDetailsByTeacher(@Param("vid") int vid);
 }
