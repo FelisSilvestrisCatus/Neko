@@ -4,21 +4,22 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
-import neko.service.IUsersloginService;
-import neko.utils.ip.Juhe;
-import neko.utils.ip.LoginInfo;
+import neko.utils.generalMethod;
 import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 用户操作
@@ -27,19 +28,8 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/users")
 public class UsersController {
 
-    //Redis过期时间
-    private static final long expire = 7;
-    //Redis过期时间单位
-    private static final TimeUnit expireTimeUnit = TimeUnit.DAYS;
-
     @Autowired
     private IUsersService usersService;
-    @Autowired
-    private IUsersloginService usersloginService;
-    @Autowired
-    private LoginInfo loginInfo;
-    @Autowired
-    private Juhe juhe;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -47,41 +37,27 @@ public class UsersController {
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String phone, String password, String loginType) {
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = generalMethod.getErrorMap();
 
+        Subject subject = SecurityUtils.getSubject();
+        // 在认证提交前准备 token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
+        // 执行认证登陆
+        subject.login(token);
         //查询用户
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("phone", phone);
         Users user = usersService.getOne(queryWrapper);
 
-        if (password.equals(user.getPwd())) {
-            usersService.login(request, phone, map, loginType);
+        if (password.equals(user.getPwd()) && usersService.login(request, phone, map, loginType)) {
+            return map;
         } else {
-            map.put("state", "400");
             map.put("msg", "用户名或密码错误");
             map.put("token", "");
+            return map;
         }
-
-        return map;
     }
 
-
-    /*
-     * 权限测试使用，完成后删除
-     * */
-    @RequestMapping(value = "/getall")
-    public Map<String, String> getall(HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-        String jsonString = JSON.toJSONString(usersService.list());
-
-
-        Map<String, String> map = new HashMap<>();
-        map.put("state", "200");
-        map.put("msg", "ok");
-        map.put("data", jsonString);
-        return map;
-    }
 
     //用户注册
     @RequestMapping(value = "/registe")
@@ -155,4 +131,17 @@ public class UsersController {
         return map;
     }
 
+
+    /*
+     * 401
+     * */
+    @RequestMapping(value = "/401")
+    public void shirofalied(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(401);
+        response.getWriter().write("未授权的访问");
+    }
 }

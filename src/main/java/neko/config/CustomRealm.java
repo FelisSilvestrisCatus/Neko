@@ -1,0 +1,75 @@
+package neko.config;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import neko.entity.Users;
+import neko.service.IUsersService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/*
+ * 用于shiro的权限认证实现
+ * */
+public class CustomRealm extends AuthorizingRealm {
+
+    @Autowired
+    private IUsersService usersService;
+
+    /**
+     * 获取身份验证信息
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
+        System.out.println("————1————");
+        // 获取用户输入的用户名和密码
+        String phone = (String) token.getPrincipal();
+        String password = new String((char[]) token.getCredentials());
+
+        // 通过用户名到数据库查询用户信息
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", phone);
+        Users user = usersService.getOne(queryWrapper);
+
+        if (user == null) {
+            throw new UnknownAccountException("用户名或密码错误！");
+        }
+        if (!password.equals(user.getPwd())) {
+            throw new IncorrectCredentialsException("用户名或密码错误！");
+        }
+        if (user.getFlag().equals(1)) {
+            throw new LockedAccountException("账号已被锁定,请联系管理员！");
+        }
+        return new SimpleAuthenticationInfo(user, password, getName());
+    }
+
+    /**
+     * 获取授权信息
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        System.out.println("————权限认证————");
+        String phone = (String) SecurityUtils.getSubject().getPrincipal();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+
+        //获得用户
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("phone", phone);
+        Users user = usersService.getOne(queryWrapper);
+        String role = user.getType().equals(1) ? "teacher" : "student";
+
+        System.out.println("role = " + role);
+        Set<String> set = new HashSet<>();
+        set.add(role);
+
+        //设置该用户拥有的角色
+        info.setStringPermissions(set);
+        return info;
+    }
+}

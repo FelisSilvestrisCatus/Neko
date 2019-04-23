@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * druid数据库连接池
+ * */
 @Configuration
 public class DruidConfig {
 

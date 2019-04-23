@@ -8,6 +8,7 @@ import neko.entity.Userslogin;
 import neko.mapper.UsersMapper;
 import neko.service.IUsersService;
 import neko.service.IUsersloginService;
+import neko.utils.generalMethod;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
 import neko.utils.redis.RedisUtil;
@@ -55,37 +56,45 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     //密码和验证码登录
     @Override
-    public void login(HttpServletRequest request, String phone, Map<String, String> map, String logintype) {
-        //查询用户
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", phone);
-        Users user = getOne(queryWrapper);
+    public boolean login(HttpServletRequest request, String phone, Map<String, String> map, String logintype) {
 
-        request.getSession().setAttribute("user", user);
+        try {
+            //查询用户
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("phone", phone);
+            Users user = getOne(queryWrapper);
 
-        String token = Token.getJwtToken(user);
-        redisUtil.set(user.getUid().toString(), token);
-        redisUtil.expire(user.getUid().toString(), tokenExpire, tokenExpireTimeUnit);
+            request.getSession().setAttribute("user", user);
 
-        map.put("state", "200");
-        map.put("msg", "ok");
-        map.put("token", token);
+            String token = Token.getJwtToken(user);
+            redisUtil.set(user.getUid().toString(), token);
+            redisUtil.expire(user.getUid().toString(), tokenExpire, tokenExpireTimeUnit);
 
-        //保存本次登录信息
-        Userslogin userslogin = new Userslogin();
-        userslogin.setUid(user.getUid());
-        userslogin.setLoginip(loginInfo.getIpAddr(request));
-        userslogin.setLogintype(Integer.parseInt(logintype));
-        userslogin.setLogintime(LocalDateTime.now());
-        String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
-        if (area.equals("未知地址")) {
-            //在淘宝api未得到数据或超时的情况下调用聚合api
-            area = juhe.getValue(loginInfo.getIpAddr(request));
+            map.put("state", "200");
+            map.put("msg", "ok");
+            map.put("token", token);
+
+            user.setPwd("");
+            map.put("user", JSON.toJSONString(user));
+
+            //保存本次登录信息
+            Userslogin userslogin = new Userslogin();
+            userslogin.setUid(user.getUid());
+            userslogin.setLoginip(loginInfo.getIpAddr(request));
+            userslogin.setLogintype(Integer.parseInt(logintype));
+            userslogin.setLogintime(LocalDateTime.now());
+            String area = loginInfo.getIpLocation(loginInfo.getIpAddr(request));
+            if (area.equals("未知地址")) {
+                //在淘宝api未得到数据或超时的情况下调用聚合api
+                area = juhe.getValue(loginInfo.getIpAddr(request));
+            }
+
+            userslogin.setLoginlocation(area);
+            return usersloginService.save(userslogin);
+        } catch (Exception e) {
+            map = generalMethod.getErrorMap();
+            return false;
         }
-        userslogin.setLoginlocation(area);
-        usersloginService.save(userslogin);
 
-        user.setPwd("");
-        map.put("user", JSON.toJSONString(user));
     }
 }

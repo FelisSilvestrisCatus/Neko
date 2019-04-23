@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+/*
+ * JWT认证过滤器
+ * */
 @WebFilter(filterName = "sessionFilter", urlPatterns = {"/*"})
 public class SessionFilter implements Filter {
 
@@ -25,7 +28,7 @@ public class SessionFilter implements Filter {
     private RedisUtil redisUtil;
 
     //不需要登录就可以访问的路径
-    String[] includeUrls = new String[]{"/users/login", "/favicon.ico", "/alive", "/"};
+    String[] includeUrls = new String[]{"/users/login", "/favicon.ico", "/alive", "/", "/test"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -42,9 +45,8 @@ public class SessionFilter implements Filter {
             return;
         }
 
+        //不过滤OPTIONS请求
         if ("OPTIONS".equals(request.getMethod())) {
-            //不需要过滤
-//            System.out.println("OPTIONS no filter");
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -53,13 +55,10 @@ public class SessionFilter implements Filter {
         String token = "";
         token = request.getHeader("Authorization");
 
-//        System.out.println("filter url:" + uri);
-//        System.out.println(token);
         //是否需要过滤
 
         if (!needFilter) {
             //不需要过滤
-//            System.out.println("no filter");
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             checkState(filterChain, request, response, session, token);
@@ -141,7 +140,7 @@ public class SessionFilter implements Filter {
         }
 
         for (String includeUrl : includeUrls) {
-            if (includeUrl.equals(uri)) {
+            if (uri.contains(includeUrl)) {
                 return false;
             }
         }
