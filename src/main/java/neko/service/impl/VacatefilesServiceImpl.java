@@ -54,7 +54,7 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
 
                 //处理文件类型
 
-                String filetype;
+                String filetype = "无类型";
                 ContentInfoUtil util = new ContentInfoUtil();
                 ContentInfo info = null;
                 try {
@@ -79,7 +79,8 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
                     filetype = "无类型";
                 }
 
-                vacatefiles.setFiletype(filename);
+                vacatefiles.setFilename(filename);
+                vacatefiles.setFiletype(filetype);
                 if (save(vacatefiles)) {
                     map.put("msg", "请假申请已提交");
                 } else {

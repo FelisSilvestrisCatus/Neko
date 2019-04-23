@@ -41,4 +41,9 @@ public class Vacatefiles implements Serializable {
      */
     private String filetype;
 
+    /**
+     * 附件名
+     */
+    private String filename;
+
 }
