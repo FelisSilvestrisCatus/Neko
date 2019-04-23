@@ -155,18 +155,12 @@ public class VacateController {
 //        return map;
 
 
-
     }
 
     //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
-    @RequestMapping(value = "/getVacateDetail")
+    @RequestMapping(value = "/getVacateFile")
     public Map<String, String> getVacateDetail(String vid) {
-        Map<String, String> map = generalMethod.getSuccessMap();
-        int vidint = Integer.valueOf(vid);
-        String data = JSON.toJSONString(vacatefilesService.getVacateDetail(vidint));
-        System.out.println("data = " + data);
-        map.put("data", data);
-        return map;
+        return vacatefilesService.getVacateFile(Integer.valueOf(vid));
     }
 
     //根据状态筛选请假申请

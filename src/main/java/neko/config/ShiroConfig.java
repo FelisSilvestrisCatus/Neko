@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShiroConfig {
 
-
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor =
@@ -38,7 +37,7 @@ public class ShiroConfig {
         return securityManager;
     }
 
-    //注入自定义的realm，告诉shiro如何获取用户信息来做登录或权限控制
+    //注入自定义的realm
     @Bean
     public Realm realm() {
         return new CustomRealm();
@@ -47,11 +46,8 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chain = new DefaultShiroFilterChainDefinition();
-
-        System.out.println("2 = " + 2);
-        // 由于demo1展示统一使用注解做访问控制，所以这里配置所有请求路径都可以匿名访问
-        chain.addPathDefinition("/**", "anon"); // all paths are managed via annotations
-
+        //验证由注解完成，这里全部放行
+        chain.addPathDefinition("/**", "anon");
         return chain;
     }
 

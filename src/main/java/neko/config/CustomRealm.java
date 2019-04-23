@@ -27,7 +27,6 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
-        System.out.println("————1————");
         // 获取用户输入的用户名和密码
         String phone = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
@@ -38,13 +37,13 @@ public class CustomRealm extends AuthorizingRealm {
         Users user = usersService.getOne(queryWrapper);
 
         if (user == null) {
-            throw new UnknownAccountException("用户名或密码错误！");
+            throw new UnknownAccountException();
         }
         if (!password.equals(user.getPwd())) {
-            throw new IncorrectCredentialsException("用户名或密码错误！");
+            throw new IncorrectCredentialsException();
         }
         if (user.getFlag().equals(1)) {
-            throw new LockedAccountException("账号已被锁定,请联系管理员！");
+            throw new LockedAccountException();
         }
         return new SimpleAuthenticationInfo(user, password, getName());
     }
@@ -54,14 +53,8 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("————权限认证————");
-        String phone = (String) SecurityUtils.getSubject().getPrincipal();
+        Users user = (Users) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-
-        //获得用户
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("phone", phone);
-        Users user = usersService.getOne(queryWrapper);
         String role = user.getType().equals(1) ? "teacher" : "student";
 
         System.out.println("role = " + role);

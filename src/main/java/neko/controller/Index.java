@@ -29,6 +29,9 @@ public class Index {
     }
 
 
+    /*
+     * shiro
+     * */
     @RequiresPermissions("student")
     @RequestMapping(value = "/ss")
     public String student(HttpServletRequest request) {

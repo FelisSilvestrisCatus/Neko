@@ -17,5 +17,8 @@ import java.util.Map;
  */
 public interface IVacatefilesService extends IService<Vacatefiles> {
     Map<String, String> createVacateFile(String id, MultipartFile[] vfile);
-     VacateDetail getVacateDetail(int vid);
+
+    VacateDetail getVacateDetail(int vid);
+
+    Map<String, String> getVacateFile(Integer vid);
 }

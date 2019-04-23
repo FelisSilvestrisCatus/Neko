@@ -176,6 +176,12 @@
             <version>3.8.1</version>
         </dependency>
 
+        <!--获取文件类型-->
+        <dependency>
+            <groupId>com.j256.simplemagic</groupId>
+            <artifactId>simplemagic</artifactId>
+            <version>1.16</version>
+        </dependency>
 
     </dependencies>
 
