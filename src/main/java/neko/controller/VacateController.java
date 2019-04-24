@@ -177,9 +177,11 @@ public class VacateController {
         return map;
     }
 
-
+    /*
+     * 下载附件
+     * */
     @RequestMapping(value = "/getFile", method = RequestMethod.POST)
-    public Map<String, String> downloadData(HttpServletResponse res, String vfid) {
+    public Map<String, String> getFile(HttpServletResponse res, String vfid) {
         Map<String, String> map = generalMethod.getSuccessMap();
         try {
             vacatefilesService.getFile(vfid, res);
@@ -189,5 +191,21 @@ public class VacateController {
 
         return map;
     }
+
+    /*
+     * 下载附件
+     * */
+    @RequestMapping(value = "/getFiles", method = RequestMethod.POST)
+    public Map<String, String> getFiles(HttpServletResponse res, String vid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        try {
+            vacatefilesService.getFiles(vid, res);
+        } catch (Exception e) {
+            map = generalMethod.getErrorMap();
+        }
+
+        return map;
+    }
+
 
 }

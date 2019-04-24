@@ -1,5 +1,9 @@
 package neko.utils;
 
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Zip;
+import org.apache.tools.ant.types.FileSet;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -55,5 +59,30 @@ public class FileUtils {
                 }
             }
         }
+    }
+
+    //打包文件夹为zip
+    public static void responseToZip(String vid, HttpServletResponse res) {
+        String srcPath = "c:\\vfiles\\" + vid;
+        String zipPath = "c:\\vfiles\\zip\\" + vid + ".zip";
+        File srcdir = new File(srcPath);
+        File zipFile = new File(zipPath);
+
+        if (!srcdir.exists()) {
+            srcdir.mkdirs();
+        }
+
+        Project prj = new Project();
+        Zip zip = new Zip();
+        zip.setProject(prj);
+        zip.setDestFile(zipFile);
+        FileSet fileSet = new FileSet();
+        fileSet.setProject(prj);
+        fileSet.setDir(srcdir);
+        zip.addFileset(fileSet);
+        zip.execute();
+
+        File file = new File(zipPath);
+        responseTo(file, res);
     }
 }

@@ -24,4 +24,6 @@ public interface IVacatefilesService extends IService<Vacatefiles> {
     Map<String, String> getVacateFile(Integer vid);
 
     void getFile(String vfid, HttpServletResponse res);
+
+    void getFiles(String vid, HttpServletResponse res);
 }

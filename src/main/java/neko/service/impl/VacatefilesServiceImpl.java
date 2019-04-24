@@ -130,4 +130,9 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
         File file = new File(vfile.getFilepath());
         FileUtils.responseTo(file, res);
     }
+
+    @Override
+    public void getFiles(String vid, HttpServletResponse res) {
+        FileUtils.responseToZip(vid, res);
+    }
 }
