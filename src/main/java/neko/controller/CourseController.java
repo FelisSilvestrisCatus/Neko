@@ -48,7 +48,6 @@ public class CourseController {
         map.put("state", "200");
         map.put("msg", "ok");
         map.put("data", JSON.toJSONString(course));
-        System.out.println("map = " + map);
         return map;
     }
 
@@ -94,43 +93,34 @@ public class CourseController {
     @RequestMapping(value = "/createCourse")
     public Map<String, String> createCourse(HttpSession session, String cid, String cname, String ctime) {
         Users users = (Users) session.getAttribute("user");
+        Map<String, String> map = generalMethod.getSuccessMap();
 
         int cday = Integer.valueOf(ctime);
-        int cid_ = Integer.valueOf(cid);
+        int cidint = Integer.valueOf(cid);
 
         Course course = new Course();
         course.setCname(cname);
         course.setCday(cday);
-        course.setCid(cid_);
+        course.setCid(cidint);
         course.setTid(users.getUid());
 
         if (courseService.save(course)) {
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("cid", cid);
 
-            Class class_ = classService.getOne(queryWrapper);
-            class_.setCstate(1);
-            System.out.println(class_.getCid());
-            System.out.println(class_.getCstate());
+            Class newclass = classService.getOne(queryWrapper);
+            newclass.setCstate(1);
             try {
-                classService.saveOrUpdate(class_);
-                Map<String, String> map = generalMethod.getSuccessMap();
-                System.out.println("创建课程");
-                return map;
+                classService.saveOrUpdate(newclass);
+
             } catch (Exception e) {
-                Map<String, String> map = generalMethod.getErrorMap();
-                System.out.println("创建失败");
-                return map;
-
+                map = generalMethod.getErrorMap();
             }
-
-
         } else {
-            Map<String, String> map = generalMethod.getErrorMap();
-            return map;
+            map = generalMethod.getErrorMap();
         }
 
-
+        return map;
     }
 
     //获取指定id的课程

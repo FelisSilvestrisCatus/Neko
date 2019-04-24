@@ -36,7 +36,10 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
         Map<String, String> map = generalMethod.getSuccessMap();
         //创建存储文件夹
         String dirpath = "c:\\vfiles\\" + Integer.parseInt(id);
-        if (new File(dirpath).mkdirs()) {
+        File dirFile = new File(dirpath);
+        if (!dirFile.exists()) {
+            dirFile.mkdirs();
+        } else {
             for (MultipartFile mf : vfile) {
                 String filename = mf.getOriginalFilename();
                 //文件路径
@@ -91,9 +94,6 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
                     map.put("msg", "无法存储附件" + filename);
                 }
             }
-        } else {
-            map = generalMethod.getErrorMap();
-            map.put("msg", "无法存储附件");
         }
         return map;
     }

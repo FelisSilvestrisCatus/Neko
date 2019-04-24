@@ -57,7 +57,6 @@ public class CustomRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         String role = user.getType().equals(1) ? "teacher" : "student";
 
-        System.out.println("role = " + role);
         Set<String> set = new HashSet<>();
         set.add(role);
 

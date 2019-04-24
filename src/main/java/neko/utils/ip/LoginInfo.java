@@ -88,7 +88,6 @@ public class LoginInfo {
         URL url = null;
         HttpURLConnection connection = null;
         try {
-            System.out.println("网站接口" + urlStr + "?ip=" + content);
             url = new URL(urlStr + "?ip=" + content);
             connection = (HttpURLConnection) url.openConnection();// 新建连接实例
             connection.setConnectTimeout(500);// 设置连接超时时间，单位毫秒
@@ -230,7 +229,6 @@ public class LoginInfo {
             } else {
                 //解析json数据 生成指定数据呈现样式
                 JSONObject json = JSONObject.parseObject(returnStr);
-                System.out.println("json数据： " + json);
                 String country = JSONObject.parseObject(json.getString("data")).get("country").toString();
                 String region = JSONObject.parseObject(json.getString("data")).get("region").toString();
                 String city = JSONObject.parseObject(json.getString("data")).get("city").toString();
