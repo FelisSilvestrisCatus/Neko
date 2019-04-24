@@ -5,6 +5,7 @@ import neko.entity.Vacatefiles;
 import neko.entity.vo.VacateDetail;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -21,4 +22,6 @@ public interface IVacatefilesService extends IService<Vacatefiles> {
     VacateDetail getVacateDetail(int vid);
 
     Map<String, String> getVacateFile(Integer vid);
+
+    void getFile(String vfid, HttpServletResponse res);
 }

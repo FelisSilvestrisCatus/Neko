@@ -12,10 +12,12 @@ import neko.service.IVacatefilesService;
 import neko.utils.generalMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -174,4 +176,18 @@ public class VacateController {
         map.put("data", JSON.toJSONString(list));
         return map;
     }
+
+
+    @RequestMapping(value = "/getFile", method = RequestMethod.POST)
+    public Map<String, String> downloadData(HttpServletResponse res, String vfid) {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        try {
+            vacatefilesService.getFile(vfid, res);
+        } catch (Exception e) {
+            map = generalMethod.getErrorMap();
+        }
+
+        return map;
+    }
+
 }

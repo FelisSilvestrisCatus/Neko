@@ -1,5 +1,6 @@
 package neko.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j256.simplemagic.ContentInfo;
@@ -8,10 +9,12 @@ import neko.entity.Vacatefiles;
 import neko.entity.vo.VacateDetail;
 import neko.mapper.VacatefilesMapper;
 import neko.service.IVacatefilesService;
+import neko.utils.FileUtils;
 import neko.utils.generalMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -105,13 +108,26 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
     public Map<String, String> getVacateFile(Integer vid) {
         Map<String, String> map = generalMethod.getErrorMap();
 
-
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("vid", vid);
+        queryWrapper.select("vid", "vfid", "filename", "filetype");
         List<Vacatefiles> list = this.baseMapper.selectList(queryWrapper);
-
-
+        if (list.size() > 0) {
+            map = generalMethod.getSuccessMap();
+            map.put("data", JSON.toJSONString(list));
+        } else {
+            map.put("msg", "无附件");
+        }
         return map;
     }
 
+    @Override
+    public void getFile(String vfid, HttpServletResponse res) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("vfid", vfid);
+        Vacatefiles vfile = this.baseMapper.selectOne(queryWrapper);
+        File file = new File(vfile.getFilepath());
+        FileUtils.responseTo(file, res);
+    }
 }
