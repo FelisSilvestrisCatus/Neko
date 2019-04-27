@@ -39,60 +39,59 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
         File dirFile = new File(dirpath);
         if (!dirFile.exists()) {
             dirFile.mkdirs();
-        } else {
-            for (MultipartFile mf : vfile) {
-                String filename = mf.getOriginalFilename();
-                //文件路径
-                String filePath = dirpath + "\\" + filename;
-                try {
-                    //保存文件
-                    mf.transferTo(new File(filePath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    map = generalMethod.getErrorMap();
-                    map.put("msg", "无法存储附件");
-                    return map;
-                }
+        }
+        for (MultipartFile mf : vfile) {
+            String filename = mf.getOriginalFilename();
+            //文件路径
+            String filePath = dirpath + "\\" + filename;
+            try {
+                //保存文件
+                mf.transferTo(new File(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+                map = generalMethod.getErrorMap();
+                map.put("msg", "无法存储附件");
+                return map;
+            }
 
-                Vacatefiles vacatefiles = new Vacatefiles();
-                vacatefiles.setVid(Integer.parseInt(id));
-                vacatefiles.setFilepath(filePath);
+            Vacatefiles vacatefiles = new Vacatefiles();
+            vacatefiles.setVid(Integer.parseInt(id));
+            vacatefiles.setFilepath(filePath);
 
-                //处理文件类型
+            //处理文件类型
 
-                String filetype = "无类型";
-                ContentInfoUtil util = new ContentInfoUtil();
-                ContentInfo info = null;
-                try {
-                    info = util.findMatch(filePath);
-                    if (info == null) {
-                        filetype = "无类型";
-                    } else {
-                        filetype = info.getName();
-                        if ("other".equals(filetype)) {
-                            File file = new File(filePath);
-                            String fileName = file.getName();
-                            int length = fileName.length();
-                            int index = fileName.lastIndexOf(".") + 1;
-                            if (index == 0) {
-                                filetype = "无类型";
-                            } else {
-                                filetype = fileName.substring(index, length);
-                            }
+            String filetype = "无类型";
+            ContentInfoUtil util = new ContentInfoUtil();
+            ContentInfo info = null;
+            try {
+                info = util.findMatch(filePath);
+                if (info == null) {
+                    filetype = "无类型";
+                } else {
+                    filetype = info.getName();
+                    if ("other".equals(filetype)) {
+                        File file = new File(filePath);
+                        String fileName = file.getName();
+                        int length = fileName.length();
+                        int index = fileName.lastIndexOf(".") + 1;
+                        if (index == 0) {
+                            filetype = "无类型";
+                        } else {
+                            filetype = fileName.substring(index, length);
                         }
                     }
-                } catch (IOException e) {
-                    filetype = "无类型";
                 }
+            } catch (IOException e) {
+                filetype = "无类型";
+            }
 
-                vacatefiles.setFilename(filename);
-                vacatefiles.setFiletype(filetype);
-                if (save(vacatefiles)) {
-                    map.put("msg", "请假申请已提交");
-                } else {
-                    map = generalMethod.getErrorMap();
-                    map.put("msg", "无法存储附件" + filename);
-                }
+            vacatefiles.setFilename(filename);
+            vacatefiles.setFiletype(filetype);
+            if (save(vacatefiles)) {
+                map.put("msg", "请假申请已提交");
+            } else {
+                map = generalMethod.getErrorMap();
+                map.put("msg", "无法存储附件" + filename);
             }
         }
         return map;
