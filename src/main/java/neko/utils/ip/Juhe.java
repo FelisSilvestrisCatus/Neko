@@ -126,10 +126,11 @@ public class Juhe {
     public JSONObject getWeather(String ip) throws IOException {
         String key = "f5e272f5f52ffb93a0902474025efb16";
         String city = getValueOnlyCity(ip);
-        if (city.contains("局域") || city.contains("未知")) {
+        if (city.contains("内网") || city.contains("未知")) {
             city = "北京";
 
         }
+        System.out.println(city);
         URL u = new URL("http://apis.juhe.cn/simpleWeather/query?city=" + city + "&key=" + key);
 
         InputStream in = u.openStream();
@@ -152,7 +153,7 @@ public class Juhe {
 
         JSONObject json = JSONObject.parseObject(result);
 
-
+        System.out.println(json);
         String now = JSONObject.parseObject(json.getString("result")).getString("realtime");
         JSONObject now_ = JSONObject.parseObject(now);
         now_.remove("wid");
