@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -17,6 +18,18 @@ public class Juhe {
     public static final int DEF_CONN_TIMEOUT = 30000;
     public static final int DEF_READ_TIMEOUT = 30000;
     public static String userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
+
+    public String getValueOnlyCity(String ip) {
+        String area = "";
+        try {
+            JSONObject jsonObject = getRequest(ip);
+            assert jsonObject != null;
+            area = jsonObject.get("City") + "";
+        } catch (Exception e) {
+            area = "未知地址";
+        }
+        return area;
+    }
 
     public String getValue(String ip) {
         String area = "";
@@ -107,5 +120,44 @@ public class Juhe {
             }
         }
         return sb.toString();
+    }
+
+    //获取天气
+    public JSONObject getWeather(String ip) throws IOException {
+        String key = "f5e272f5f52ffb93a0902474025efb16";
+        String city = getValueOnlyCity(ip);
+        if (city.contains("局域") || city.contains("未知")) {
+            city = "北京";
+
+        }
+        URL u = new URL("http://apis.juhe.cn/simpleWeather/query?city=" + city + "&key=" + key);
+
+        InputStream in = u.openStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            byte buf[] = new byte[1024];
+            int read = 0;
+            while ((read = in.read(buf)) > 0) {
+                out.write(buf, 0, read);
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+        }
+        byte b[] = out.toByteArray();
+        String result = new String(b, "utf-8");
+
+        //可以使用fastjson解析
+
+        JSONObject json = JSONObject.parseObject(result);
+
+
+        String now = JSONObject.parseObject(json.getString("result")).getString("realtime");
+        JSONObject now_ = JSONObject.parseObject(now);
+        now_.remove("wid");
+        now_.remove("aqi");
+
+        return now_;
     }
 }

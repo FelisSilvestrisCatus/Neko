@@ -53,6 +53,14 @@ public class Course implements Serializable {
      * 状态位
      */
     private Integer state;
-
+    /**
+     * 学生数
+     *
+     */
+    private Integer studenttotal;
+    /*
+     *应出勤人数
+     */
+    private Integer mayattendstunum;
 
 }

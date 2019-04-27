@@ -1,8 +1,23 @@
 package neko.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import neko.entity.Classteacher;
+import neko.entity.Users;
+import neko.entity.vo.AuditVacateByTeacher;
+import neko.utils.generalMethod;
+import neko.utils.ip.Juhe;
+import neko.utils.ip.LoginInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -15,5 +30,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rollcall")
 public class RollcallController {
+    //修改班级信息
+    @Autowired
+    private LoginInfo loginInfo;
+    @Autowired
+    private Juhe juhe;
+
+    @RequestMapping(value = "/getWeather")
+    public Map<String, String> getIpCity(HttpServletRequest request) throws IOException {
+        String ip = loginInfo.getIpAddr(request);
+        Map<String, String> map = generalMethod.getSuccessMap();
+
+        map.put("data", JSON.toJSONString(juhe.getWeather(ip)));
+
+
+        return map;
+    }
 
 }
