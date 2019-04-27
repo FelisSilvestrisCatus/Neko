@@ -136,7 +136,6 @@ public class CourseController {
         return map;
     }
 
-    //
     //修改指定id的课程的state
     @RequestMapping(value = "/changeCourseState")
     public Map<String, String> changeCourseState(HttpSession session, String courseid, String state) {
@@ -156,7 +155,6 @@ public class CourseController {
             map = generalMethod.getErrorMap();
             return map;
         }
-
 
     }
 }

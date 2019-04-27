@@ -164,7 +164,6 @@ public class ClassController {
     }
 
     //获取老师创建的所有班级（含学生数目）
-    //
     @RequestMapping(value = "/getClassStudent")
     public Map<String, String> getClassStudent(HttpSession session) {
         Users users = (Users) session.getAttribute("user");

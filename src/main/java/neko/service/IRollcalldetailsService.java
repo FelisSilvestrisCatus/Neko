@@ -2,6 +2,9 @@ package neko.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Rollcalldetails;
+import neko.entity.Users;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import neko.entity.Rollcalldetails;
  */
 public interface IRollcalldetailsService extends IService<Rollcalldetails> {
 
+    Map<String, String> myInfo(Users u);
 }
