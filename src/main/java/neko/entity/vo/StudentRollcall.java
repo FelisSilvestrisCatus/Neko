@@ -25,10 +25,10 @@ public class StudentRollcall implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 点名id
+     * 点名详情id
      */
-    @TableId(value = "rid", type = IdType.AUTO)
-    private Integer rid;
+    @TableId(value = "rdid", type = IdType.AUTO)
+    private Integer rdid;
 
     /**
      * 班级名
