@@ -2,9 +2,6 @@ package neko.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import neko.entity.Classteacher;
-import neko.entity.Users;
-import neko.entity.vo.AuditVacateByTeacher;
 import neko.utils.generalMethod;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
@@ -13,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +36,6 @@ public class RollcallController {
         Map<String, String> map = generalMethod.getSuccessMap();
 
         map.put("data", JSON.toJSONString(juhe.getWeather(ip)));
-
 
         return map;
     }
