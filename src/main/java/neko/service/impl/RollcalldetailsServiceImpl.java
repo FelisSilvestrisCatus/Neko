@@ -77,11 +77,12 @@ public class RollcalldetailsServiceImpl extends ServiceImpl<RollcalldetailsMappe
         return map;
     }
 
+    //查询出勤记录
     @Override
-    public IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage) {
-
-        Page<StudentRollcall> page = new Page<>(currentPage, 9);
-        IPage<StudentRollcall> userIPage = this.baseMapper.myAttendance(page, uid);
+    public IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage,
+                                               String datetimeBegin, String datetimeEnd, String course) {
+        Page<StudentRollcall> page = new Page<>(currentPage, 10);
+        IPage<StudentRollcall> userIPage = this.baseMapper.myAttendance(page, uid, datetimeBegin, datetimeEnd, course);
         return userIPage;
     }
 }

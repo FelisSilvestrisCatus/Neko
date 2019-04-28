@@ -20,5 +20,5 @@ public interface IRollcalldetailsService extends IService<Rollcalldetails> {
 
     Map<String, String> myInfo(Users u);
 
-    IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage);
+    IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage, String datetimeBegin, String datetimeEnd, String course);
 }
