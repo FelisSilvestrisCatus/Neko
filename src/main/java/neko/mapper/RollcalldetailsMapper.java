@@ -17,5 +17,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface RollcalldetailsMapper extends BaseMapper<Rollcalldetails> {
 
-    IPage<StudentRollcall> myAttendance(Page page, @Param("uid") Integer uid);
+    IPage<StudentRollcall> myAttendance(Page page, @Param("uid") Integer uid,
+                                        @Param("datetimeBegin") String datetimeBegin,
+                                        @Param("datetimeEnd") String datetimeEnd,
+                                        @Param("course") String course);
 }

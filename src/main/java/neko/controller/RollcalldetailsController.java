@@ -38,36 +38,23 @@ public class RollcalldetailsController {
 
     //我的出勤记录
     @RequestMapping(value = "/myAttendance")
-    public Map<String, String> myAttendance(HttpSession session, Integer currentPage) {
+    public Map<String, String> myAttendance(HttpSession session, Integer currentPage,
+                                            String datetimeBegin, String datetimeEnd, String course) {
         Map<String, String> map = generalMethod.getSuccessMap();
         Users u = (Users) session.getAttribute("user");
-
-        System.out.println("page = " + currentPage);
+        if ((datetimeBegin.equals("undefined")) || (datetimeEnd.equals("undefined"))) {
+            datetimeBegin = "1000-01-01 00:00:00";
+            datetimeEnd = "9999-12-31 23:59:59";
+        }
 
         if (currentPage == null || currentPage.equals(0)) {
             currentPage = 1;
         }
 
-        IPage<StudentRollcall> list = rs.myAttendance(u.getUid(), currentPage);
+        IPage<StudentRollcall> list = rs.myAttendance(u.getUid(), currentPage, datetimeBegin, datetimeEnd, course);
 
         map.put("data", JSON.toJSONString(list.getRecords()));
         map.put("total", list.getTotal() + "");
         return map;
     }
-
-    //我的出勤记录(时间查询)
-    @RequestMapping(value = "/myAttendanceByTime")
-    public Map<String, String> myAttendanceByTime(HttpSession session, String vdatetimeBegin,
-                                                  String vdatetimeEnd) {
-        Map<String, String> map = generalMethod.getSuccessMap();
-        Users u = (Users) session.getAttribute("user");
-        if ((vdatetimeBegin.equals("undefined")) || (vdatetimeEnd.equals("undefined"))) {
-//            rs.myAttendance(1);
-        } else {
-//            rs.myAttendanceByTime(vdatetimeBegin, vdatetimeEnd);
-        }
-
-        return rs.myInfo(u);
-    }
-
 }

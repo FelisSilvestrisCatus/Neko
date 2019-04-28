@@ -5,11 +5,14 @@
     <select id="myAttendance" resultType="neko.entity.vo.StudentRollcall">
         select rd.rdid,c.cname,course.cname as 'coursename',u.uname,r.rtime,rd.state
             from rollcalldetails rd
-                     left join rollcall r on rd.rid = r.rid
-                     left join course on r.cid = course.courseid
-                     left join class c on course.cid = c.cid
-                     left join classteacher ct on c.cid = ct.cid
-                     left join users u on ct.uid = u.uid
+                left join rollcall r on rd.rid = r.rid
+                left join course on r.cid = course.courseid
+                left join class c on course.cid = c.cid
+                left join classteacher ct on c.cid = ct.cid
+                left join users u on ct.uid = u.uid
             where rd.uid = #{uid}
+                and r.rtime&lt;=#{datetimeEnd}
+                and r.rtime&gt;=#{datetimeBegin}
+                and if(#{course} = '', 1 = 1,course.courseid=#{course})
     </select>
 </mapper>
