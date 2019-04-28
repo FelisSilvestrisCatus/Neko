@@ -1,11 +1,14 @@
 package neko.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Rollcalldetails;
 import neko.entity.Users;
 import neko.entity.vo.ClassWithTeacherName;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.StudentRollcall;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.RollcalldetailsMapper;
 import neko.service.IClassService;
@@ -72,5 +75,13 @@ public class RollcalldetailsServiceImpl extends ServiceImpl<RollcalldetailsMappe
 
         map.put("data", JSON.toJSONString(datalist));
         return map;
+    }
+
+    @Override
+    public IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage) {
+
+        Page<StudentRollcall> page = new Page<>(currentPage, 9);
+        IPage<StudentRollcall> userIPage = this.baseMapper.myAttendance(page, uid);
+        return userIPage;
     }
 }

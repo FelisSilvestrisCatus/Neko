@@ -1,8 +1,10 @@
 package neko.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Rollcalldetails;
 import neko.entity.Users;
+import neko.entity.vo.StudentRollcall;
 
 import java.util.Map;
 
@@ -17,4 +19,6 @@ import java.util.Map;
 public interface IRollcalldetailsService extends IService<Rollcalldetails> {
 
     Map<String, String> myInfo(Users u);
+
+    IPage<StudentRollcall> myAttendance(Integer uid, Integer currentPage);
 }
