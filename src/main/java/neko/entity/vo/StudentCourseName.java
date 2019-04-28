@@ -36,6 +36,8 @@ public class StudentCourseName implements Serializable {
      */
     private String cname;
 
+
+
     /**
      * 任课老师
      */
@@ -50,5 +52,13 @@ public class StudentCourseName implements Serializable {
      * 状态位
      */
     private Integer state;
+    /**
+     * 班级总人数
+     */
+    private int snum;
+    /**
+     * 该课程应到人数
+     */
+    private int anum;
 
 }

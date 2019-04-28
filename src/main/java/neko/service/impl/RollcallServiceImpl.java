@@ -2,9 +2,12 @@ package neko.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Rollcall;
+import neko.entity.vo.StudentCourseName;
 import neko.mapper.RollcallMapper;
 import neko.service.IRollcallService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> implements IRollcallService {
 
+    @Override
+    public List<StudentCourseName> getCourseToday(int uid, int cday) {
+        return this.baseMapper.getCourseToday(uid, cday);
+    }
 }
