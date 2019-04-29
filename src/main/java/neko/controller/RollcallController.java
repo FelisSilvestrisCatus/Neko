@@ -2,6 +2,7 @@ package neko.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import neko.entity.Rollcall;
 import neko.entity.Rollcalltype;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +96,24 @@ public class RollcallController {
     @RequestMapping(value = "/getCourseStudentWithoutVacate")
     public Map<String, String> getCourseStudentWithoutVacate(HttpSession session, String courseid) throws IOException {
         int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<TeacherRollCall> list = rollcallService.getCourseStudentWithoutVacate(courseid_);
+        map.put("data", JSON.toJSONString(list));
+        System.out.println(map.get("data"));
+        return map;
+    }
+
+    //存储一次点名的
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/insertOneRollcall")
+    public Map<String, String> insertOneRollcall(HttpSession session, String courseid, String rollType) throws IOException {
+        int courseid_ = Integer.valueOf(courseid);
+        int rollType_ = Integer.valueOf(rollType);
+
+        Rollcall rollcall = new Rollcall();
+        rollcall.setCid(courseid_);
+        rollcall.setRtime(LocalDateTime.now());
+        rollcall.setTid()
         Map<String, String> map = generalMethod.getSuccessMap();
         List<TeacherRollCall> list = rollcallService.getCourseStudentWithoutVacate(courseid_);
         map.put("data", JSON.toJSONString(list));
