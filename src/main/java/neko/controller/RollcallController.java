@@ -2,12 +2,16 @@ package neko.controller;
 
 
 import com.alibaba.fastjson.JSON;
+
+import com.alibaba.fastjson.JSONObject;
 import neko.entity.Rollcall;
+import neko.entity.Rollcalldetails;
 import neko.entity.Rollcalltype;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
 import neko.entity.vo.TeacherRollCall;
 import neko.service.IRollcallService;
+import neko.service.IRollcalldetailsService;
 import neko.service.IRollcalltypeService;
 import neko.utils.generalMethod;
 import neko.utils.ip.Juhe;
@@ -21,10 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -44,6 +45,8 @@ public class RollcallController {
     private Juhe juhe;
     @Autowired
     private IRollcallService rollcallService;
+    @Autowired
+    private IRollcalldetailsService rollcalldetailsService;
     @Autowired
     private IRollcalltypeService rollcalltypeService;
 
@@ -106,18 +109,49 @@ public class RollcallController {
     //存储一次点名的
     @RequiresPermissions("teacher")
     @RequestMapping(value = "/insertOneRollcall")
-    public Map<String, String> insertOneRollcall(HttpSession session, String courseid, String rollType) throws IOException {
+    public Map<String, String> insertOneRollcall(HttpSession session, String courseid, String rollType, String datamap) throws IOException {
+        System.out.println("datamap = " + datamap);
         int courseid_ = Integer.valueOf(courseid);
         int rollType_ = Integer.valueOf(rollType);
 
         Rollcall rollcall = new Rollcall();
         rollcall.setCid(courseid_);
         rollcall.setRtime(LocalDateTime.now());
-        rollcall.setTid()
-        Map<String, String> map = generalMethod.getSuccessMap();
-        List<TeacherRollCall> list = rollcallService.getCourseStudentWithoutVacate(courseid_);
-        map.put("data", JSON.toJSONString(list));
-        System.out.println(map.get("data"));
-        return map;
+        rollcall.setRtid(rollType_);
+        if (rollcallService.save(rollcall)) {
+            //存储学生点名信息
+            List<Rollcalldetails> list = new ArrayList<>();
+            JSONObject json = JSONObject.parseObject(datamap);
+            System.out.println(json);
+            for (Map.Entry<String, Object> entry : json.entrySet()) {
+                System.out.println(entry.getKey() + ":" + entry.getValue());
+                Rollcalldetails rollcalldetails = new Rollcalldetails();
+                rollcalldetails.setState(Integer.valueOf(entry.getValue() + ""));
+                rollcalldetails.setUid(Integer.valueOf(entry.getKey() + ""));
+                rollcalldetails.setRid(rollcall.getRid());
+                list.add(rollcalldetails);
+
+            }
+            if (rollcalldetailsService.saveBatch(list)) {
+                System.out.println("要插入的数据条数" + list.size());
+
+
+                Map<String, String> map = generalMethod.getSuccessMap();
+                return map;
+            } else {
+                Map<String, String> map = generalMethod.getErrorMap();
+
+                return map;
+            }
+
+
+        } else {
+
+            Map<String, String> map = generalMethod.getErrorMap();
+
+            return map;
+        }
+
+
     }
 }

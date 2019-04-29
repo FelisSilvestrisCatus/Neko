@@ -27,6 +27,6 @@ public class TeacherRollCall {
     /**
      * 用户请假状态
      */
-   private  int state;
+   private  String  state;
 
 }
