@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author z9961
- * @since 2019-03-03
+ * @since 2019-04-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,19 +31,19 @@ public class Rollcall implements Serializable {
     private Integer rid;
 
     /**
-     * 班级id
+     * 课程id
      */
     private Integer cid;
-
-    /**
-     * 教师id
-     */
-    private Integer tid;
 
     /**
      * 点名时间
      */
     private LocalDateTime rtime;
+
+    /**
+     * 点名方式
+     */
+    private Integer rtid;
 
 
 }
