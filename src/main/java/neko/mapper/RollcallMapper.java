@@ -3,6 +3,7 @@ package neko.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Rollcall;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.TeacherRollCall;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,4 +23,9 @@ public interface RollcallMapper extends BaseMapper<Rollcall> {
     @Select("call getCourseInfo(#{uid},#{cday})")
     @Options(statementType = StatementType.CALLABLE)
     List<StudentCourseName> getCourseToday(int uid, int cday);
+
+
+    @Select("call getCourseStudentWithoutVacate(#{courseid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<TeacherRollCall> getCourseStudentWithoutVacate(int courseid);
 }

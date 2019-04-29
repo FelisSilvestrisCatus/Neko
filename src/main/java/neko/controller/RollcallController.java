@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import neko.entity.Rollcalltype;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.TeacherRollCall;
 import neko.service.IRollcallService;
 import neko.service.IRollcalltypeService;
 import neko.utils.generalMethod;
@@ -76,6 +77,7 @@ public class RollcallController {
     }
 
     //读取名方式
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getRollType")
     public Map<String, String> getRollType(HttpSession session) throws IOException {
 
@@ -87,4 +89,15 @@ public class RollcallController {
         return map;
     }
 
+    //根据课程id获取要点名的学生
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getCourseStudentWithoutVacate")
+    public Map<String, String> getCourseStudentWithoutVacate(HttpSession session, String courseid) throws IOException {
+        int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<TeacherRollCall> list = rollcallService.getCourseStudentWithoutVacate(courseid_);
+        map.put("data", JSON.toJSONString(list));
+        System.out.println(map.get("data"));
+        return map;
+    }
 }
