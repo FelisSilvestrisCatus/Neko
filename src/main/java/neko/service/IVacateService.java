@@ -31,4 +31,6 @@ public interface IVacateService extends IService<Vacate> {
     List<AuditVacateByTeacher> VacateList(int uid, int state);
 
     Map<String, String> auditVacate(Integer vid, Integer state, String remark);
+
+    List<VacateWithTeacherName> getMyVacateByCourse(Integer uid, String vcourse);
 }

@@ -80,4 +80,9 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
             return map;
         }
     }
+
+    @Override
+    public List<VacateWithTeacherName> getMyVacateByCourse(Integer uid, String vcourse) {
+        return this.baseMapper.getMyVacateByCourse(uid, vcourse);
+    }
 }
