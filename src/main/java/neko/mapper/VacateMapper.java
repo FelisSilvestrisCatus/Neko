@@ -52,4 +52,8 @@ public interface VacateMapper extends BaseMapper<Vacate> {
     @Select("call getVacateByTeacher(#{vid})")
     @Options(statementType = StatementType.CALLABLE)
     VacateByTeacher getDetailsByTeacher(@Param("vid") int vid);
+
+    @Select("select v.vid,c.cname,v.vname,v.vtime,v.vtype,v.state,u.uname from vacate v,course c," +
+            "classteacher t,users u where v.uid=#{uid} and v.courseid=#{vcourse} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid")
+    List<VacateWithTeacherName> getMyVacateByCourse(@Param("uid") Integer uid, @Param("vcourse") String vcourse);
 }

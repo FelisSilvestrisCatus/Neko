@@ -20,11 +20,11 @@ import java.util.List;
  */
 public interface ClassMapper extends BaseMapper<Class> {
 
-    @Select("call classwithteachername(#{uid})")
+    @Select("call getClassWithTeacherName(#{uid})")
     @Options(statementType = StatementType.CALLABLE)
     List<ClassWithTeacherName> getallclass(@Param("uid") int uid);
 
-    @Select("call JoinedClass(#{uid})")
+    @Select("call getJoinedClass(#{uid})")
     @Options(statementType = StatementType.CALLABLE)
     List<ClassWithTeacherName> getJoinedclass(@Param("uid") int uid);
 

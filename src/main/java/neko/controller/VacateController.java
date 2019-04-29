@@ -1,11 +1,11 @@
 package neko.controller;
 
-
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.VacateWithTeacherName;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
@@ -19,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +48,16 @@ public class VacateController {
         Users users = (Users) session.getAttribute("user");
 
         Vacate vacate = new Vacate();
-        vacate.setUid(users.getUid()).setVtype(Integer.parseInt(vtype)).setCourseid(Integer.parseInt(vcourse));
-        handleTime(vreason, vdatetimeBegin, vdatetimeEnd, vacate);
+
+        //请假时间检查
+        if (checkVacateTime(vdatetimeBegin, vdatetimeEnd, users, vcourse)) return returnErrorTime();
+
+        //拼接请假时间
+        vacate.setVtime(vdatetimeBegin + " 至 " + vdatetimeEnd);
+
+        //赋值请假信息
+        vacate.setUid(users.getUid()).setVtype(Integer.parseInt(vtype))
+                .setCourseid(Integer.parseInt(vcourse)).setVname(vreason);
 
         if (vacateService.save(vacate)) {
             session.setAttribute("vid", vacate.getVid());
@@ -55,6 +66,43 @@ public class VacateController {
         } else {
             map = generalMethod.getErrorMap();
         }
+        return map;
+    }
+
+    //请假时间检查
+    private boolean checkVacateTime(String vdatetimeBegin, String vdatetimeEnd, Users users, String vcourse) {
+
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        long vBegin;
+        long vEnd;
+        try {
+            vBegin = sdf.parse(vdatetimeBegin).getTime();
+            vEnd = sdf.parse(vdatetimeEnd).getTime();
+        } catch (ParseException e) {
+            return true;
+        }
+
+        List<VacateWithTeacherName> allVacate = vacateService.getMyVacateByCourse(users.getUid(), vcourse);
+        for (VacateWithTeacherName vacateWithTeacherName : allVacate) {
+            String[] timestr = vacateWithTeacherName.getVtime().split("至");
+            try {
+                long begin = sdf.parse(timestr[0]).getTime();
+                long end = sdf.parse(timestr[1]).getTime();
+                if ((begin <= vBegin && vBegin <= end) || (begin <= vEnd && vEnd <= end)) {
+                    return true;
+                }
+            } catch (ParseException e) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //错误的时间段
+    private Map<String, String> returnErrorTime() {
+        Map<String, String> map;
+        map = generalMethod.getErrorMap();
+        map.put("msg", "请假时间范围错误，请检查是否有冲突的时间段");
         return map;
     }
 
@@ -108,7 +156,11 @@ public class VacateController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("vid", Integer.parseInt(vid));
         Vacate vacate = vacateService.getOne(queryWrapper);
-        handleTime(vreason, vdatetimeBegin, vdatetimeEnd, vacate);
+
+        //请假时间检查
+        if (checkVacateTime(vdatetimeBegin, vdatetimeEnd, users, vacate.getCourseid().toString()))
+            return returnErrorTime();
+
 
         Map<String, String> map = generalMethod.getSuccessMap();
         if (vacateService.updateById(vacate)) {
@@ -120,42 +172,11 @@ public class VacateController {
         return map;
     }
 
-    //处理时间格式和请假原因
-    private void handleTime(String vreason, String vdatetimeBegin, String vdatetimeEnd, Vacate vacate) {
-        vacate.setVname(vreason);
-        if ((vdatetimeBegin.equals("undefined")) && (vdatetimeEnd.equals("undefined"))) {
-            vacate.setVtime("未定时间");
-        } else {
-            if (vdatetimeBegin.equals("undefined"))
-                vdatetimeBegin = "未定时间";
-            if (vdatetimeEnd.equals("undefined"))
-                vdatetimeEnd = "未定时间";
-            vacate.setVtime(vdatetimeBegin + " 至 " + vdatetimeEnd);
-        }
-    }
-
     //请假审批
     @RequestMapping(value = "/auditVacate")
     public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
 
         return vacateService.auditVacate(vid, state, remark);
-
-
-//        Map<String, String> map = generalMethod.getSuccessMap();
-//        //当前学生请假时间段含今日  且 其请假课程为 本老师创建的课程
-//        Users users = (Users) session.getAttribute("user");
-//        int uid = users.getUid();
-//        System.out.println("当前老师uid" + uid);
-//        //获取今天的日期（String  类型）
-//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
-//        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-//        //开始实现查询逻辑
-//        String nowdate = df.format(new Date());
-//        String data = JSON.toJSONString(vacateService.auditVacateByTeacher(nowdate, uid));
-//        //存放数据
-//        map.put("data", data);
-//        return map;
-
 
     }
 
