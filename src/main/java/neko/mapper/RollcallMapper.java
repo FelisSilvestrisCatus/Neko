@@ -3,6 +3,7 @@ package neko.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Rollcall;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.StudentRollCallRate;
 import neko.entity.vo.TeacherRollCall;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +34,9 @@ public interface RollcallMapper extends BaseMapper<Rollcall> {
     @Select("call getLastRollCallInfo(#{courseid})")
     @Options(statementType = StatementType.CALLABLE)
     List<StudentCourseName> getLastRollCallInfo(int courseid);
+
+
+    @Select("call getStudentRollCallRate(#{courseid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<StudentRollCallRate> getStudentRollCallRate(int courseid);
 }

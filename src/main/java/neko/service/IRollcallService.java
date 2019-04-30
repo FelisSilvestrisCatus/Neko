@@ -3,6 +3,7 @@ package neko.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Rollcall;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.StudentRollCallRate;
 import neko.entity.vo.TeacherRollCall;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface IRollcallService extends IService<Rollcall> {
     List<TeacherRollCall> getCourseStudentWithoutVacate(int courseid);
     //根据课程id虎丘所有的历史出勤信息（达到人数 逃课人数 请假人数）
     List<StudentCourseName> getLastRollCallInfo(int courseid);
+    //根据课程id获取所有学生的出勤率（请假不影响）
+    List<StudentRollCallRate>  getStudentRollCallRate(int courseid);
 }

@@ -9,6 +9,7 @@ import neko.entity.Rollcalldetails;
 import neko.entity.Rollcalltype;
 import neko.entity.Users;
 import neko.entity.vo.StudentCourseName;
+import neko.entity.vo.StudentRollCallRate;
 import neko.entity.vo.TeacherRollCall;
 import neko.service.IRollcallService;
 import neko.service.IRollcalldetailsService;
@@ -193,6 +194,32 @@ public class RollcallController {
 
         System.out.println("要返回给前台的数据" + JSON.toJSONString(list));
         map.put("data", JSON.toJSONString(list));
+
+
+        return map;
+    }
+//根据出勤率筛选学生
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getStudentRollCallRate")
+    public Map<String, String> getStudentRollCallRate(HttpSession session, String courseid, String rate) throws IOException {
+        int rate_ = Integer.valueOf(rate);
+        int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<StudentRollCallRate> list = rollcallService.getStudentRollCallRate(courseid_);
+        List<StudentRollCallRate> listforRate = new ArrayList<>();
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            StudentRollCallRate StudentRollCallRate = (StudentRollCallRate) iterator.next();
+            System.out.println("当前学生的出勤"+StudentRollCallRate.getAttrate());
+            if (StudentRollCallRate.getAttrate() < rate_) {
+
+                listforRate.add(StudentRollCallRate);
+            }
+
+
+        }
+        map.put("data", JSON.toJSONString(listforRate));
+        System.out.println("出勤率小于"+rate_+"的学生"+JSON.toJSONString(listforRate));
 
 
         return map;
