@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -37,7 +38,6 @@ public class StudentCourseName implements Serializable {
     private String cname;
 
 
-
     /**
      * 任课老师
      */
@@ -60,5 +60,12 @@ public class StudentCourseName implements Serializable {
      * 该课程应到人数
      */
     private int anum;
+
+    //===========================图标所需要的数据======================================//
+    private int attnum;//喊道的人
+    private int notattnum;//逃课的人
+    private LocalDateTime retime;//点名时间
+    private int vnum;//请假的人数
+
 
 }

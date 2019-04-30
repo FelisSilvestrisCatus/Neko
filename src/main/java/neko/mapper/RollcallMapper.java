@@ -28,4 +28,9 @@ public interface RollcallMapper extends BaseMapper<Rollcall> {
     @Select("call getCourseStudentWithoutVacate(#{courseid})")
     @Options(statementType = StatementType.CALLABLE)
     List<TeacherRollCall> getCourseStudentWithoutVacate(int courseid);
+
+
+    @Select("call getLastRollCallInfo(#{courseid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<StudentCourseName> getLastRollCallInfo(int courseid);
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.VacateMapper;
 import neko.service.IVacateService;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 @Service
 public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> implements IVacateService {
+
 
 
     @Override
@@ -84,5 +86,10 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     @Override
     public List<VacateWithTeacherName> getMyVacateByCourse(Integer uid, String vcourse) {
         return this.baseMapper.getMyVacateByCourse(uid, vcourse);
+    }
+
+    @Override
+    public List<TeacherRollCall> getCourseStudentWhoVacate(int courseid) {
+        return this.baseMapper.getCourseStudentWhoVacate(courseid);
     }
 }

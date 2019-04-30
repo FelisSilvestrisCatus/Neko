@@ -3,6 +3,7 @@ package neko.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateByTeacher;
 import neko.entity.vo.VacateWithTeacherName;
 import org.apache.ibatis.annotations.Options;
@@ -56,4 +57,11 @@ public interface VacateMapper extends BaseMapper<Vacate> {
     @Select("select v.vid,c.cname,v.vname,v.vtime,v.vtype,v.state,u.uname from vacate v,course c," +
             "classteacher t,users u where v.uid=#{uid} and v.courseid=#{vcourse} and v.courseid=c.courseid and c.cid=t.cid and t.uid=u.uid")
     List<VacateWithTeacherName> getMyVacateByCourse(@Param("uid") Integer uid, @Param("vcourse") String vcourse);
+
+    @Select("call getCourseStudentWhoVacate(#{courseid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<TeacherRollCall> getCourseStudentWhoVacate(int courseid);
+
+
+
 }

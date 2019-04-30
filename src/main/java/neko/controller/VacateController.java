@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.service.IUsersService;
 import neko.service.IVacateService;
 import neko.service.IVacatefilesService;
 import neko.utils.generalMethod;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -227,6 +229,18 @@ public class VacateController {
 
         return map;
     }
+//根据courseid获取请假的学生
+@RequiresPermissions("teacher")
+
+@RequestMapping(value = "/getCourseStudentWhoVacate")
+public Map<String, String> getCourseStudentWhoVacate(HttpSession session, String courseid) {
+
+    int courseid_ = Integer.valueOf(courseid);
+    Map<String, String> map = generalMethod.getSuccessMap();
+    List<TeacherRollCall> list = vacateService.getCourseStudentWhoVacate(courseid_);
+    map.put("data", JSON.toJSONString(list));
+    return map;
+}
 
 
 }

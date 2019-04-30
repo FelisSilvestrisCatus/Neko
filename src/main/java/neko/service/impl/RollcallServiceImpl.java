@@ -30,4 +30,9 @@ public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> i
     public List<TeacherRollCall> getCourseStudentWithoutVacate(int courseid) {
         return this.baseMapper.getCourseStudentWithoutVacate(courseid);
     }
+
+    @Override
+    public List<StudentCourseName> getLastRollCallInfo(int courseid) {
+        return this.baseMapper.getLastRollCallInfo(courseid);
+    }
 }

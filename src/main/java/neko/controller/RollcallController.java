@@ -154,4 +154,30 @@ public class RollcallController {
 
 
     }
+    //返回课程id下的全部点名信息
+
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getLastRollCallInfo")
+    public Map<String, String> getLastRollCallInfo(HttpSession session, String courseid, String index) throws IOException {
+        int index_ = Integer.valueOf(index);
+        int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<StudentCourseName> list = rollcallService.getLastRollCallInfo(courseid_);
+        System.out.println("当前查询的index" + index_);
+        System.out.println("返回集合的四则" + list.size());
+        if (index_ <= list.size()) {
+            StudentCourseName studentCourseName = new StudentCourseName();
+            studentCourseName = list.get(index_ - 1);
+            System.out.println(studentCourseName.getRetime()+""+"点名时间");
+            map.put("data", JSON.toJSONString(studentCourseName));
+
+            return map;
+
+        } else {
+            map=generalMethod.getErrorMap();
+
+            return map;
+        }
+
+    }
 }

@@ -20,4 +20,6 @@ public interface IRollcallService extends IService<Rollcall> {
      List<StudentCourseName> getCourseToday(int  uid, int cday);
     //根据课程id获取要点名的同学（不含有请假成功的同学）
     List<TeacherRollCall> getCourseStudentWithoutVacate(int courseid);
+    //根据课程id虎丘所有的历史出勤信息（达到人数 逃课人数 请假人数）
+    List<StudentCourseName> getLastRollCallInfo(int courseid);
 }

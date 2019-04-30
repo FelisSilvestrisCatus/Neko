@@ -3,6 +3,7 @@ package neko.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Vacate;
 import neko.entity.vo.AuditVacateByTeacher;
+import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateWithTeacherName;
 
 import java.util.List;
@@ -33,4 +34,7 @@ public interface IVacateService extends IService<Vacate> {
     Map<String, String> auditVacate(Integer vid, Integer state, String remark);
 
     List<VacateWithTeacherName> getMyVacateByCourse(Integer uid, String vcourse);
+
+    List<TeacherRollCall> getCourseStudentWhoVacate(int courseid);
+
 }

@@ -28,5 +28,17 @@ public class TeacherRollCall {
      * 用户请假状态
      */
    private  String  state;
+    /**
+     * 用户请假原因
+     */
+    private  String  vname;
+    /**
+     * 用户请假时间
+     */
+    private  String  vtime;
+    /**
+     * 用户请假类型
+     */
+    private  String  vtype;
 
 }
