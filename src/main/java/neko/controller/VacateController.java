@@ -176,10 +176,9 @@ public class VacateController {
 
     //请假审批
     @RequestMapping(value = "/auditVacate")
-    public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
-
+    public Map<String, String> auditVacate(HttpSession session, Integer vid, Integer state, String remark) {
+        Users u = (Users) session.getAttribute("user");
         return vacateService.auditVacate(vid, state, remark);
-
     }
 
     //老师查看学生请假时附件的详细信息（弹框形式 显示请假类型 以及 附件下载）
@@ -229,18 +228,18 @@ public class VacateController {
 
         return map;
     }
-//根据courseid获取请假的学生
-@RequiresPermissions("teacher")
 
-@RequestMapping(value = "/getCourseStudentWhoVacate")
-public Map<String, String> getCourseStudentWhoVacate(HttpSession session, String courseid) {
+    //根据courseid获取请假的学生
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getCourseStudentWhoVacate")
+    public Map<String, String> getCourseStudentWhoVacate(HttpSession session, String courseid) {
 
-    int courseid_ = Integer.valueOf(courseid);
-    Map<String, String> map = generalMethod.getSuccessMap();
-    List<TeacherRollCall> list = vacateService.getCourseStudentWhoVacate(courseid_);
-    map.put("data", JSON.toJSONString(list));
-    return map;
-}
+        int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<TeacherRollCall> list = vacateService.getCourseStudentWhoVacate(courseid_);
+        map.put("data", JSON.toJSONString(list));
+        return map;
+    }
 
 
 }

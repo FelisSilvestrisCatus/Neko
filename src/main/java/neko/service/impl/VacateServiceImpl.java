@@ -8,8 +8,10 @@ import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.VacateMapper;
+import neko.service.IUsermessageService;
 import neko.service.IVacateService;
 import neko.utils.generalMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,8 @@ import java.util.Map;
 @Service
 public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> implements IVacateService {
 
+    @Autowired
+    private IUsermessageService usermessageService;
 
 
     @Override
@@ -69,6 +73,10 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
 
     @Override
     public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
+
+
+//        usermessageService.sendMessage()
+
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("vid", vid);
