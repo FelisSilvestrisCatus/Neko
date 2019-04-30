@@ -154,7 +154,7 @@ public class RollcallController {
 
 
     }
-    //返回课程id下的全部点名信息
+    //返回课程id下的全部点名信息  但仅仅返回指定的一条
 
     @RequiresPermissions("teacher")
     @RequestMapping(value = "/getLastRollCallInfo")
@@ -168,16 +168,33 @@ public class RollcallController {
         if (index_ <= list.size()) {
             StudentCourseName studentCourseName = new StudentCourseName();
             studentCourseName = list.get(index_ - 1);
-            System.out.println(studentCourseName.getRetime()+""+"点名时间");
+            System.out.println(studentCourseName.getRetime() + "" + "点名时间");
             map.put("data", JSON.toJSONString(studentCourseName));
 
             return map;
 
         } else {
-            map=generalMethod.getErrorMap();
+            map = generalMethod.getErrorMap();
 
             return map;
         }
 
+    }
+
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getAllRollCallOneWeekHistory")
+    public Map<String, String> getAllRollCallOneWeekHistory(HttpSession session, String courseid) throws IOException {
+
+        int courseid_ = Integer.valueOf(courseid);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<StudentCourseName> list = rollcallService.getLastRollCallInfo(courseid_);
+
+        System.out.println("返回集合的四则" + list.size());
+
+        System.out.println("要返回给前台的数据" + JSON.toJSONString(list));
+        map.put("data", JSON.toJSONString(list));
+
+
+        return map;
     }
 }
