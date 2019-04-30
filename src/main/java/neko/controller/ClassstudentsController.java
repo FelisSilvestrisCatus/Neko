@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Class;
 import neko.entity.Classstudents;
-import neko.entity.Classteacher;
 import neko.entity.Users;
 import neko.entity.vo.ClassWithTeacherName;
 import neko.service.IClassService;
@@ -13,6 +12,7 @@ import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
 import neko.service.IUsersService;
 import neko.utils.generalMethod;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -87,6 +87,7 @@ public class ClassstudentsController {
     }
 
     //获取已加入班级的学生
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getStudents")
     public Map<String, String> getJoinedStudent(HttpSession session, String cid, String state) {
         int cid_ = Integer.valueOf(cid);
@@ -119,6 +120,7 @@ public class ClassstudentsController {
     }
 
     //删除指定班级id 指定uid的学生
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/deleteStudent")
     public Map<String, String> deleteStudent(HttpSession session, String cid, String uid) {
         int cid_ = Integer.valueOf(cid);
@@ -138,6 +140,7 @@ public class ClassstudentsController {
     }
 
     //同意学生加入该班级的申请
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/agreeApply")
     public Map<String, String> agreeApply(HttpSession session, String cid, String uid) {
         int cid_ = Integer.valueOf(cid);

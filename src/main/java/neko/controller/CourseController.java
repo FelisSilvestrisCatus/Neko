@@ -10,6 +10,7 @@ import neko.entity.vo.StudentCourseName;
 import neko.service.IClassService;
 import neko.service.ICourseService;
 import neko.utils.generalMethod;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,7 @@ public class CourseController {
     }
 
     //获取老师所有的课程
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getTeacherCourse")
     public Map<String, String> getTeacherCourse(HttpServletRequest request) {
         Users users = (Users) request.getSession().getAttribute("user");
@@ -67,6 +69,7 @@ public class CourseController {
     }
 
     //修改课程信息
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/changeCourse")
     public Map<String, String> auditCourse(HttpSession session, String courseid, String cname, String ctime) {
         int ctime_ = Integer.valueOf(ctime);
@@ -90,6 +93,7 @@ public class CourseController {
     }
 
     //创建课程
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/createCourse")
     public Map<String, String> createCourse(HttpSession session, String cid, String cname, String ctime) {
         Users users = (Users) session.getAttribute("user");
@@ -124,6 +128,7 @@ public class CourseController {
     }
 
     //获取指定id的课程
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getCourseByCid")
     public Map<String, String> getTeacherCourse(HttpSession session, String cid) {
         int cid_ = Integer.valueOf(cid);
@@ -137,6 +142,7 @@ public class CourseController {
     }
 
     //修改指定id的课程的state
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/changeCourseState")
     public Map<String, String> changeCourseState(HttpSession session, String courseid, String state) {
         int courseid_ = Integer.valueOf(courseid);

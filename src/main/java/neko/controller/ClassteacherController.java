@@ -4,6 +4,7 @@ package neko.controller;
 import neko.entity.Classteacher;
 import neko.entity.Users;
 import neko.service.IClassteacherService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,9 @@ import java.util.Map;
 public class ClassteacherController {
     @Autowired
     IClassteacherService classteacherService;
+
     //修改班级信息
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getMyCreateClass")
     public Map<String, String> getMyCreateClass(HttpSession session) {
         Map<String, String> map = new HashMap<>();
@@ -35,7 +38,7 @@ public class ClassteacherController {
         System.out.println("老师" + uid);
         //获取老师创建的班级
 
-        List<Classteacher>  classteacherList =classteacherService.list();
+        List<Classteacher> classteacherList = classteacherService.list();
 
         return map;
     }

@@ -12,6 +12,7 @@ import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
 import neko.service.IUsersService;
 import neko.utils.generalMethod;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,7 @@ public class ClassController {
     private IClassstudentsService classstudentsService;
 
     //创建班级
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/createClass")
     public Map<String, String> getValidatecode(HttpSession session, String name) {
 
@@ -76,6 +78,7 @@ public class ClassController {
     }
 
     //修改班级信息
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/changeClass")
     public Map<String, String> changeClass(HttpSession session, String name, String cid) {
 
@@ -100,6 +103,7 @@ public class ClassController {
     /**
      * @param:flag 选择显示列表类型 0显示全部  1 显示已经加入 2 显示待审核
      **/
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/auditClass")
     public Map<String, String> auditClass(HttpSession session, String flag, String cid) {
         Map<String, String> map = generalMethod.getSuccessMap();
@@ -140,6 +144,7 @@ public class ClassController {
     }
 
     //获取老师创建的班级
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getTeacherClass")
     public Map<String, String> getTeacherClass(HttpSession session) {
         Users users = (Users) session.getAttribute("user");
@@ -164,6 +169,7 @@ public class ClassController {
     }
 
     //获取老师创建的所有班级（含学生数目）
+    @RequiresPermissions("teacher")
     @RequestMapping(value = "/getClassStudent")
     public Map<String, String> getClassStudent(HttpSession session) {
         Users users = (Users) session.getAttribute("user");
