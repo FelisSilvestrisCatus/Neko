@@ -8,6 +8,7 @@ import neko.entity.vo.AuditVacateByTeacher;
 import neko.entity.vo.TeacherRollCall;
 import neko.entity.vo.VacateWithTeacherName;
 import neko.mapper.VacateMapper;
+import neko.service.ICourseService;
 import neko.service.IUsermessageService;
 import neko.service.IVacateService;
 import neko.utils.generalMethod;
@@ -30,7 +31,8 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
 
     @Autowired
     private IUsermessageService usermessageService;
-
+    @Autowired
+    private ICourseService courseService;
 
     @Override
     public List<VacateWithTeacherName> getMyVacate(int uid) {
@@ -76,15 +78,28 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
 
 
 //        usermessageService.sendMessage()
-
+        //要发送的message
+        String message = "";
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("vid", vid);
         Vacate vacate = this.baseMapper.selectOne(queryWrapper);
         vacate.setRemark(remark).setState(state);
+        //查询批的老师uid
+        QueryWrapper queryWrapper_ = new QueryWrapper();
+        queryWrapper.eq("courseid", vacate.getCourseid());
+        int tid = courseService.getOne(queryWrapper_).getTid();
         if (this.baseMapper.updateById(vacate) == 0) {
             return generalMethod.getErrorMap();
         } else {
+            if (vacate.getState() == 1) {
+                //未批准
+                message = "你有一个请假申请被拒绝，请查看";
+            } else {
+                message = "你有一个请假申请通过了，请查看";
+            }
+
+            usermessageService.sendMessage(vacate.getUid(), tid, message);
             Map<String, String> map = generalMethod.getSuccessMap();
             map.put("msg", "请假申请处理成功");
             return map;
