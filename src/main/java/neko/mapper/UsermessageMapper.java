@@ -1,7 +1,11 @@
 package neko.mapper;
 
-import neko.entity.Usermessage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import neko.entity.Usermessage;
+import neko.entity.vo.UsersMsg;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UsermessageMapper extends BaseMapper<Usermessage> {
 
+    @Select("select ")
+    List<UsersMsg> getMsg();
 }

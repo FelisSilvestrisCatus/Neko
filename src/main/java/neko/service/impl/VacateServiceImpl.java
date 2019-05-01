@@ -87,7 +87,7 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
         vacate.setRemark(remark).setState(state);
         //查询批的老师uid
         QueryWrapper queryWrapper_ = new QueryWrapper();
-        queryWrapper.eq("courseid", vacate.getCourseid());
+        queryWrapper_.eq("courseid", vacate.getCourseid());
         int tid = courseService.getOne(queryWrapper_).getTid();
         if (this.baseMapper.updateById(vacate) == 0) {
             return generalMethod.getErrorMap();

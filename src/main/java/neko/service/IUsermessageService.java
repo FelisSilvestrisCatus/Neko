@@ -1,11 +1,14 @@
 package neko.service;
 
-import neko.entity.Usermessage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import neko.entity.Usermessage;
+import neko.entity.vo.UsersMsg;
+
+import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author z9961
@@ -13,8 +16,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUsermessageService extends IService<Usermessage> {
 
-/*
 
-* */
-    public boolean sendMessage(Integer uid,Integer sourceid,String message);
+    boolean sendMessage(Integer uid, Integer sourceid, String message);
+
+    List<UsersMsg> getMsg(Integer uid);
 }
