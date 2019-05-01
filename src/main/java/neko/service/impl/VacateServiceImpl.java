@@ -76,9 +76,6 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     @Override
     public Map<String, String> auditVacate(Integer vid, Integer state, String remark) {
 
-
-//        usermessageService.sendMessage()
-        //要发送的message
         String message = "";
 
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -94,11 +91,10 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
         } else {
             if (vacate.getState() == 1) {
                 //未批准
-                message = "你有一个请假申请被拒绝，请查看";
+                message = "你有一个请假申请被拒绝，请到请假申请中查看";
             } else {
-                message = "你有一个请假申请通过了，请查看";
+                message = "你有一个请假申请通过了，请到请假申请中查看";
             }
-
             usermessageService.sendMessage(vacate.getUid(), tid, message);
             Map<String, String> map = generalMethod.getSuccessMap();
             map.put("msg", "请假申请处理成功");

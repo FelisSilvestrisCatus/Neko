@@ -2,18 +2,29 @@ package neko.utils.ip;
 
 //import net.sf.json.JSONObject;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import neko.utils.redis.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class Juhe {
+
+    @Autowired
+    private RedisUtil redisUtil;
+    //Redis过期时间
+    private static final long tokenExpire = 12;
+    //Redis过期时间单位
+    private static final TimeUnit tokenExpireTimeUnit = TimeUnit.HOURS;
+
     public static final String DEF_CHATSET = "UTF-8";
     public static final int DEF_CONN_TIMEOUT = 30000;
     public static final int DEF_READ_TIMEOUT = 30000;
@@ -124,43 +135,48 @@ public class Juhe {
 
     //获取天气
     public JSONObject getWeather(String ip) throws IOException {
+        JSONObject weather = new JSONObject();
         String key = "f5e272f5f52ffb93a0902474025efb16";
         String city = getValueOnlyCity(ip);
         if (city.contains("内网") || city.contains("未知")) {
             city = "北京";
-
         }
-        System.out.println(city);
+
+        //检查redis中是否有缓存
+        if (redisUtil.hasKey(city)) {
+            weather = JSON.parseObject(redisUtil.get(city));
+            return weather;
+        }
+
         URL u = new URL("http://apis.juhe.cn/simpleWeather/query?city=" + city + "&key=" + key);
-        System.out.println("连接中");
         InputStream in = u.openStream();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-
-            byte buf[] = new byte[1024];
+            byte[] buf = new byte[1024];
             int read = 0;
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }
+
+            byte[] b = out.toByteArray();
+            String result = new String(b, "UTF-8");
+            JSONObject json = JSONObject.parseObject(result);
+            weather = json.getJSONObject("result").getJSONObject("realtime");
+            weather.remove("wid");
+            weather.remove("aqi");
+
+            redisUtil.set(city, JSON.toJSONString(weather));
+            redisUtil.expire(city, tokenExpire, tokenExpireTimeUnit);
+        } catch (Exception e) {
+            weather = JSON.parseObject("{\"temperature\":\"未知\",\"direct\":\"未知\",\"humidity\":\"未知\",\"power\":\"未知\",\"info\":\"未知\"}");
         } finally {
             System.out.println("失败");
             if (in != null) {
                 in.close();
             }
         }
-        byte b[] = out.toByteArray();
-        String result = new String(b, "utf-8");
 
-        //可以使用fastjson解析
 
-        JSONObject json = JSONObject.parseObject(result);
-
-        System.out.println(json);
-        String now = JSONObject.parseObject(json.getString("result")).getString("realtime");
-        JSONObject now_ = JSONObject.parseObject(now);
-        now_.remove("wid");
-        now_.remove("aqi");
-
-        return now_;
+        return weather;
     }
 }

@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -40,7 +39,7 @@ public class UsersMsg implements Serializable {
     /**
      * 发送消息的时间
      */
-    private LocalDateTime mtime;
+    private String mtime;
 
     /**
      * 消息状态(0未读,1已读)
@@ -50,6 +49,6 @@ public class UsersMsg implements Serializable {
     /**
      * 消息发送者姓名
      */
-    private String sourceName;
+    private String uname;
 
 }

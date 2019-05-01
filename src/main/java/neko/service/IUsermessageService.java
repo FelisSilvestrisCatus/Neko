@@ -2,9 +2,8 @@ package neko.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import neko.entity.Usermessage;
-import neko.entity.vo.UsersMsg;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -19,5 +18,9 @@ public interface IUsermessageService extends IService<Usermessage> {
 
     boolean sendMessage(Integer uid, Integer sourceid, String message);
 
-    List<UsersMsg> getMsg(Integer uid);
+    Map<String, String> getMsg(Integer uid);
+
+    Map<String, String> setMsgRead(Integer uid, int umid);
+
+    Map<String, String> setAllMsgRead(Integer uid);
 }
