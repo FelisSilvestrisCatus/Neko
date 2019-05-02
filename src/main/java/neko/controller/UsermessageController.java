@@ -34,6 +34,7 @@ public class UsermessageController {
         Map<String, String> map = generalMethod.getSuccessMap();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("uid", u.getUid());
+        queryWrapper.eq("mstate", 0);
         Integer count = usermessage.count(queryWrapper);
         map.put("data", count.toString());
         return map;
