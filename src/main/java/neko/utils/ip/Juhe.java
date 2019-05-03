@@ -164,7 +164,7 @@ public class Juhe {
             weather = json.getJSONObject("result").getJSONObject("realtime");
             weather.remove("wid");
             weather.remove("aqi");
-
+            System.out.println(json);
             redisUtil.set(city, JSON.toJSONString(weather));
             redisUtil.expire(city, tokenExpire, tokenExpireTimeUnit);
         } catch (Exception e) {

@@ -198,7 +198,8 @@ public class RollcallController {
 
         return map;
     }
-//根据出勤率筛选学生
+
+    //根据出勤率筛选学生
     @RequiresPermissions("teacher")
     @RequestMapping(value = "/getStudentRollCallRate")
     public Map<String, String> getStudentRollCallRate(HttpSession session, String courseid, String rate) throws IOException {
@@ -210,7 +211,7 @@ public class RollcallController {
         Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
             StudentRollCallRate StudentRollCallRate = (StudentRollCallRate) iterator.next();
-            System.out.println("当前学生的出勤"+StudentRollCallRate.getAttrate());
+            System.out.println("当前学生的出勤" + StudentRollCallRate.getAttrate());
             if (StudentRollCallRate.getAttrate() < rate_) {
 
                 listforRate.add(StudentRollCallRate);
@@ -219,7 +220,24 @@ public class RollcallController {
 
         }
         map.put("data", JSON.toJSONString(listforRate));
-        System.out.println("出勤率小于"+rate_+"的学生"+JSON.toJSONString(listforRate));
+        System.out.println("出勤率小于" + rate_ + "的学生" + JSON.toJSONString(listforRate));
+
+
+        return map;
+    }
+
+    //默认比率请假列表
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getStudentRollCallRandom")
+    public Map<String, String> getStudentRollCallRandom(HttpSession session, String courseid) throws IOException {
+
+        int courseid_ = Integer.valueOf(courseid);
+        System.out.println("选择随机点名方式");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        List<TeacherRollCall> list = rollcallService.getStudentRollCallRandom(courseid_);
+
+        map.put("data", JSON.toJSONString(list));
+        System.out.println("默认比率需要点名的学生" + JSON.toJSONString(list));
 
 
         return map;

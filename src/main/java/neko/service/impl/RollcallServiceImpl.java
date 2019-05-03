@@ -41,4 +41,9 @@ public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> i
     public List<StudentRollCallRate> getStudentRollCallRate(int courseid) {
         return this.baseMapper.getStudentRollCallRate(courseid);
     }
+
+    @Override
+    public List<TeacherRollCall> getStudentRollCallRandom(int courseid) {
+        return this.baseMapper.getStudentRollCallRandom(courseid);
+    }
 }

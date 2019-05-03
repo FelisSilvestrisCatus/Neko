@@ -39,4 +39,8 @@ public interface RollcallMapper extends BaseMapper<Rollcall> {
     @Select("call getStudentRollCallRate(#{courseid})")
     @Options(statementType = StatementType.CALLABLE)
     List<StudentRollCallRate> getStudentRollCallRate(int courseid);
+
+    @Select("call getStudentRollCallRandom(#{courseid})")
+    @Options(statementType = StatementType.CALLABLE)
+    List<TeacherRollCall> getStudentRollCallRandom(int courseid);
 }
