@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.entity.Userslogin;
 import neko.service.IUsersloginService;
+import neko.utils.generalMethod;
+import neko.utils.ip.Geocoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,15 +25,11 @@ public class UsersloginController {
     @Autowired
     private IUsersloginService usersloginService;
 
-
     //获取登录信息
     @RequestMapping(value = "/getLast")
-    public Map<String, String> getLast(HttpServletRequest request) {
-        Map<String, String> map = new HashMap<>();
-        map.put("state", "200");
-        map.put("msg", "ok");
+    public Map<String, String> getLast(HttpSession session) {
+        Map<String, String> map = generalMethod.getSuccessMap();
 
-        HttpSession session = request.getSession();
         Users users = (Users) session.getAttribute("user");
 
         //查询登录记录
@@ -65,6 +61,15 @@ public class UsersloginController {
             map.put("isfirst", "false");
         }
 
+        return map;
+    }
+
+    //获取定位信息
+    @RequestMapping(value = "/location")
+    public Map<String, String> location(String lat, String lng) {
+        String addr = Geocoder.getAddrInfo(lat, lng);
+        Map<String, String> map = generalMethod.getSuccessMap();
+        map.put("data", addr);
         return map;
     }
 }
