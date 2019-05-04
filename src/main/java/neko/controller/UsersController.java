@@ -141,7 +141,7 @@ public class UsersController {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
         response.setCharacterEncoding("UTF-8");
-        response.setStatus(401);
+//        response.setStatus(401);
         response.getWriter().write("未授权的访问");
     }
 }

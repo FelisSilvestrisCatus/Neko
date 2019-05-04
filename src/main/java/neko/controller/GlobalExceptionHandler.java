@@ -61,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IncorrectCredentialsException.class)
     @ResponseBody
     public Map<String, String> IncorrectCredentialsException(HttpServletResponse response) {
-        Map<String, String> map = get401Map(response);
+        Map<String, String> map = generalMethod.getErrorMap();
         map.put("msg", "用户名或密码错误");
         return map;
     }
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     private Map<String, String> get401Map(HttpServletResponse response) {
-        response.setStatus(401);
+//        response.setStatus(401);
         Map<String, String> map = generalMethod.getErrorMap();
         map.put("state", "401");
         return map;
