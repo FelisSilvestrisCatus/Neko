@@ -2,7 +2,6 @@ package neko.controller;
 
 
 import com.alibaba.fastjson.JSON;
-
 import com.alibaba.fastjson.JSONObject;
 import neko.entity.Rollcall;
 import neko.entity.Rollcalldetails;
@@ -63,7 +62,6 @@ public class RollcallController {
 
     //显示今天可以点名的班级
     @RequiresPermissions("teacher")
-
     @RequestMapping(value = "/getCourseToday")
     public Map<String, String> getCourseToday(HttpSession session) throws IOException {
         Users users = (Users) session.getAttribute("user");

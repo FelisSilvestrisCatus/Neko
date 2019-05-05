@@ -232,11 +232,11 @@ public class LoginInfo {
                 String country = JSONObject.parseObject(json.getString("data")).get("country").toString();
                 String region = JSONObject.parseObject(json.getString("data")).get("region").toString();
                 String city = JSONObject.parseObject(json.getString("data")).get("city").toString();
-                String county = JSONObject.parseObject(json.getString("data")).get("county").toString();
-                String isp = JSONObject.parseObject(json.getString("data")).get("isp").toString();
-                String area = JSONObject.parseObject(json.getString("data")).get("area").toString();
+//                String county = JSONObject.parseObject(json.getString("data")).get("county").toString();
+//                String isp = JSONObject.parseObject(json.getString("data")).get("isp").toString();
+//                String area = JSONObject.parseObject(json.getString("data")).get("area").toString();
                 String address;
-                address = country + region + city + county + isp;
+                address = country + region + city;
                 return address;
             }
 
