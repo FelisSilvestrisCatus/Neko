@@ -1,17 +1,13 @@
 package neko.utils.face;
 
-import neko.utils.generalMethod;
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,8 +16,7 @@ import java.util.Date;
 public class Face {
     //前端数据转换为图片
     static {
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
     }
 
 
@@ -33,8 +28,9 @@ public class Face {
 
         return num;
     }
+
     /**
-     * @param    img    ：前端request 获得的图像数据
+     * @param img      ：前端request 获得的图像数据
      * @param uid：用户id
      * @return
      */
@@ -89,7 +85,7 @@ public class Face {
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
-        CascadeClassifier faceDetector = new CascadeClassifier("lbpcascade_frontalface.xml");
+        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\test\\lbpcascade_frontalface.xml");
         Mat image = Imgcodecs.imread(path);
         System.out.println("图片" + image.size());
         MatOfRect faceDetections = new MatOfRect();

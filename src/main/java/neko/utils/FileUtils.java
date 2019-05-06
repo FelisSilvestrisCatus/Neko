@@ -63,7 +63,7 @@ public class FileUtils {
 
     //打包文件夹为zip
     public static void responseToZip(String vid, HttpServletResponse res) {
-        String srcPath = "c:\\vfiles\\" + vid;
+        String srcPath = "c:\\vfiles\\files\\" + vid;
         String zipPath = "c:\\vfiles\\zip\\" + vid + ".zip";
         File srcdir = new File(srcPath);
         File zipFile = new File(zipPath);

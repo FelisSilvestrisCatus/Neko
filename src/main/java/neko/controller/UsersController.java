@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -149,10 +150,9 @@ public class UsersController {
 
     //上传自己的照片  用来点名
     @RequestMapping(value = "/uploadPhotoForRollCall")
-    public Map<String, String> uploadPhotoForRollCall(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Map<String, String> uploadPhotoForRollCall(HttpSession session, String imgCode) throws IOException {
         Map<String, String> map = generalMethod.getSuccessMap();
-        String imgCode = request.getParameter("photo");//获取照片的字节
-        Users users = (Users) request.getSession().getAttribute("user");
+        Users users = (Users) session.getAttribute("user");
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
@@ -160,7 +160,6 @@ public class UsersController {
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
         map.put("face_num", face_num + "");
         map.put("photo_train", photo_train + "");
-
 
         return map;
     }

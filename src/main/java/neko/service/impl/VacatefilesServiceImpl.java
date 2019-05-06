@@ -35,7 +35,7 @@ public class VacatefilesServiceImpl extends ServiceImpl<VacatefilesMapper, Vacat
     public Map<String, String> createVacateFile(String id, MultipartFile[] vfile) {
         Map<String, String> map = generalMethod.getSuccessMap();
         //创建存储文件夹
-        String dirpath = "c:\\vfiles\\" + Integer.parseInt(id);
+        String dirpath = "c:\\vfiles\\files\\" + Integer.parseInt(id);
         File dirFile = new File(dirpath);
         if (!dirFile.exists()) {
             dirFile.mkdirs();

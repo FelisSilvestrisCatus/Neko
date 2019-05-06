@@ -1,21 +1,12 @@
 package neko.neko;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import neko.entity.Class;
-import neko.entity.Classteacher;
-import neko.service.IClassService;
-import neko.service.IClassteacherService;
-import neko.service.IVacateService;
-import neko.service.IVacatefilesService;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,17 +14,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class NekoApplicationTests {
     static {
-
-        System.loadLibrary("opencv_java401");
+//        System.loadLibrary("opencv_java401");
+        System.load("C:\\vfiles\\opencv\\build\\java\\x64\\opencv_java401.dll");
     }
 
     @Test
@@ -102,8 +92,8 @@ public class NekoApplicationTests {
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
-        CascadeClassifier faceDetector = new CascadeClassifier("./lbpcascade_frontalface.xml");
-        Mat image = Imgcodecs.imread("C:\\Users\\13395\\Desktop\\ww.png");
+        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\test\\lbpcascade_frontalface.xml");
+        Mat image = Imgcodecs.imread("C:\\vfiles\\test\\ww.png");
         System.out.println("图片" + image.size());
         MatOfRect faceDetections = new MatOfRect();
         faceDetector.detectMultiScale(image, faceDetections);

@@ -193,7 +193,7 @@
         <!-- java集成opencv-->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
+            <artifactId>javacv</artifactId>
             <version>1.5</version>
         </dependency>
     </dependencies>
