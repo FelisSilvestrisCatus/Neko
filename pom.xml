@@ -189,6 +189,13 @@
             <artifactId>ant</artifactId>
             <version>1.10.5</version>
         </dependency>
+
+        <!-- java集成opencv-->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
+import neko.utils.face.Face;
 import neko.utils.generalMethod;
 import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
@@ -143,5 +144,24 @@ public class UsersController {
         response.setCharacterEncoding("UTF-8");
 //        response.setStatus(401);
         response.getWriter().write("未授权的访问");
+    }
+
+
+    //上传自己的照片  用来点名
+    @RequestMapping(value = "/uploadPhotoForRollCall")
+    public Map<String, String> uploadPhotoForRollCall(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        String imgCode = request.getParameter("photo");//获取照片的字节
+        Users users = (Users) request.getSession().getAttribute("user");
+        String uid = users.getUid() + "";
+        //告诉学生 有没有拍到脸  拍到了几个脸
+        String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
+        int face_num = Face.facedetection(temppath, uid);    //拍到了几个脸
+        int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
+        map.put("face_num", face_num + "");
+        map.put("photo_train", photo_train + "");
+
+
+        return map;
     }
 }
