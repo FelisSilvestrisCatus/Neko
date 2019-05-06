@@ -85,7 +85,7 @@ public class Face {
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
-        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\test\\lbpcascade_frontalface.xml");
+        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\opencv\\lbpcascade_frontalface.xml");
         Mat image = Imgcodecs.imread(path);
         System.out.println("图片" + image.size());
         MatOfRect faceDetections = new MatOfRect();
