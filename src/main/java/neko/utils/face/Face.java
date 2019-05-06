@@ -9,12 +9,11 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 //有关人脸识别的所有东西都在这
 public class Face {
@@ -33,8 +32,9 @@ public class Face {
 
         return num;
     }
+
     /**
-     * @param    img    ：前端request 获得的图像数据
+     * @param img      ：前端request 获得的图像数据
      * @param uid：用户id
      * @return
      */
@@ -125,6 +125,96 @@ public class Face {
         Imgproc.resize(dst, afterreasize, new Size(92, 112), 0, 0, Imgproc.INTER_LINEAR);
         System.out.println("像素" + dst.height() + "dd" + dst.width());
         Imgcodecs.imwrite(filename, afterreasize);
+        return flag;
+    }
+
+    //获取训练图片的csv文件
+    public static boolean getCsv() {
+        boolean flag = false;
+        //获取文件夹下的文件列表
+        String basefile = "C:\\vfiles\\photo";
+        File file = new File(basefile);
+        // 获得该文件夹内的所有文件
+        File[] array = file.listFiles();
+        System.out.println("获取指定文件下文件夹的个数" + array.length);
+        List<String> list = new ArrayList<>();
+        // 循环遍历
+        for (int i = 0; i < array.length; i++) {
+            //此时能够获取已上传图片的学生相册
+            File file_ = new File(array[i].getPath());
+            File[] array_ = file_.listFiles();
+            //获取相册文件夹名字 即学生学号
+            String uname = array[i].getName();
+            for (int a = 0; a < array_.length; a++) {
+                File img_file = array_[a];
+                String path_img = img_file.getPath();
+                String imgname = img_file.getName();
+                String listitem = path_img + imgname + ";" + uname;
+                System.out.println("要写入的数据" + listitem);
+                list.add(listitem);
+
+
+            }
+
+
+        }
+        //sh创建文件 且将集合写入
+        File filename = new File("C:\\vfiles\\a.text");
+
+        if (!filename.exists()) {
+            try {
+                filename.createNewFile();
+                System.out.println("文件一开始存在但被我删除" + "成功！");
+                BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\vfiles\\a.text"));
+                int count = 1;
+                for (String l : list) {
+                    if (count != list.size()) {
+                        writer.write(l + "\r\n");
+                    } else {
+                        writer.write(l);
+                    }
+
+                    count++;
+                }
+                writer.close();
+                flag = true;
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+
+            //删除该文件
+            Boolean succeedDelete = filename.delete();
+            if (succeedDelete) {
+                System.out.println("删除单个文件" + filename.getName() + "成功！");
+
+                try {
+                    filename.createNewFile();
+                    System.out.println("文件一开始存在但被我删除" + "成功！");
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\vfiles\\a.text"));
+                    int count = 1;
+                    for (String l : list) {
+                        if (count != list.size()) {
+                            writer.write(l + "\r\n");
+                        } else {
+                            writer.write(l);
+                        }
+
+                        count++;
+                    }
+                    writer.close();
+                    flag = true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("删除单个文件" + filename.getName() + "失败！");
+
+            }
+        }
+
         return flag;
     }
 
