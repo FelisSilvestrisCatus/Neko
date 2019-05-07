@@ -32,7 +32,8 @@ public class FaceTrainAndValidate {
 
     //模型训练 用户上传完照片后自动调用模型训练  将生成后的模型保存 后期直接使用
     public static void train() throws IOException {
-        //模型训练之前 生成
+        //模型训练之前 生成csv文件
+        Face.getCsv();
         String trainingDir = "C:\\vfiles\\a.text";
 
 
@@ -91,16 +92,16 @@ public class FaceTrainAndValidate {
 
     //人脸识别
     //学生用来登录或者点名时所需（）
-    public static  Map<String,String> validate(String uid, String img) {
+    public static Map<String, String> validate(String uid, String img) {
 
         boolean flag = false;
         //将照片字节码转为指定格式的照片  若通过返回值
-        String loginimgpath=Face.base64StrToImage(img,uid);
+        String loginimgpath = Face.base64StrToImage(img, uid);
         //识别人脸并裁剪
-        Map<String,String> map=new HashMap<>();
-        map=Face.facedetection(loginimgpath,uid,"1");// 1 表示该该方法用来登录存放临时的图片
-        if(!(map.get("flag").equalsIgnoreCase("1"))){
-            map.put("isThisGuy","no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
+        Map<String, String> map = new HashMap<>();
+        map = Face.facedetection(loginimgpath, uid, "1");// 1 表示该该方法用来登录存放临时的图片
+        if (!(map.get("flag").equalsIgnoreCase("1"))) {
+            map.put("isThisGuy", "no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
             return map;// 不具备人脸识别的条件
         }
         //开始人脸识别
@@ -115,11 +116,11 @@ public class FaceTrainAndValidate {
         Mat Image = imread(map.get("path"), Imgcodecs.IMREAD_GRAYSCALE);
         faceRecognizer.predict(Image, label, confidence);
         int predictedLabel = label.get(0);
-        if(predictedLabel==Integer.valueOf(uid)){
-            map.put("isThisGuy","yes"); //是他就是他
+        if (predictedLabel == Integer.valueOf(uid)) {
+            map.put("isThisGuy", "yes"); //是他就是他
             return map;
         }
-        map.put("isThisGuy","no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
+        map.put("isThisGuy", "no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
         return map;
     }
 }

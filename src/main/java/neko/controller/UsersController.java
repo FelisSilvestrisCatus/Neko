@@ -156,9 +156,9 @@ public class UsersController {
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
-        int face_num = Face.facedetection(temppath, uid);    //拍到了几个脸
+        String  face_num = Face.facedetection(temppath, uid,"0").get("flag");    //拍到了几个脸
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
-        map.put("face_num", face_num + "");
+        map.put("face_num", face_num );
         map.put("photo_train", photo_train + "");
 
         return map;
