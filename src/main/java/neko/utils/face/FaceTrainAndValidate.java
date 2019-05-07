@@ -32,6 +32,7 @@ public class FaceTrainAndValidate {
 
     //模型训练 用户上传完照片后自动调用模型训练  将生成后的模型保存 后期直接使用
     public static void train() throws IOException {
+        //模型训练之前 生成
         String trainingDir = "C:\\vfiles\\a.text";
 
 
