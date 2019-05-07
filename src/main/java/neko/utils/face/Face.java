@@ -116,7 +116,7 @@ public class Face {
 
             dirpath = "C:\\vfiles\\photo\\" + uid;
         } else {
-            dirpath = "C:\\vfiles\\temphoto\\" + uid;
+             dirpath = "C:\\vfiles\\photo_login\\" + uid;
         }
 
 

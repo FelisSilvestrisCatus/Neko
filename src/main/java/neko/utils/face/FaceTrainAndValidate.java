@@ -9,7 +9,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
@@ -81,17 +83,42 @@ public class FaceTrainAndValidate {
         //   int predictedLabel = label.get(0);
 //
         System.out.println("模型训练完毕 ");
+        faceRecognizer.save("C:\\vfiles\\Model.xml");
+        System.out.println("模型保存完毕 ");
 
     }
 
     //人脸识别
     //学生用来登录或者点名时所需（）
-    public static boolean validate(String uid, String img) {
+    public static  Map<String,String> validate(String uid, String img) {
 
         boolean flag = false;
         //将照片字节码转为指定格式的照片  若通过返回值
+        String loginimgpath=Face.base64StrToImage(img,uid);
+        //识别人脸并裁剪
+        Map<String,String> map=new HashMap<>();
+        map=Face.facedetection(loginimgpath,uid,"1");// 1 表示该该方法用来登录存放临时的图片
+        if(!(map.get("flag").equalsIgnoreCase("1"))){
+            map.put("isThisGuy","no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
+            return map;// 不具备人脸识别的条件
+        }
+        //开始人脸识别
+        //加载模型
+        FaceRecognizer faceRecognizer = FisherFaceRecognizer.create();
 
-
-        return flag;
+        IntPointer label = new IntPointer(1);
+        DoublePointer confidence = new DoublePointer(1);
+        faceRecognizer.setThreshold(94.22);//设置阈值
+        faceRecognizer.read("C:\\vfiles\\Model.xml");
+        //图像灰度化
+        Mat Image = imread(map.get("path"), Imgcodecs.IMREAD_GRAYSCALE);
+        faceRecognizer.predict(Image, label, confidence);
+        int predictedLabel = label.get(0);
+        if(predictedLabel==Integer.valueOf(uid)){
+            map.put("isThisGuy","yes"); //是他就是他
+            return map;
+        }
+        map.put("isThisGuy","no");//也同时拒绝他的登录  或者这个哔是冒名顶替的
+        return map;
     }
 }
