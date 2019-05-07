@@ -1,5 +1,7 @@
 package neko.utils.face;
 
+
+import org.bytedeco.opencv.opencv_core.MatVector;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -7,10 +9,10 @@ import org.opencv.objdetect.CascadeClassifier;
 import sun.misc.BASE64Decoder;
 
 import java.io.*;
+import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 
 //有关人脸识别的所有东西都在这
 public class Face {
@@ -76,11 +78,13 @@ public class Face {
 
     /**
      * @param path:base64 转换后的图片的地址
-     * @return
+     *                    type:  0  默认保存到ui下的文件夹（用来上传照片时）
+     *                    1  默认保存在临时文件夹中（用来登录时 所需）
+     * @return 使用map   path 返回保存的地址  flag 返回检测到的人脸
      */
 
-    public static int facedetection(String path, String uid) {
-
+    public static Map<String, String> facedetection(String path, String uid, String type) {
+        Map<String, String> map = new HashMap<>();
         int flag = 0;
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -94,9 +98,11 @@ public class Face {
         System.out.println("人脸有几个" + flag
         );
         if (flag != 1) {
-            return flag;
+            map.put("flag",""+flag); //没检测到人脸（或者检测到多张人脸） 直接返回
+            map.put("path","");
+            return map;
         }
-        Rect rect = faceDetections.toArray()[0];
+        org.opencv.core.Rect rect = faceDetections.toArray()[0];
 //            // 用绿色框匡助
 
         Imgproc.rectangle(image, new Point(rect.x, rect.y),
@@ -105,9 +111,15 @@ public class Face {
         rect_cut.y = rect.y;
         rect_cut.width = rect.width;
         rect_cut.height = rect.height;
+        String dirpath=null;
+        if (type.equalsIgnoreCase("0") ) {
+
+            dirpath = "C:\\vfiles\\photo\\" + uid;
+        } else {
+            dirpath = "C:\\vfiles\\temphoto\\" + uid;
+        }
 
 
-        String dirpath = "C:\\vfiles\\photo\\" + 2;
         File dirFile = new File(dirpath);
         if (!dirFile.exists()) {
             dirFile.mkdirs();
@@ -121,7 +133,9 @@ public class Face {
         Imgproc.resize(dst, afterreasize, new Size(92, 112), 0, 0, Imgproc.INTER_LINEAR);
         System.out.println("像素" + dst.height() + "dd" + dst.width());
         Imgcodecs.imwrite(filename, afterreasize);
-        return flag;
+        map.put("flag",""+flag);
+        map.put("path",filename);
+        return map;
     }
 
     //获取训练图片的csv文件
@@ -214,4 +228,8 @@ public class Face {
         return flag;
     }
 
+
 }
+
+
+
