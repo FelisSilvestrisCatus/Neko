@@ -14,14 +14,21 @@ import java.util.*;
 
 //有关人脸识别的所有东西都在这
 public class Face {
-    //前端数据转换为图片
+
+    static String str2 = "";
     static {
-        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
+        String t = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        // System.out.println(" " +t );
+
+        str2 = t.substring(1, t.length()).replace('/', '\\') + "neko\\utils\\face\\";
+        System.out.println(" " + str2);
+
+
+        System.load(str2 + "opencv_java401.dll");
+
+
     }
 
-//    public Face() {
-//        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
-//    }
 
     public static int getPhotoNum(String uid) {
         File file = new File("C:\\vfiles\\photo\\" + uid);
@@ -90,8 +97,8 @@ public class Face {
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
-        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
-        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\opencv\\lbpcascade_frontalface.xml");
+        // CascadeClassifier faceDetector = new CascadeClassifier("lbpcascade_frontalface.xml");
+        CascadeClassifier faceDetector = new CascadeClassifier(str2 + "lbpcascade_frontalface.xml");
         Mat image = Imgcodecs.imread(path);
         System.out.println("图片" + image.size());
         MatOfRect faceDetections = new MatOfRect();
@@ -141,7 +148,7 @@ public class Face {
     }
 
     //获取训练图片的csv文件
-    public static boolean getCsv() {
+    public boolean getCsv() {
         boolean flag = false;
         //获取文件夹下的文件列表
         String basefile = "C:\\vfiles\\photo";

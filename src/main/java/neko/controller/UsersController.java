@@ -155,6 +155,7 @@ public class UsersController {
         Users users = (Users) session.getAttribute("user");
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
+
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
         String face_num = Face.facedetection(temppath, uid, "0").get("flag");    //拍到了几个脸
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
