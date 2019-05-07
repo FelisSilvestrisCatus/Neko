@@ -156,10 +156,15 @@ public class UsersController {
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
-        String  face_num = Face.facedetection(temppath, uid,"0").get("flag");    //拍到了几个脸
+        String face_num = Face.facedetection(temppath, uid, "0").get("flag");    //拍到了几个脸
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
-        map.put("face_num", face_num );
-        map.put("photo_train", photo_train + "");
+        if (face_num.equals("0")) {
+            map.put("msg", "未检测到人脸，请重试");
+        } else {
+            map.put("msg", "有效图片");
+        }
+        //有效图片数量
+        map.put("successnum", photo_train + "");
 
         return map;
     }
