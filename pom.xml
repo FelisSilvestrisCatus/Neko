@@ -191,11 +191,22 @@
         </dependency>
 
         <!-- java集成opencv-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.bytedeco</groupId>-->
+        <!--            <artifactId>javacpp</artifactId>-->
+        <!--            <version>1.5</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv</artifactId>
+            <artifactId>javacv-platform</artifactId>
             <version>1.5</version>
         </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.bytedeco</groupId>-->
+        <!--            <artifactId>javacv</artifactId>-->
+        <!--            <version>1.5</version>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -205,10 +216,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!-- fork: 如果没有配置该项配置，devtools不会起作用的，即应用不会restear -->
-                    <fork>true</fork>
-                </configuration>
+                <!--                <configuration>-->
+                <!--                    &lt;!&ndash; fork: 如果没有配置该项配置，devtools不会起作用的，即应用不会restear &ndash;&gt;-->
+                <!--                    <fork>true</fork>-->
+                <!--                </configuration>-->
             </plugin>
         </plugins>
     </build>

@@ -1,7 +1,6 @@
 package neko.utils.face;
 
 
-import org.bytedeco.opencv.opencv_core.MatVector;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -9,7 +8,6 @@ import org.opencv.objdetect.CascadeClassifier;
 import sun.misc.BASE64Decoder;
 
 import java.io.*;
-import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,6 +19,9 @@ public class Face {
         System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
     }
 
+//    public Face() {
+//        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
+//    }
 
     public static int getPhotoNum(String uid) {
         File file = new File("C:\\vfiles\\photo\\" + uid);
@@ -89,6 +90,7 @@ public class Face {
         Rect rect_cut = new Rect();// 裁剪后的
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
+        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
         CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\opencv\\lbpcascade_frontalface.xml");
         Mat image = Imgcodecs.imread(path);
         System.out.println("图片" + image.size());
@@ -98,8 +100,8 @@ public class Face {
         System.out.println("人脸有几个" + flag
         );
         if (flag != 1) {
-            map.put("flag",""+flag); //没检测到人脸（或者检测到多张人脸） 直接返回
-            map.put("path","");
+            map.put("flag", "" + flag); //没检测到人脸（或者检测到多张人脸） 直接返回
+            map.put("path", "");
             return map;
         }
         org.opencv.core.Rect rect = faceDetections.toArray()[0];
@@ -111,12 +113,12 @@ public class Face {
         rect_cut.y = rect.y;
         rect_cut.width = rect.width;
         rect_cut.height = rect.height;
-        String dirpath=null;
-        if (type.equalsIgnoreCase("0") ) {
+        String dirpath = null;
+        if (type.equalsIgnoreCase("0")) {
 
             dirpath = "C:\\vfiles\\photo\\" + uid;
         } else {
-             dirpath = "C:\\vfiles\\photo_login\\" + uid;
+            dirpath = "C:\\vfiles\\photo_login\\" + uid;
         }
 
 
@@ -133,8 +135,8 @@ public class Face {
         Imgproc.resize(dst, afterreasize, new Size(92, 112), 0, 0, Imgproc.INTER_LINEAR);
         System.out.println("像素" + dst.height() + "dd" + dst.width());
         Imgcodecs.imwrite(filename, afterreasize);
-        map.put("flag",""+flag);
-        map.put("path",filename);
+        map.put("flag", "" + flag);
+        map.put("path", filename);
         return map;
     }
 
