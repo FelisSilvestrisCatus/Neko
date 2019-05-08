@@ -12,6 +12,7 @@ import neko.service.ICourseService;
 import neko.service.IUsermessageService;
 import neko.service.IVacateService;
 import neko.utils.generalMethod;
+import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,8 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
     private IUsermessageService usermessageService;
     @Autowired
     private ICourseService courseService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public List<VacateWithTeacherName> getMyVacate(int uid) {
@@ -82,6 +85,8 @@ public class VacateServiceImpl extends ServiceImpl<VacateMapper, Vacate> impleme
         queryWrapper.eq("vid", vid);
         Vacate vacate = this.baseMapper.selectOne(queryWrapper);
         vacate.setRemark(remark).setState(state);
+        String key = "Message:" + vacate.getUid();
+        redisUtil.delete(key);
         //查询批的老师uid
         QueryWrapper queryWrapper_ = new QueryWrapper();
         queryWrapper_.eq("courseid", vacate.getCourseid());
