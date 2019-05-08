@@ -190,6 +190,14 @@
             <version>1.10.5</version>
         </dependency>
 
+        <!--HttpClient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.8</version>
+        </dependency>
+
+
         <!-- java集成opencv-->
         <!--        <dependency>-->
         <!--            <groupId>org.bytedeco</groupId>-->
