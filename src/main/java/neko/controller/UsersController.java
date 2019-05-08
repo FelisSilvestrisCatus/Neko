@@ -166,6 +166,7 @@ public class UsersController {
         String face_num = jsonObject.getString("flag");
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
         if (face_num.equals("0")) {
+            map.put("state", "400");
             map.put("msg", "未检测到人脸，请重试");
         } else {
             map.put("msg", "有效图片");

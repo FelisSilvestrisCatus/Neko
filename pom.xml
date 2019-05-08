@@ -196,25 +196,13 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.8</version>
         </dependency>
-
-
-        <!-- java集成opencv-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.bytedeco</groupId>-->
-        <!--            <artifactId>javacpp</artifactId>-->
-        <!--            <version>1.5</version>-->
-        <!--        </dependency>-->
+        
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv-platform</artifactId>
             <version>1.5</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.bytedeco</groupId>-->
-        <!--            <artifactId>javacv</artifactId>-->
-        <!--            <version>1.5</version>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -231,16 +219,6 @@
             </plugin>
         </plugins>
 
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.dll</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
 </project>

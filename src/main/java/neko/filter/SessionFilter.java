@@ -39,11 +39,11 @@ public class SessionFilter implements Filter {
         HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
 
-        //不过滤开发环境
-        if (request.getRemoteAddr().contains("127.0.0.1") || request.getRemoteAddr().contains("172.")) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
+//        //不过滤开发环境
+//        if (request.getRemoteAddr().contains("127.0.0.1") || request.getRemoteAddr().contains("172.")) {
+//            filterChain.doFilter(servletRequest, servletResponse);
+//            return;
+//        }
 
         //不过滤OPTIONS请求
         if ("OPTIONS".equals(request.getMethod())) {

@@ -15,18 +15,8 @@ import java.util.*;
 //有关人脸识别的所有东西都在这
 public class Face {
 
-    static String str2 = "";
     static {
-        String t = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        // System.out.println(" " +t );
-
-        str2 = t.substring(1, t.length()).replace('/', '\\') + "neko\\utils\\face\\";
-        System.out.println(" " + str2);
-
-
-        System.load(str2 + "opencv_java401.dll");
-
-
+        System.load("C:\\vfiles\\opencv\\opencv_java401.dll");
     }
 
 
@@ -98,7 +88,7 @@ public class Face {
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
         Size dsize = new Size(92, 112);
         // CascadeClassifier faceDetector = new CascadeClassifier("lbpcascade_frontalface.xml");
-        CascadeClassifier faceDetector = new CascadeClassifier(str2 + "lbpcascade_frontalface.xml");
+        CascadeClassifier faceDetector = new CascadeClassifier("C:\\vfiles\\opencv\\lbpcascade_frontalface.xml");
         Mat image = Imgcodecs.imread(path);
         System.out.println("图片" + image.size());
         MatOfRect faceDetections = new MatOfRect();
