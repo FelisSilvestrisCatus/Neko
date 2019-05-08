@@ -172,6 +172,8 @@ public class UsersController {
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
 
+        System.out.println("imgCode = " + imgCode);
+
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时图片
         JSONObject jsonObject = nekoFace.facedetection(temppath, uid, "0");
         String face_num = jsonObject.getString("flag");
