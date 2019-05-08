@@ -85,7 +85,7 @@ public class UsersController {
             user.setPhone(userphone);
             user.setUname(username);
             user.setType(2);
-            user.setIdnumber(Integer.parseInt(idnumber));
+            user.setIdnumber(idnumber);
             usersService.save(user);
             map.put("state", "200");
             map.put("msg", "注册成功");

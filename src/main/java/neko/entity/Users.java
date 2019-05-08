@@ -54,7 +54,7 @@ public class Users implements Serializable {
     /**
      * 证件号码（学生证，教师证）
      */
-    private Integer idnumber;
+    private String idnumber;
 
     /**
      * 0为启用,1为禁用

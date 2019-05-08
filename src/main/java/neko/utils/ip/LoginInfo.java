@@ -237,6 +237,7 @@ public class LoginInfo {
 //                String area = JSONObject.parseObject(json.getString("data")).get("area").toString();
                 String address;
                 address = country + region + city;
+                address = address.replace("X", "");
                 return address;
             }
 
