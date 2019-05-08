@@ -18,9 +18,9 @@ public class Face {
         File file = new File("C:\\vfiles\\photo\\" + uid);
         String files[];
         files = file.list();
-        int num=0;
+        int num = 0;
         try {
-             num = files.length;
+            num = files.length;
         } catch (Exception e) {
             e.getStackTrace();
         }
@@ -71,71 +71,6 @@ public class Face {
             return filename;
         }
     }
-
-    //检测人脸  //若检测到 进行裁剪 并返回值
-
-    /**
-     * @param :base64 转换后的图片的地址
-     *                type:  0  默认保存到ui下的文件夹（用来上传照片时）
-     *                1  默认保存在临时文件夹中（用来登录时 所需）
-     * @return 使用map   path 返回保存的地址  flag 返回检测到的人脸
-     */
-
-//    public static Map<String, String> facedetection(String path, String uid, String type) {
-//        Map<String, String> map = new HashMap<>();
-//        int flag = 0;
-//        Rect rect_cut = new Rect();// 裁剪后的
-//        SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
-//        Size dsize = new Size(92, 112);
-//        // CascadeClassifier faceDetector = new CascadeClassifier("lbpcascade_frontalface.xml");
-//        CascadeClassifier faceDetector = new CascadeClassifier(str2 + "lbpcascade_frontalface.xml");
-//        Mat image = Imgcodecs.imread(path);
-//        System.out.println("图片" + image.size());
-//        MatOfRect faceDetections = new MatOfRect();
-//        faceDetector.detectMultiScale(image, faceDetections);
-//        flag = faceDetections.toArray().length;
-//        System.out.println("人脸有几个" + flag
-//        );
-//        if (flag != 1) {
-//            map.put("flag", "" + flag); //没检测到人脸（或者检测到多张人脸） 直接返回
-//            map.put("path", "");
-//            return map;
-//        }
-//        org.opencv.core.Rect rect = faceDetections.toArray()[0];
-////            // 用绿色框匡助
-//
-//        Imgproc.rectangle(image, new Point(rect.x, rect.y),
-//                new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0));
-//        rect_cut.x = rect.x;
-//        rect_cut.y = rect.y;
-//        rect_cut.width = rect.width;
-//        rect_cut.height = rect.height;
-//        String dirpath = null;
-//        if (type.equalsIgnoreCase("0")) {
-//
-//            dirpath = "C:\\vfiles\\photo\\" + uid;
-//        } else {
-//            dirpath = "C:\\vfiles\\photo_temp\\" + uid;
-//        }
-//
-//
-//        File dirFile = new File(dirpath);
-//        if (!dirFile.exists()) {
-//            dirFile.mkdirs();
-//        }
-//        String filename = dirpath + "\\" + f.format(new Date()) + ".png";
-//        System.out.println(filename);
-//        rect_cut = new Rect(rect_cut.x, rect_cut.y, rect_cut.width, rect_cut.height);
-//        //dst裁剪后的
-//        Mat dst = new Mat(image, rect_cut);
-//        Mat afterreasize = new Mat();
-//        Imgproc.resize(dst, afterreasize, new Size(92, 112), 0, 0, Imgproc.INTER_LINEAR);
-//        System.out.println("像素" + dst.height() + "dd" + dst.width());
-//        Imgcodecs.imwrite(filename, afterreasize);
-//        map.put("flag", "" + flag);
-//        map.put("path", filename);
-//        return map;
-//    }
 
     //获取训练图片的csv文件
     public boolean getCsv() {
