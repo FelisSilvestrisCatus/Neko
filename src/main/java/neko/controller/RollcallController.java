@@ -257,9 +257,26 @@ public class RollcallController {
         System.out.println("开始为" + uid + "进行人脸点名");
         Map<String, String> map = generalMethod.getSuccessMap();
         String temppath = Face.base64StrToImage(imgcode, uid);//用来保存临时图片
-        JSONObject jsonObject = nekoFace.faceRecognition(temppath,uid);
+        JSONObject jsonObject = nekoFace.faceRecognition(temppath, uid);
 
         System.out.println("该用户是否是本人" + jsonObject.getString("isThisGuy"));
+
+       map.put("data",jsonObject.getString("isThisGuy"));
+        return map;
+    }
+
+    //默认比率请假列表
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/getPhotoNum")
+    /**
+     * imgcode 前端图片信息
+     */
+    public Map<String, String> getPhotoNum(HttpSession session, String uid) throws IOException {
+
+        Map<String, String> map = generalMethod.getSuccessMap();
+        int num;
+        num = Face.getPhotoNum(uid);
+        map.put("num", num + "");
 
 
         return map;

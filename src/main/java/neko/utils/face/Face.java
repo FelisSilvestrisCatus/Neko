@@ -18,7 +18,13 @@ public class Face {
         File file = new File("C:\\vfiles\\photo\\" + uid);
         String files[];
         files = file.list();
-        int num = files.length;
+        int num=0;
+        try {
+             num = files.length;
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
 
         return num;
     }
@@ -70,8 +76,8 @@ public class Face {
 
     /**
      * @param :base64 转换后的图片的地址
-     *                    type:  0  默认保存到ui下的文件夹（用来上传照片时）
-     *                    1  默认保存在临时文件夹中（用来登录时 所需）
+     *                type:  0  默认保存到ui下的文件夹（用来上传照片时）
+     *                1  默认保存在临时文件夹中（用来登录时 所需）
      * @return 使用map   path 返回保存的地址  flag 返回检测到的人脸
      */
 
