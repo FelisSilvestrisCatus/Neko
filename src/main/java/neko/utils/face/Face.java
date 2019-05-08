@@ -46,7 +46,7 @@ public class Face {
      */
     public static String base64StrToImage(String img, String uid) {
         SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dirpath = "C:\\vfiles\\photo_login\\" + uid;
+        String dirpath = "C:\\vfiles\\photo_temp\\" + uid;
         File dirFile = new File(dirpath);
         if (!dirFile.exists()) {
             dirFile.mkdirs();
@@ -125,7 +125,7 @@ public class Face {
 
             dirpath = "C:\\vfiles\\photo\\" + uid;
         } else {
-            dirpath = "C:\\vfiles\\photo_login\\" + uid;
+            dirpath = "C:\\vfiles\\photo_temp\\" + uid;
         }
 
 

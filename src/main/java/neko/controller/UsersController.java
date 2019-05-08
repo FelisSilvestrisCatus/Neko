@@ -1,10 +1,12 @@
 package neko.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
 import neko.utils.face.Face;
+import neko.utils.face.NekoFace;
 import neko.utils.generalMethod;
 import neko.utils.redis.RedisUtil;
 import neko.utils.token.Token;
@@ -34,6 +36,9 @@ public class UsersController {
     private IUsersService usersService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private NekoFace nekoFace;
+
 
     //用户登录
     @RequestMapping(value = "/login")
@@ -157,7 +162,8 @@ public class UsersController {
         //告诉学生 有没有拍到脸  拍到了几个脸
 
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时
-        String face_num = Face.facedetection(temppath, uid, "0").get("flag");    //拍到了几个脸
+        JSONObject jsonObject = nekoFace.facedetection(temppath, uid, "0");
+        String face_num = jsonObject.getString("flag");
         int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
         if (face_num.equals("0")) {
             map.put("msg", "未检测到人脸，请重试");
