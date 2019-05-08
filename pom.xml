@@ -190,31 +190,12 @@
             <version>1.10.5</version>
         </dependency>
 
-        <!--HttpClient-->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.8</version>
-        </dependency>
-
-
         <!-- java集成opencv-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.bytedeco</groupId>-->
-        <!--            <artifactId>javacpp</artifactId>-->
-        <!--            <version>1.5</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
+            <artifactId>javacv</artifactId>
             <version>1.5</version>
         </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.bytedeco</groupId>-->
-        <!--            <artifactId>javacv</artifactId>-->
-        <!--            <version>1.5</version>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -224,23 +205,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--                <configuration>-->
-                <!--                    &lt;!&ndash; fork: 如果没有配置该项配置，devtools不会起作用的，即应用不会restear &ndash;&gt;-->
-                <!--                    <fork>true</fork>-->
-                <!--                </configuration>-->
+                <configuration>
+                    <!-- fork: 如果没有配置该项配置，devtools不会起作用的，即应用不会restear -->
+                    <fork>true</fork>
+                </configuration>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.dll</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
 </project>
