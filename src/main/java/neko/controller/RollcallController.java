@@ -13,6 +13,8 @@ import neko.entity.vo.TeacherRollCall;
 import neko.service.IRollcallService;
 import neko.service.IRollcalldetailsService;
 import neko.service.IRollcalltypeService;
+import neko.utils.face.Face;
+import neko.utils.face.NekoFace;
 import neko.utils.generalMethod;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
@@ -38,6 +40,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/rollcall")
 public class RollcallController {
+    @Autowired
+    private NekoFace nekoFace;
     //修改班级信息
     @Autowired
     private LoginInfo loginInfo;
@@ -236,6 +240,26 @@ public class RollcallController {
 
         map.put("data", JSON.toJSONString(list));
         System.out.println("默认比率需要点名的学生" + JSON.toJSONString(list));
+
+
+        return map;
+    }
+
+    //默认比率请假列表
+    @RequiresPermissions("teacher")
+    @RequestMapping(value = "/faceRocall")
+    /**
+     * imgcode 前端图片信息
+     */
+    public Map<String, String> faceRocall(HttpSession session, String uid, String imgcode) throws IOException {
+
+
+        System.out.println("开始为" + uid + "进行人脸点名");
+        Map<String, String> map = generalMethod.getSuccessMap();
+        String temppath = Face.base64StrToImage(imgcode, uid);//用来保存临时图片
+        JSONObject jsonObject = nekoFace.faceRecognition(temppath,uid);
+
+        System.out.println("该用户是否是本人" + jsonObject.getString("isThisGuy"));
 
 
         return map;
