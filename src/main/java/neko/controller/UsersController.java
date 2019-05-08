@@ -151,6 +151,17 @@ public class UsersController {
 //        response.setStatus(401);
         response.getWriter().write("未授权的访问");
     }
+    //获取自己已经上传的图片数目
+    @RequestMapping(value = "/getAlreadyUploadImgNum")
+    public Map<String, String> getAlreadyUploadImgNum(HttpSession session) throws IOException {
+        Map<String, String> map = generalMethod.getSuccessMap();
+        Users users = (Users) session.getAttribute("user");
+        String uid = users.getUid() + "";
+        int num=Face.getPhotoNum(uid);
+        map.put("num",num+"");
+
+        return map;
+    }
 
 
     //上传自己的照片  用来点名
@@ -173,6 +184,12 @@ public class UsersController {
         }
         //有效图片数量
         map.put("successnum", photo_train + "");
+        //如果够十张便进行训练
+
+        if (photo_train >= 10) {
+            nekoFace.startTrain();
+        }
+
 
         return map;
     }
