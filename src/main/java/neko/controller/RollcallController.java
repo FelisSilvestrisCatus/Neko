@@ -77,8 +77,8 @@ public class RollcallController {
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
         int cday = weekDays[w];
         Map<String, String> map = generalMethod.getSuccessMap();
-
-        List<StudentCourseName> list = rollcallService.getCourseToday(users.getUid(), 4);
+        System.out.println("cday = " + cday);
+        List<StudentCourseName> list = rollcallService.getCourseToday(users.getUid(), cday);
         map.put("data", JSON.toJSONString(list));
 
         return map;

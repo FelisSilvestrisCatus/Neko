@@ -28,7 +28,7 @@ public class SessionFilter implements Filter {
     private RedisUtil redisUtil;
 
     //不需要登录就可以访问的路径
-    String[] includeUrls = new String[]{"/users/login", "/usersRegiste/", "/validatecode/", "/favicon.ico", "/alive", "/test"};
+    String[] includeUrls = new String[]{"/users/login", "/usersRegiste/", "/validatecode/", "/favicon.ico", "/alive", "/test", "/druid"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -128,7 +128,7 @@ public class SessionFilter implements Filter {
     public boolean isNeedFilter(String uri) {
 
         //排除druid监控
-        if (uri.contains("druid")) {
+        if (uri.contains("durid")) {
             return false;
         }
 
