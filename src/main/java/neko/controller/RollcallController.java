@@ -261,7 +261,7 @@ public class RollcallController {
 
         System.out.println("该用户是否是本人" + jsonObject.getString("isThisGuy"));
 
-       map.put("data",jsonObject.getString("isThisGuy"));
+        map.put("data", jsonObject.getString("isThisGuy"));
         return map;
     }
 
