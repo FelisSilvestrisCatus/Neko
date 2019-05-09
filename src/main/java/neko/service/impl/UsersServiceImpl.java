@@ -33,9 +33,9 @@ import java.util.concurrent.TimeUnit;
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
 
     //Redis过期时间
-    private static final long tokenExpire = 7;
+    private static final long tokenExpire = 24 * 7;
     //Redis过期时间单位
-    private static final TimeUnit tokenExpireTimeUnit = TimeUnit.MINUTES;
+    private static final TimeUnit tokenExpireTimeUnit = TimeUnit.HOURS;
 
     @Autowired
     private IUsersloginService usersloginService;

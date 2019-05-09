@@ -37,6 +37,7 @@ public class UsersController {
     private RedisUtil redisUtil;
     @Autowired
     private NekoFace nekoFace;
+
     //用户登录
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String phone, String password, String loginType) {
@@ -61,44 +62,15 @@ public class UsersController {
             return map;
         }
     }
-    //用户注册
-    @RequestMapping(value = "/registe")
-    public Map<String, String> registe(String idnumber, String username, String userphone, String validatecode) {
-        Map<String, String> map = new HashMap<>();
 
-        //检查用户是否已存在
-        if (usersService.checkUser(userphone)) {
-            map.put("state", "400");
-            map.put("msg", "用户已存在");
-            return map;
-        }
-        //手机号有记录且获取验证码匹配
-        if (redisUtil.hasKey(userphone + "code") && redisUtil.get(userphone + "code").equalsIgnoreCase(validatecode)) {
-            //插入数据库
-            Users user = new Users();
-            user.setPhone(userphone);
-            user.setUname(username);
-            user.setType(2);
-            user.setIdnumber(idnumber);
-            usersService.save(user);
-            map.put("state", "200");
-            map.put("msg", "注册成功");
-            //删除验证码
-            redisUtil.delete(userphone + "code");
-        } else {
-            map.put("state", "400");
-            map.put("msg", "验证码错误");
-        }
-        return map;
-    }
     //修改用户信息
     @RequestMapping(value = "/changeInfo")
-    public Map<String, String> changeInfo(HttpServletRequest request, String email, String password) {
-
+    public Map<String, String> changeInfo(HttpSession session, String email, String password) {
+        Users user = (Users) session.getAttribute("user");
+        redisUtil.delete(user.getUid().toString());
         Map<String, String> map = new HashMap<>();
 
-        Users users = (Users) request.getSession().getAttribute("user");
-        Users u = usersService.getById(users.getUid());
+        Users u = usersService.getById(user.getUid());
         if (!StringUtils.isBlank(email))
             u.setEmail(email);
         if (!StringUtils.isBlank(password)) {
@@ -111,7 +83,8 @@ public class UsersController {
         }
         return map;
     }
-    //修改用户信息
+
+    //获取用户信息
     @RequestMapping(value = "/getInfo")
     public Map<String, String> getInfo(HttpServletRequest request) {
         //获取token
@@ -142,23 +115,25 @@ public class UsersController {
 //        response.setStatus(401);
         response.getWriter().write("未授权的访问");
     }
+
     //获取自己已经上传的图片数目
     @RequestMapping(value = "/getAlreadyUploadImgNum")
     public Map<String, String> getAlreadyUploadImgNum(HttpSession session) throws IOException {
         Map<String, String> map = generalMethod.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
         String uid = users.getUid() + "";
-        int num=Face.getPhotoNum(uid);
-        map.put("num",num+"");
+        int num = Face.getPhotoNum(uid);
+        map.put("num", num + "");
 
         return map;
     }
+
     //上传自己的照片  用来点名
     @RequestMapping(value = "/uploadPhotoForRollCall")
     public Map<String, String> uploadPhotoForRollCall(HttpSession session, String imgCode) throws IOException {
         Map<String, String> map = generalMethod.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
-        System.out.println("用户"+users);
+        System.out.println("用户" + users);
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
         System.out.println("imgCode = " + imgCode);

@@ -28,7 +28,7 @@ public class SessionFilter implements Filter {
     private RedisUtil redisUtil;
 
     //不需要登录就可以访问的路径
-    String[] includeUrls = new String[]{"/users/login", "/favicon.ico", "/alive", "/", "/test"};
+    String[] includeUrls = new String[]{"/users/login", "/usersRegiste/", "/validatecode/", "/favicon.ico", "/alive", "/test"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -38,12 +38,6 @@ public class SessionFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
-
-//        //不过滤开发环境
-//        if (request.getRemoteAddr().contains("127.0.0.1") || request.getRemoteAddr().contains("172.")) {
-//            filterChain.doFilter(servletRequest, servletResponse);
-//            return;
-//        }
 
         //不过滤OPTIONS请求
         if ("OPTIONS".equals(request.getMethod())) {
@@ -56,7 +50,6 @@ public class SessionFilter implements Filter {
         token = request.getHeader("Authorization");
 
         //是否需要过滤
-
         if (!needFilter) {
             //不需要过滤
             filterChain.doFilter(servletRequest, servletResponse);

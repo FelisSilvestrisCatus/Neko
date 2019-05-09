@@ -21,7 +21,7 @@ public class Juhe {
     @Autowired
     private RedisUtil redisUtil;
     //Redis过期时间
-    private static final long tokenExpire = 12;
+    private static final long tokenExpire = 6;
     //Redis过期时间单位
     private static final TimeUnit tokenExpireTimeUnit = TimeUnit.HOURS;
 
@@ -139,7 +139,7 @@ public class Juhe {
         String key = "f5e272f5f52ffb93a0902474025efb16";
         String city = getValueOnlyCity(ip);
         if (city.contains("内网") || city.contains("未知")) {
-            city = "北京";
+            city = "青岛";
         }
 
         //检查redis中是否有缓存
@@ -164,13 +164,11 @@ public class Juhe {
             weather = json.getJSONObject("result").getJSONObject("realtime");
             weather.remove("wid");
             weather.remove("aqi");
-            System.out.println(json);
             redisUtil.set(city, JSON.toJSONString(weather));
             redisUtil.expire(city, tokenExpire, tokenExpireTimeUnit);
         } catch (Exception e) {
             weather = JSON.parseObject("{\"temperature\":\"未知\",\"direct\":\"未知\",\"humidity\":\"未知\",\"power\":\"未知\",\"info\":\"未知\"}");
         } finally {
-            System.out.println("失败");
             if (in != null) {
                 in.close();
             }

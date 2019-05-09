@@ -4,7 +4,7 @@ import neko.service.IUsersService;
 import neko.service.IUsersloginService;
 import neko.utils.ip.Juhe;
 import neko.utils.ip.LoginInfo;
-import neko.utils.message.MessageExample;
+import neko.utils.message.Message;
 import neko.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +36,7 @@ public class ValidatecodeController {
     @Autowired
     private Juhe juhe;
     @Autowired
-    private MessageExample message;
+    private Message message;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -81,8 +81,7 @@ public class ValidatecodeController {
     //检查redis中的验证码
     private void checkRedis(String userphone, Map<String, String> map, boolean redis, boolean hasRedis) {
         if (!redis || hasRedis) {
-//                int code = message.getCode(userphone);
-            int code = 1111;
+            int code = message.getCode(userphone);
 
             if (code != 0) {
                 //获取验证码存入redis
