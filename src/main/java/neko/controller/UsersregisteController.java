@@ -33,4 +33,18 @@ public class UsersregisteController {
         }
         return map;
     }
+    //判断学号是否已经存在
+    @RequestMapping(value = "/idNumberIsOrNotExist")
+    public Map<String, String> idNumberIsOrNotExist(HttpServletRequest request, String idnumber) {
+        Map<String, String> map = new HashMap<>();
+        if (usersService.checkUserByIdnumber(idnumber)) {
+            map.put("state", "400");
+            map.put("msg", "学号已存在");
+        } else {
+            map.put("state", "200");
+            map.put("msg", "学号不存在");
+        }
+        return map;
+
+    }
 }

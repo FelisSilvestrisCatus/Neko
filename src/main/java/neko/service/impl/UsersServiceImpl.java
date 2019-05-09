@@ -97,4 +97,12 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
 
     }
+
+    @Override
+    public boolean checkUserByIdnumber(String idnumber) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("idnumber", idnumber);
+        return count(queryWrapper) != 0 ? true : false;
+
+    }
 }

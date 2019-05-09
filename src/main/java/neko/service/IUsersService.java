@@ -20,5 +20,7 @@ public interface IUsersService extends IService<Users> {
 
     //密码和验证码登录
     boolean login(HttpServletRequest request, String phone, Map<String, String> map, String logintype);
+    //查询该idnumber号是否存在
+    public boolean checkUserByIdnumber (String idnumber);
 
 }

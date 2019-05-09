@@ -31,15 +31,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UsersController {
-
     @Autowired
     private IUsersService usersService;
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
     private NekoFace nekoFace;
-
-
     //用户登录
     @RequestMapping(value = "/login")
     public Map<String, String> login(HttpServletRequest request, String phone, String password, String loginType) {
@@ -64,8 +61,6 @@ public class UsersController {
             return map;
         }
     }
-
-
     //用户注册
     @RequestMapping(value = "/registe")
     public Map<String, String> registe(String idnumber, String username, String userphone, String validatecode) {
@@ -77,7 +72,6 @@ public class UsersController {
             map.put("msg", "用户已存在");
             return map;
         }
-
         //手机号有记录且获取验证码匹配
         if (redisUtil.hasKey(userphone + "code") && redisUtil.get(userphone + "code").equalsIgnoreCase(validatecode)) {
             //插入数据库
@@ -97,7 +91,6 @@ public class UsersController {
         }
         return map;
     }
-
     //修改用户信息
     @RequestMapping(value = "/changeInfo")
     public Map<String, String> changeInfo(HttpServletRequest request, String email, String password) {
@@ -118,7 +111,6 @@ public class UsersController {
         }
         return map;
     }
-
     //修改用户信息
     @RequestMapping(value = "/getInfo")
     public Map<String, String> getInfo(HttpServletRequest request) {
@@ -137,7 +129,6 @@ public class UsersController {
         map.put("user", JSON.toJSONString(user));
         return map;
     }
-
 
     /*
      * 401
@@ -162,18 +153,15 @@ public class UsersController {
 
         return map;
     }
-
-
     //上传自己的照片  用来点名
     @RequestMapping(value = "/uploadPhotoForRollCall")
     public Map<String, String> uploadPhotoForRollCall(HttpSession session, String imgCode) throws IOException {
         Map<String, String> map = generalMethod.getSuccessMap();
         Users users = (Users) session.getAttribute("user");
+        System.out.println("用户"+users);
         String uid = users.getUid() + "";
         //告诉学生 有没有拍到脸  拍到了几个脸
-
         System.out.println("imgCode = " + imgCode);
-
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时图片
         JSONObject jsonObject = nekoFace.facedetection(temppath, uid, "0");
         String face_num = jsonObject.getString("flag");
@@ -187,12 +175,9 @@ public class UsersController {
         //有效图片数量
         map.put("successnum", photo_train + "");
         //如果够十张便进行训练
-
         if (photo_train >= 10) {
             nekoFace.startTrain();
         }
-
-
         return map;
     }
 }
