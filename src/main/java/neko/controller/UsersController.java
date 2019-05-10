@@ -140,19 +140,31 @@ public class UsersController {
         String temppath = Face.base64StrToImage(imgCode, uid);//用来保存临时图片
         JSONObject jsonObject = nekoFace.facedetection(temppath, uid, "0");
         String face_num = jsonObject.getString("flag");
-        int photo_train = Face.getPhotoNum(uid);        //已经有了几个脸
+
         if (face_num.equals("0")) {
             map.put("state", "400");
             map.put("msg", "未检测到人脸，请重试");
         } else {
             map.put("msg", "有效图片");
         }
+
+
+        int photo_train = Face.getPhotoNum(uid);        //已经有了几张有效图片
         //有效图片数量
         map.put("successnum", photo_train + "");
         //如果够十张便进行训练
-        if (photo_train >= 10) {
-            nekoFace.startTrain();
-        }
+
+//        if (photo_train >= 10) {
+//            nekoFace.startTrain();
+//        }
         return map;
     }
+
+    //上传自己的照片  用来点名
+    @RequestMapping(value = "/startTrain")
+    public Map<String, String> startTrain() {
+        nekoFace.startTrain();
+        return generalMethod.getSuccessMap();
+    }
+
 }
