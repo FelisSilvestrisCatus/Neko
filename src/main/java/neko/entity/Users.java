@@ -60,6 +60,4 @@ public class Users implements Serializable {
      * 0为启用,1为禁用
      */
     private Integer flag;
-
-
 }

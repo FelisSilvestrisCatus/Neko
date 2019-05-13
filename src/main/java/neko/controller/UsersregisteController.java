@@ -66,6 +66,8 @@ public class UsersregisteController {
         }
         //手机号有记录且获取验证码匹配
         if (redisUtil.hasKey(userphone + "code") && redisUtil.get(userphone + "code").equalsIgnoreCase(validatecode)) {
+            //删除验证码
+            redisUtil.delete(userphone + "code");
             //插入数据库
             Users user = new Users();
             user.setPhone(userphone);
@@ -75,8 +77,6 @@ public class UsersregisteController {
             usersService.save(user);
             map.put("state", "200");
             map.put("msg", "注册成功");
-            //删除验证码
-            redisUtil.delete(userphone + "code");
         } else {
             map.put("state", "400");
             map.put("msg", "验证码错误");

@@ -66,6 +66,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
             request.getSession().setAttribute("user", user);
 
+            //存入redis
             String token = Token.getJwtToken(user);
             redisUtil.set(user.getUid().toString(), token);
             redisUtil.expire(user.getUid().toString(), tokenExpire, tokenExpireTimeUnit);

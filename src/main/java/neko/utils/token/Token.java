@@ -48,7 +48,7 @@ public class Token {
                 .compact();
 
         //AES加密
-        token = AESUtil.encrypt(token, SECRET);
+        token = PwdUtil.encrypt(token);
 
         return token;
     }
@@ -57,7 +57,7 @@ public class Token {
     public static Map<String, String> parseJwtToken(String token) {
 
         //AES解密
-        token = AESUtil.decrypt(token, SECRET);
+        token = PwdUtil.decrypt(token);
 
         Jws<Claims> jws = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
         Claims Claims = jws.getBody();

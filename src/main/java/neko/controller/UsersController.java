@@ -9,6 +9,7 @@ import neko.utils.face.Face;
 import neko.utils.face.NekoFace;
 import neko.utils.generalMethod;
 import neko.utils.redis.RedisUtil;
+import neko.utils.token.PwdUtil;
 import neko.utils.token.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -54,7 +55,7 @@ public class UsersController {
         queryWrapper.eq("phone", phone);
         Users user = usersService.getOne(queryWrapper);
 
-        if (password.equals(user.getPwd()) && usersService.login(request, phone, map, loginType)) {
+        if (PwdUtil.PwdMd5(password).equals(user.getPwd()) && usersService.login(request, phone, map, loginType)) {
             return map;
         } else {
             map.put("msg", "用户名或密码错误");
@@ -71,10 +72,10 @@ public class UsersController {
         Map<String, String> map = new HashMap<>();
 
         Users u = usersService.getById(user.getUid());
-        if (!StringUtils.isBlank(email))
+        if (!StringUtils.isBlank(email) && (!"undefined".equals(email)))
             u.setEmail(email);
         if (!StringUtils.isBlank(password)) {
-            u.setPwd(password);
+            u.setPwd(PwdUtil.PwdMd5(password));
         }
         if (usersService.updateById(u)) {
             map.put("state", "200");

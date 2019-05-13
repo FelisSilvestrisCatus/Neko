@@ -1,6 +1,7 @@
 package neko.utils.token;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -12,22 +13,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @version V1.0
- * @desc AES 加密工具类
+ * 加密工具类
  */
-public class AESUtil {
+public class PwdUtil {
 
     private static final String KEY_ALGORITHM = "AES";
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";//默认的加密算法
+    //密钥
+    private static String password = "ThisIsAesSecret";
 
     /**
      * AES 加密操作
      *
-     * @param content  待加密内容
-     * @param password 加密密码
+     * @param content 待加密内容
      * @return 返回Base64转码后的加密数据
      */
-    public static String encrypt(String content, String password) {
+    public static String encrypt(String content) {
         try {
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);// 创建密码器
 
@@ -39,7 +40,7 @@ public class AESUtil {
 
             return Base64.encodeBase64String(result);//通过Base64转码返回
         } catch (Exception ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PwdUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return null;
@@ -49,10 +50,9 @@ public class AESUtil {
      * AES 解密操作
      *
      * @param content
-     * @param password
      * @return
      */
-    public static String decrypt(String content, String password) {
+    public static String decrypt(String content) {
 
         try {
             //实例化
@@ -66,7 +66,7 @@ public class AESUtil {
 
             return new String(result, "utf-8");
         } catch (Exception ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PwdUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return null;
@@ -92,9 +92,13 @@ public class AESUtil {
 
             return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);// 转换为AES专用密钥
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PwdUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return null;
+    }
+
+    public static String PwdMd5(String pwd) {
+        return encrypt(DigestUtils.md5Hex(pwd));
     }
 }

@@ -3,6 +3,7 @@ package neko.config;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import neko.entity.Users;
 import neko.service.IUsersService;
+import neko.utils.token.PwdUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -39,7 +40,10 @@ public class CustomRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException();
         }
-        if (!password.equals(user.getPwd())) {
+        boolean pwd = false;
+        pwd = PwdUtil.PwdMd5(password).equals(user.getPwd());
+        System.out.println("PwdUtil.PwdMd5(password) = " + PwdUtil.PwdMd5(password));
+        if (!pwd) {
             throw new IncorrectCredentialsException();
         }
         if (user.getFlag().equals(1)) {

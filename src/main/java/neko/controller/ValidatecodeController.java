@@ -81,7 +81,8 @@ public class ValidatecodeController {
     //检查redis中的验证码
     private void checkRedis(String userphone, Map<String, String> map, boolean redis, boolean hasRedis) {
         if (!redis || hasRedis) {
-            int code = message.getCode(userphone);
+//            int code = message.getCode(userphone);
+            int code = 1111;
 
             if (code != 0) {
                 //获取验证码存入redis
