@@ -141,10 +141,12 @@ public class Juhe {
         if (city.contains("内网") || city.contains("未知")) {
             city = "青岛";
         }
+        System.out.println("city = " + city);
 
         //检查redis中是否有缓存
         if (redisUtil.hasKey(city)) {
             weather = JSON.parseObject(redisUtil.get(city));
+            System.out.println("weather = " + weather);
             return weather;
         }
 
