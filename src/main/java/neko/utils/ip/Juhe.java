@@ -137,7 +137,7 @@ public class Juhe {
     public JSONObject getWeather(String ip) throws IOException {
         JSONObject weather = new JSONObject();
         String key = "f5e272f5f52ffb93a0902474025efb16";
-        String city = getValueOnlyCity(ip);
+        String city = getValueOnlyCity(ip).replace("市", "");
         if (city.contains("内网") || city.contains("未知")) {
             city = "青岛";
         }
