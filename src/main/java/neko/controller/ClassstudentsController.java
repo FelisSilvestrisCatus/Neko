@@ -3,10 +3,13 @@ package neko.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import neko.entity.Class;
 import neko.entity.Classstudents;
 import neko.entity.Users;
 import neko.entity.vo.ClassWithTeacherName;
+import neko.entity.vo.StudentRollcall;
 import neko.service.IClassService;
 import neko.service.IClassstudentsService;
 import neko.service.IClassteacherService;
@@ -89,7 +92,9 @@ public class ClassstudentsController {
     //获取已加入班级的学生
     @RequiresPermissions("teacher")
     @RequestMapping(value = "/getStudents")
-    public Map<String, String> getJoinedStudent(HttpSession session, String cid, String state) {
+    public Map<String, String> getJoinedStudent(HttpSession session, Integer currentPage, String cid, String state) {
+        Page<Classstudents> page = new Page<>(currentPage, 10);
+
         int cid_ = Integer.valueOf(cid);
         int flag_ = Integer.valueOf(state);
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -101,23 +106,53 @@ public class ClassstudentsController {
         System.out.println("学生数=" + list.size());
         Iterator it = list.iterator();
         List<Integer> uid_list = new ArrayList<>();
+
+        if (currentPage == null || currentPage.equals(0)) {
+            currentPage = 1;
+        }
+
         while (it.hasNext()) {
             int uid = ((Classstudents) it.next()).getUid();
             uid_list.add(uid);
         }
         if (uid_list.size() == 0) {
-            map.put("data", JSON.toJSONString(null));
-        } else {
-            QueryWrapper queryWrapper1 = new QueryWrapper();
-            queryWrapper1.in("uid", uid_list);
-            List<Users> usersList = usersService.list(queryWrapper1);
-            map.put("data", JSON.toJSONString(usersList));
 
+            map.put("data", JSON.toJSONString(null));
+            map.put("total", 0+ "");
+        } else {
+            IPage<Classstudents> usersList = classstudentsService.getJoinedStudent(currentPage, cid, state,uid_list);
+            map.put("data", JSON.toJSONString(usersList.getRecords()));
+            System.out.println("分页数据"+JSON.toJSONString(usersList.getRecords()));
+            map.put("total", usersList.getTotal() + "");
 
         }
 
         return map;
     }
+
+
+//    //我的出勤记录
+//    @RequestMapping(value = "/myAttendance")
+//    public Map<String, String> myAttendance(HttpSession session, Integer currentPage,
+//                                            String datetimeBegin, String datetimeEnd, String course) {
+//        Map<String, String> map = generalMethod.getSuccessMap();
+//        Users u = (Users) session.getAttribute("user");
+//        if ((datetimeBegin.equals("undefined")) || (datetimeEnd.equals("undefined"))) {
+//            datetimeBegin = "1000-01-01 00:00:00";
+//            datetimeEnd = "9999-12-31 23:59:59";
+//        }
+//
+//        if (currentPage == null || currentPage.equals(0)) {
+//            currentPage = 1;
+//        }
+//
+//        IPage<StudentRollcall> list = rs.myAttendance(u.getUid(), currentPage, datetimeBegin, datetimeEnd, course);
+//
+//        map.put("data", JSON.toJSONString(list.getRecords()));
+//        map.put("total", list.getTotal() + "");
+//        return map;
+//    }
+
 
     //删除指定班级id 指定uid的学生
     @RequiresPermissions("teacher")

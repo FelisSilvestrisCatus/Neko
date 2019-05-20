@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="neko.mapper.ClassstudentsMapper">
 
+    <select id="getJoinedStudent" resultType="neko.entity.Classstudents">
+
+        select * from users
+        <where>
+            uid in
+            <foreach collection="uid_list" item="item" index="index"
+                     open="(" separator="," close=")">#{item}
+            </foreach>
+        </where>
+
+    </select>
 </mapper>
