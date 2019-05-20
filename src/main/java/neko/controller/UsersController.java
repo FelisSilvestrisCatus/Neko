@@ -75,6 +75,11 @@ public class UsersController {
         if (!StringUtils.isBlank(email) && (!"undefined".equals(email)))
             u.setEmail(email);
         if (!StringUtils.isBlank(password)) {
+            if (password.length() < 6) {
+                map = generalMethod.getErrorMap();
+                map.put("msg", "密码长度不足6位");
+                return map;
+            }
             u.setPwd(PwdUtil.PwdMd5(password));
         }
         if (usersService.updateById(u)) {
